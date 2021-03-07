@@ -24,6 +24,7 @@ import { EventModule } from './event/event.module'
       sortSchema: true,
       playground: true,
       debug: false,
+      introspection: true, // TODO Remove in production at release time
     }),
     SchoolModule,
     CalendarModule,
