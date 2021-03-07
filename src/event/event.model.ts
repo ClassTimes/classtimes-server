@@ -12,15 +12,15 @@ export class Event {
 
   @Field(() => String, { nullable: false })
   @Prop({ required: true })
-  title: string // Date
+  title: string
 
   @Field(() => Date, { nullable: false })
   @Prop({ required: true })
-  startDateUtc: Date // Date
+  startDateUtc: Date
 
-  // @Field(() => Date)
-  // @Prop({ required: false })
-  // endDateUtc: Date // Date
+  @Field(() => Date)
+  @Prop({ required: false })
+  endDateUtc: Date
 
   @Field(() => Boolean, { nullable: true })
   @Prop({ required: false })
@@ -34,6 +34,10 @@ export class Event {
   @Prop({ required: false })
   rrule: string
 
+  @Field(() => [Date], { nullable: true })
+  @Prop({ required: false })
+  exceptionsDatesUtc: Date[]
+
   // Relations
   @Field(() => Calendar, { nullable: false })
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
@@ -42,3 +46,8 @@ export class Event {
 
 export type EventDocument = Event & mongoose.Document
 export const EventSchema = SchemaFactory.createForClass(Event)
+
+//
+// # Reference Link
+//
+// https://github.com/bmoeskau/Extensible/blob/master/recurrence-overview.md

@@ -5,6 +5,7 @@ import {
   Resolver,
   ResolveField,
   Parent,
+  ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
@@ -25,7 +26,7 @@ export class SchoolResolver {
   constructor(private service: SchoolService) {}
 
   @Query(() => School)
-  async school(@Args('_id', { type: () => String }) _id: Types.ObjectId) {
+  async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.getById(_id)
   }
 
@@ -47,7 +48,7 @@ export class SchoolResolver {
   }
 
   @Mutation(() => School)
-  async deleteSchool(@Args('_id', { type: () => String }) _id: Types.ObjectId) {
+  async deleteSchool(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
   }
 

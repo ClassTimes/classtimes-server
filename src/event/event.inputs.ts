@@ -5,9 +5,6 @@ import { Types } from 'mongoose'
 
 @InputType()
 export class CreateEventInput {
-  @Field(() => ID)
-  calendar: Types.ObjectId
-
   @Field(() => String, { nullable: false })
   title: string // Date
 
@@ -25,6 +22,13 @@ export class CreateEventInput {
 
   @Field(() => String, { nullable: true })
   rrule: string
+
+  @Field(() => [Date], { nullable: true })
+  exceptionsDatesUtc: Date[]
+
+  // Realtions
+  @Field(() => ID)
+  calendar: Types.ObjectId
 }
 
 @InputType()
@@ -47,6 +51,7 @@ export class UpdateEventInput {
   @Field(() => String, { nullable: true })
   title?: string
 
+  // Relations
   @Field(() => ID, { nullable: true })
   calendar: Types.ObjectId
 }

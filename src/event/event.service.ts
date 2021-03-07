@@ -30,11 +30,11 @@ export class EventService {
 
     const updateResult = await this.calendar.findByIdAndUpdate(
       model.calendar,
-      { $push: { calendars: model._id } },
+      { $push: { events: model._id } },
       { new: true, useFindAndModify: false },
     )
 
-    console.log('calendar', { updateResult })
+    console.log('event after', { updateResult })
 
     return model
   }
@@ -65,7 +65,7 @@ export class EventService {
     if (model) {
       const updateResult = await this.calendar.findByIdAndUpdate(
         model.school,
-        { $pull: { calendars: _id } },
+        { $pull: { events: _id } },
         // { new: true, useFindAndModify: false },
       )
 
