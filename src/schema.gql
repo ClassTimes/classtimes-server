@@ -38,7 +38,7 @@ type Event {
   _id: ID!
   calendar(populate: Boolean!): Calendar!
   durationHours: Float!
-  endDateUtc: DateTime!
+  endDateUtc: DateTime
   exceptionsDatesUtc: [DateTime!]
   isAllDay: Boolean
   rrule: String

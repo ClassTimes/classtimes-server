@@ -18,7 +18,8 @@ export class Event {
   @Prop({ required: true })
   startDateUtc: Date
 
-  @Field(() => Date)
+  // TODO This should be mandatory. Either explicit duration or end date should be set.
+  @Field(() => Date, { nullable: true })
   @Prop({ required: false })
   endDateUtc: Date
 
