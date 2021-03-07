@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateSchoolInput {
+  name: String!
+}
+
+input ListSchoolInput {
+  _id: ID
+  name: String
+}
+
+type Mutation {
+  createSchool(payload: CreateSchoolInput!): School!
+  deleteSchool(_id: String!): School!
+  updateSchool(payload: UpdateSchoolInput!): School!
+}
+
+type Query {
+  school(_id: String!): School!
+  schools(filters: ListSchoolInput): [School!]!
+}
+
+type School {
+  _id: ID!
+  name: String!
+}
+
+input UpdateSchoolInput {
+  _id: ID!
+  name: String
+}
