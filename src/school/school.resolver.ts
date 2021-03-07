@@ -1,13 +1,24 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import {
+  Args,
+  Mutation,
+  Query,
+  Resolver,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
-import { School } from './school.model'
+// School
+import { School, SchoolDocument } from './school.model'
 import { SchoolService } from './school.service'
 import {
   CreateSchoolInput,
   ListSchoolInput,
   UpdateSchoolInput,
 } from './school.inputs'
+
+// Calendar
+import { Calendar } from '../calendar/calendar.model'
 
 @Resolver(() => School)
 export class SchoolResolver {
@@ -39,9 +50,18 @@ export class SchoolResolver {
   async deleteSchool(@Args('_id', { type: () => String }) _id: Types.ObjectId) {
     return this.service.delete(_id)
   }
+
+  @ResolveField()
+  async calendars(
+    @Parent() school: SchoolDocument,
+    @Args('populate') populate: boolean,
+  ) {
+    if (populate) {
+      await school
+        .populate({ path: 'calendars', model: Calendar.name })
+        .execPopulate()
+    }
+
+    return school.calendars
+  }
 }
-
-// import { Resolver } from '@nestjs/graphql';
-
-// @Resolver()
-// export class SchoolResolver {}

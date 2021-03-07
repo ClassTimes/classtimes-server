@@ -7,19 +7,25 @@ import { join } from 'path'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
-// School
+// Models
 import { SchoolModule } from './school/school.module'
+import { CalendarModule } from './calendar/calendar.module'
+import { EventModule } from './event/event.module'
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/classtimes'),
     GraphQLModule.forRoot({
+      // installSubscriptionHandlers: true,
+      // dateScalarMode: 'timestamp',
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: true,
       debug: false,
     }),
     SchoolModule,
+    CalendarModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],

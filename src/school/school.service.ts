@@ -39,27 +39,3 @@ export class SchoolService {
     return this.model.findByIdAndDelete(_id).exec()
   }
 }
-
-// import { Injectable } from '@nestjs/common'
-// import { InjectModel } from '@nestjs/mongoose'
-// import { Model } from 'mongoose'
-// import { CreateSchoolDto } from './dto/create-school.dto'
-// // import { School, SchoolDocument } from './schemas/school.schema'
-// import { School, SchoolDocument } from './school.model'
-
-// @Injectable()
-// export class SchoolService {
-//   constructor(
-//     @InjectModel(School.name)
-//     private readonly schoolModel: Model<SchoolDocument>,
-//   ) {}
-
-//   async create(createSchoolDto: CreateSchoolDto): Promise<School> {
-//     const createdSchool = new this.schoolModel(createSchoolDto)
-//     return createdSchool.save()
-//   }
-
-//   async findAll(): Promise<School[]> {
-//     return this.schoolModel.find().exec()
-//   }
-// }

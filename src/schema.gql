@@ -2,8 +2,57 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Calendar {
+  _id: ID!
+  events(populate: Boolean!): [Event!]!
+  name: String!
+  school(populate: Boolean!): School!
+}
+
+input CreateCalendarInput {
+  name: String!
+  school: ID!
+}
+
+input CreateEventInput {
+  calendar: ID!
+  durationHours: Float
+  endDateUtc: DateTime
+  isAllDay: Boolean
+  rrule: String
+  startDateUtc: DateTime!
+  title: String!
+}
+
 input CreateSchoolInput {
   name: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Event {
+  _id: ID!
+  calendar(populate: Boolean!): Calendar!
+  durationHours: Float!
+  isAllDay: Boolean
+  rrule: String
+  startDateUtc: DateTime!
+  title: String!
+}
+
+input ListCalendarInput {
+  _id: ID
+  name: String
+  school: ID
+}
+
+input ListEventInput {
+  _id: ID
+  calendar: ID
+  title: String
 }
 
 input ListSchoolInput {
@@ -12,19 +61,42 @@ input ListSchoolInput {
 }
 
 type Mutation {
+  createCalendar(payload: CreateCalendarInput!): Calendar!
+  createEvent(payload: CreateEventInput!): Event!
   createSchool(payload: CreateSchoolInput!): School!
+  deleteCalendar(_id: ID!): Calendar
+  deleteEvent(_id: ID!): Event
   deleteSchool(_id: String!): School!
+  updateCalendar(payload: UpdateCalendarInput!): Calendar
+  updateEvent(payload: UpdateEventInput!): Event
   updateSchool(payload: UpdateSchoolInput!): School!
 }
 
 type Query {
+  calendar(_id: ID!): Calendar!
+  calendars(filters: ListCalendarInput): [Calendar!]!
+  event(_id: ID!): Event!
+  events(filters: ListEventInput): [Event!]!
   school(_id: String!): School!
   schools(filters: ListSchoolInput): [School!]!
 }
 
 type School {
   _id: ID!
+  calendars(populate: Boolean!): [Calendar!]!
   name: String!
+}
+
+input UpdateCalendarInput {
+  _id: ID!
+  name: String
+  school: ID
+}
+
+input UpdateEventInput {
+  _id: ID!
+  calendar: ID
+  title: String
 }
 
 input UpdateSchoolInput {
