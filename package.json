@@ -1,10 +1,10 @@
 {
   "name": "classtimes",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.0",
+  "description": "ClassTimes.app Calendar Server",
+  "author": "Gaston Morixe",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Copyright Gaston Morixe 2021",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
