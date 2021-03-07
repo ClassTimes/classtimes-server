@@ -14,7 +14,9 @@ import { EventModule } from './event/event.module'
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/classtimes'),
+    MongooseModule.forRoot(
+      process.env.MONGODB || 'mongodb://localhost/classtimes',
+    ),
     GraphQLModule.forRoot({
       // installSubscriptionHandlers: true,
       // dateScalarMode: 'timestamp',
