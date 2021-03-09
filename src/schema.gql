@@ -16,6 +16,7 @@ input CreateCalendarInput {
 
 input CreateEventInput {
   calendar: ID!
+  description: String
   durationHours: Float
   endDateUtc: DateTime
   exceptionsDatesUtc: [DateTime!]
@@ -37,6 +38,7 @@ scalar DateTime
 type Event {
   _id: ID!
   calendar(populate: Boolean!): Calendar!
+  description: String
   durationHours: Float!
   endDateUtc: DateTime
   exceptionsDatesUtc: [DateTime!]

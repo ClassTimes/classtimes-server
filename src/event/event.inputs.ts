@@ -6,13 +6,16 @@ import { Types } from 'mongoose'
 @InputType()
 export class CreateEventInput {
   @Field(() => String, { nullable: false })
-  title: string // Date
+  title: string
+
+  @Field(() => String, { nullable: true })
+  description: string
 
   @Field(() => Date, { nullable: false })
-  startDateUtc: Date // Date
+  startDateUtc: Date
 
   @Field(() => Date, { nullable: true })
-  endDateUtc: Date // Date
+  endDateUtc: Date
 
   @Field(() => Boolean, { nullable: true })
   isAllDay: boolean

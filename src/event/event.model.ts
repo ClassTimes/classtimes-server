@@ -14,6 +14,10 @@ export class Event {
   @Prop({ required: true })
   title: string
 
+  @Field(() => String, { nullable: true })
+  @Prop({ required: false })
+  description: string
+
   @Field(() => Date, { nullable: false })
   @Prop({ required: true })
   startDateUtc: Date
