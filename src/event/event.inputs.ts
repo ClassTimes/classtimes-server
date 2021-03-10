@@ -47,12 +47,9 @@ export class ListEventInput {
 }
 
 @InputType()
-export class UpdateEventInput {
+export class UpdateEventInput extends CreateEventInput {
   @Field(() => ID)
   _id: Types.ObjectId
-
-  @Field(() => String, { nullable: true })
-  title?: string
 
   // Relations
   @Field(() => ID, { nullable: true })

@@ -101,7 +101,14 @@ input UpdateCalendarInput {
 input UpdateEventInput {
   _id: ID!
   calendar: ID
-  title: String
+  description: String
+  durationHours: Float
+  endDateUtc: DateTime
+  exceptionsDatesUtc: [DateTime!]
+  isAllDay: Boolean
+  rrule: String
+  startDateUtc: DateTime!
+  title: String!
 }
 
 input UpdateSchoolInput {
