@@ -107,8 +107,8 @@ input UpdateEventInput {
   exceptionsDatesUtc: [DateTime!]
   isAllDay: Boolean
   rrule: String
-  startDateUtc: DateTime!
-  title: String!
+  startDateUtc: DateTime
+  title: String
 }
 
 input UpdateSchoolInput {

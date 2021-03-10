@@ -51,6 +51,12 @@ export class UpdateEventInput extends CreateEventInput {
   @Field(() => ID)
   _id: Types.ObjectId
 
+  @Field(() => String, { nullable: true })
+  title: string
+
+  @Field(() => Date, { nullable: true })
+  startDateUtc: Date
+
   // Relations
   @Field(() => ID, { nullable: true })
   calendar: Types.ObjectId
