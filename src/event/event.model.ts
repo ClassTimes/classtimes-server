@@ -29,7 +29,7 @@ export class Event {
 
   // endDateUtc: Date
   // TODO This should be mandatory. Either explicit duration or end date should be set.
-  @Field(() => Date, { nullable: false })
+  @Field(() => Date, { nullable: true })
   @Prop({ required: false })
   endDateUtc: Date
   // get endDateUtc(): Date {
