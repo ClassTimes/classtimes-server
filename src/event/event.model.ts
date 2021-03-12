@@ -32,21 +32,17 @@ export class Event {
   @Field(() => Date, { nullable: false })
   @Prop({ required: false })
   get endDateUtc(): Date {
-    const startDateUtc = dayjs(this.startDateUtc).utc()
-
-    if (!this.rrule) {
-      const endDateUtc = startDateUtc.add(this.durationHours, 'hours')
-      return endDateUtc.toDate()
-    }
-
+    // const startDateUtc = dayjs(this.startDateUtc).utc()
+    // if (!this.rrule) {
+    //   const endDateUtc = startDateUtc.add(this.durationHours, 'hours')
+    //   return endDateUtc.toDate()
+    // }
     // const rule = RRule.fromString(
     //   `DTSTART:${startDateUtc.format('YYYYMMDD[T]HHmmss')}Z\nRRULE:${
     //     this.rrule
     //   }`,
     // )
-
     //   if(rule.count()) // || rule.options.until
-
     // rule.options.dtstart = start.toDate()
     // const ruleQuery = rule.between(startDateUtc, endDateUtc, false)
     // for (const ruleDate of ruleQuery) {
