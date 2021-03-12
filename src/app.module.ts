@@ -11,6 +11,7 @@ import { AppService } from './app.service'
 import { SchoolModule } from './school/school.module'
 import { CalendarModule } from './calendar/calendar.module'
 import { EventModule } from './event/event.module'
+import { UserModule } from './user/user.module'
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { EventModule } from './event/event.module'
     SchoolModule,
     CalendarModule,
     EventModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

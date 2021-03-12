@@ -30,6 +30,14 @@ input CreateSchoolInput {
   name: String!
 }
 
+input CreateUserInput {
+  email: String
+  fullName: String
+  mobile: String
+  role: String
+  username: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -40,7 +48,7 @@ type Event {
   calendar(populate: Boolean!): Calendar!
   description: String
   durationHours: Float!
-  endDateUtc: DateTime
+  endDateUtc: DateTime!
   exceptionsDatesUtc: [DateTime!]
   isAllDay: Boolean
   rrule: String
@@ -65,16 +73,24 @@ input ListSchoolInput {
   name: String
 }
 
+input ListUserInput {
+  _id: ID
+  fullName: String
+}
+
 type Mutation {
   createCalendar(payload: CreateCalendarInput!): Calendar!
   createEvent(payload: CreateEventInput!): Event!
   createSchool(payload: CreateSchoolInput!): School!
+  createUser(payload: CreateUserInput!): User!
   deleteCalendar(_id: ID!): Calendar
   deleteEvent(_id: ID!): Event
   deleteSchool(_id: ID!): School!
+  deleteUser(_id: ID!): User
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateEvent(payload: UpdateEventInput!): Event
   updateSchool(payload: UpdateSchoolInput!): School!
+  updateUser(payload: UpdateUserInput!): User
 }
 
 type Query {
@@ -84,6 +100,8 @@ type Query {
   events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!
   schools(filters: ListSchoolInput): [School!]!
+  user(_id: ID!): User!
+  users(filters: ListUserInput): [User!]!
 }
 
 type School {
@@ -114,4 +132,22 @@ input UpdateEventInput {
 input UpdateSchoolInput {
   _id: ID!
   name: String
+}
+
+input UpdateUserInput {
+  _id: ID!
+  email: String
+  fullName: String
+  mobile: String
+  role: String
+  username: String!
+}
+
+type User {
+  _id: ID!
+  email: String
+  fullName: String
+  mobile: String
+  role: String
+  username: String!
 }

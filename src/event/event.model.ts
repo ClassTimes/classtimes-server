@@ -1,6 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Field, ObjectType, ID } from '@nestjs/graphql'
 import * as mongoose from 'mongoose'
+import dayjs from 'dayjs'
+// import utc from 'dayjs/plugin/utc'
+// // import { RRule } from 'rrule'
+
+// dayjs.extend(utc)
 
 import { Calendar } from '../calendar/calendar.model'
 
@@ -22,10 +27,34 @@ export class Event {
   @Prop({ required: true })
   startDateUtc: Date
 
+  // endDateUtc: Date
   // TODO This should be mandatory. Either explicit duration or end date should be set.
-  @Field(() => Date, { nullable: true })
+  @Field(() => Date, { nullable: false })
   @Prop({ required: false })
-  endDateUtc: Date
+  get endDateUtc(): Date {
+    const startDateUtc = dayjs(this.startDateUtc).utc()
+
+    if (!this.rrule) {
+      const endDateUtc = startDateUtc.add(this.durationHours, 'hours')
+      return endDateUtc.toDate()
+    }
+
+    // const rule = RRule.fromString(
+    //   `DTSTART:${startDateUtc.format('YYYYMMDD[T]HHmmss')}Z\nRRULE:${
+    //     this.rrule
+    //   }`,
+    // )
+
+    //   if(rule.count()) // || rule.options.until
+
+    // rule.options.dtstart = start.toDate()
+    // const ruleQuery = rule.between(startDateUtc, endDateUtc, false)
+    // for (const ruleDate of ruleQuery) {
+    //   if (ruleDate.valueOf() === start.valueOf()) {
+    //     // skip same event
+    //     continue
+    //   }
+  }
 
   @Field(() => Boolean, { nullable: true })
   @Prop({ required: false })
@@ -42,6 +71,8 @@ export class Event {
   @Field(() => [Date], { nullable: true })
   @Prop({ required: false })
   exceptionsDatesUtc: Date[]
+
+  // TODO Person(studend) is Attending a class / not attending? (make friends! and chat)
 
   // Relations
   @Field(() => Calendar, { nullable: false })
