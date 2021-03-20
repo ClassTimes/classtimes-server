@@ -1,24 +1,31 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
-import { GraphQLModule } from '@nestjs/graphql'
+import * as GQL from '@nestjs/graphql'
 import { join } from 'path'
+// import {
+//   ApolloErrorConverter, // required: core export
+//   // mapItemBases, // optional: MapItem bases of common Errors that can be extended
+//   // extendMapItem, // optional: tool for extending MapItems with new configurations
+// } from 'apollo-error-converter'
 
 // App
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 // Models
-import { SchoolModule } from './school/school.module'
+import { CalendarEventModule } from './calendarEvent/calendarEvent.module'
 import { CalendarModule } from './calendar/calendar.module'
 import { EventModule } from './event/event.module'
+import { SchoolModule } from './school/school.module'
 import { UserModule } from './user/user.module'
+// import { ValidationError } from 'class-validator'
 
 @Module({
   imports: [
     MongooseModule.forRoot(
       process.env.MONGODB || 'mongodb://localhost/classtimes',
     ),
-    GraphQLModule.forRoot({
+    GQL.GraphQLModule.forRoot({
       // installSubscriptionHandlers: true,
       // dateScalarMode: 'timestamp',
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -26,9 +33,15 @@ import { UserModule } from './user/user.module'
       playground: true,
       debug: false,
       introspection: true, // TODO Remove in production at release time
+      // formatError: new ApolloErrorConverter({
+      //   // logger,
+      //   // fallback,
+      //   // errorMap
+      // }),
     }),
     SchoolModule,
     CalendarModule,
+    CalendarEventModule,
     EventModule,
     UserModule,
   ],

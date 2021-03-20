@@ -4,8 +4,8 @@ import {
   Query,
   Resolver,
   ID,
-  ResolveField,
-  Parent,
+  // ResolveField,
+  // Parent,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 

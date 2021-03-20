@@ -1,24 +1,29 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Field, ObjectType, ID } from '@nestjs/graphql'
+import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
+import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as mongoose from 'mongoose'
-// import { forwardRef } from '@nestjs/common'
+import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
+import * as Utils from '../utils/Model'
 import { Calendar } from '../calendar/calendar.model'
 
-@ObjectType()
-@Schema()
-export class School {
-  @Field(() => ID)
+@GQL.ObjectType()
+@DB.Schema({
+  timestamps: true,
+  // autoIndex: true
+})
+@Utils.ValidateSchema()
+export class School extends Utils.Model {
+  @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @Field(() => String)
-  @Prop()
+  @GQL.Field(() => String)
+  @DB.Prop()
   name: string
 
-  @Field(() => [Calendar])
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Calendar' })
+  @GQL.Field(() => [Calendar])
+  @DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Calendar' })
   calendars: mongoose.Types.ObjectId[] | Calendar[]
 }
 
 export type SchoolDocument = School & mongoose.Document
-export const SchoolSchema = SchemaFactory.createForClass(School)
+export const SchoolSchema = School.schema

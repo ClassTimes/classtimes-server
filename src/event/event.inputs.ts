@@ -1,63 +1,41 @@
-import { Field, ID, InputType } from '@nestjs/graphql'
-import { Types } from 'mongoose'
+import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
+import * as mongoose from 'mongoose'
 
 // import { School } from '../school/school.model'
 
-@InputType()
+@GQL.InputType()
 export class CreateEventInput {
-  @Field(() => String, { nullable: false })
-  title: string
-
-  @Field(() => String, { nullable: true })
-  description: string
-
-  @Field(() => Date, { nullable: false })
-  startDateUtc: Date
-
-  @Field(() => Date, { nullable: true })
-  endDateUtc: Date
-
-  @Field(() => Boolean, { nullable: true })
-  isAllDay: boolean
-
-  @Field(() => Number, { nullable: true })
-  durationHours: number
-
-  @Field(() => String, { nullable: true })
-  rrule: string
-
-  @Field(() => [Date], { nullable: true })
-  exceptionsDatesUtc: Date[]
-
-  // Realtions
-  @Field(() => ID)
-  calendar: Types.ObjectId
-}
-
-@InputType()
-export class ListEventInput {
-  @Field(() => ID, { nullable: true })
-  _id?: Types.ObjectId
-
-  @Field(() => String, { nullable: true })
-  title?: string
-
-  @Field(() => ID, { nullable: true })
-  calendar: Types.ObjectId
-}
-
-@InputType()
-export class UpdateEventInput extends CreateEventInput {
-  @Field(() => ID)
-  _id: Types.ObjectId
-
-  @Field(() => String, { nullable: true })
-  title: string
-
-  @Field(() => Date, { nullable: true })
-  startDateUtc: Date
+  @GQL.Field(() => String, { nullable: false })
+  content: string
 
   // Relations
-  @Field(() => ID, { nullable: true })
-  calendar: Types.ObjectId
+  @GQL.Field(() => GQL.ID, { nullable: false })
+  calendarEvent: mongoose.Types.ObjectId
+
+  @GQL.Field(() => [GQL.ID], { nullable: true })
+  usersJoining: [mongoose.Types.ObjectId]
+}
+
+@GQL.InputType()
+export class ListEventInput extends CreateEventInput {
+  @GQL.Field(() => GQL.ID, { nullable: true })
+  _id?: mongoose.Types.ObjectId
+}
+
+@GQL.InputType()
+export class UpdateEventInput extends CreateEventInput {
+  @GQL.Field(() => GQL.ID, { nullable: false })
+  _id: mongoose.Types.ObjectId
+
+  @GQL.Field(() => String, { nullable: true })
+  content: string
+}
+
+@GQL.InputType()
+export class UserJoinEventInput {
+  @GQL.Field(() => GQL.ID, { nullable: false })
+  eventId: mongoose.Types.ObjectId
+
+  @GQL.Field(() => GQL.ID, { nullable: false })
+  userId: mongoose.Types.ObjectId
 }

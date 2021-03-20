@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
+import { MongooseModule, getModelToken } from '@nestjs/mongoose'
 
 import { EventService } from './event.service'
 import { Event, EventSchema } from './event.model'
 import { EventResolver } from './event.resolver'
-// import { SchoolController } from './schools.controller';
-import { Calendar, CalendarSchema } from '../calendar/calendar.model'
+// import {
+//   CalendarEvent,
+//   CalendarEventSchema,
+// } from '../calendarEvent/calendarEvent.model'
+// import { User, UserSchema } from '../user/user.model'
 
 @Module({
   imports: [
@@ -14,13 +17,24 @@ import { Calendar, CalendarSchema } from '../calendar/calendar.model'
         name: Event.name,
         schema: EventSchema,
       },
-      {
-        name: Calendar.name,
-        schema: CalendarSchema,
-      },
+      // {
+      //   name: CalendarEvent.name,
+      //   schema: CalendarEventSchema,
+      // },
+      // {
+      //   name: User.name,
+      //   schema: UserSchema,
+      // },
     ]),
   ],
-  //  controllers: [CalendarsController],
-  providers: [EventService, EventResolver],
+  //  controllers: [EventController],
+  providers: [
+    EventService,
+    EventResolver,
+    // {
+    //   provide: getModelToken(Event.name),
+    //   useValue: eventModel,
+    // },
+  ],
 })
 export class EventModule {}

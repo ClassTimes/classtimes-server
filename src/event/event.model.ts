@@ -1,86 +1,45 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Field, ObjectType, ID } from '@nestjs/graphql'
+import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
+import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as mongoose from 'mongoose'
-import dayjs from 'dayjs'
-// import utc from 'dayjs/plugin/utc'
-// // import { RRule } from 'rrule'
+import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
-// dayjs.extend(utc)
+import * as Utils from '../utils/Model'
+import { User } from '../user/user.model'
+import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 
-import { Calendar } from '../calendar/calendar.model'
-
-@ObjectType()
-@Schema()
-export class Event {
-  @Field(() => ID)
+@GQL.ObjectType()
+@DB.Schema({
+  autoIndex: true,
+})
+@Utils.ValidateSchema()
+export class Event extends Utils.Model {
+  @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @Field(() => String, { nullable: false })
-  @Prop({ required: true })
-  title: string
-
-  @Field(() => String, { nullable: true })
-  @Prop({ required: false })
-  description: string
-
-  @Field(() => Date, { nullable: false })
-  @Prop({ required: true })
-  startDateUtc: Date
-
-  // endDateUtc: Date
-  // TODO This should be mandatory. Either explicit duration or end date should be set.
-  @Field(() => Date, { nullable: true })
-  @Prop({ required: false })
-  endDateUtc: Date
-  // get endDateUtc(): Date {
-  // const startDateUtc = dayjs(this.startDateUtc).utc()
-  // if (!this.rrule) {
-  //   const endDateUtc = startDateUtc.add(this.durationHours, 'hours')
-  //   return endDateUtc.toDate()
-  // }
-  // const rule = RRule.fromString(
-  //   `DTSTART:${startDateUtc.format('YYYYMMDD[T]HHmmss')}Z\nRRULE:${
-  //     this.rrule
-  //   }`,
-  // )
-  //   if(rule.count()) // || rule.options.until
-  // rule.options.dtstart = start.toDate()
-  // const ruleQuery = rule.between(startDateUtc, endDateUtc, false)
-  // for (const ruleDate of ruleQuery) {
-  //   if (ruleDate.valueOf() === start.valueOf()) {
-  //     // skip same event
-  //     continue
-  //   }
-  // }
-
-  @Field(() => Boolean, { nullable: true })
-  @Prop({ required: false })
-  isAllDay: boolean
-
-  @Field(() => Number, { nullable: false })
-  @Prop({ required: false })
-  durationHours: number
-
-  @Field(() => String, { nullable: true })
-  @Prop({ required: false })
-  rrule: string
-
-  @Field(() => [Date], { nullable: true })
-  @Prop({ required: false })
-  exceptionsDatesUtc: Date[]
-
-  // TODO Person(studend) is Attending a class / not attending? (make friends! and chat)
+  @GQL.Field(() => String, { nullable: false })
+  @DB.Prop({
+    required: true,
+  })
+  @V.MinLength(10)
+  content: string
 
   // Relations
-  @Field(() => Calendar, { nullable: false })
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
-  calendar: mongoose.Types.ObjectId | Calendar
+  @GQL.Field(() => CalendarEvent, { nullable: false })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CalendarEvent',
+    required: true,
+  })
+  calendarEvent: mongoose.Types.ObjectId | CalendarEvent
+
+  @GQL.Field(() => [User], { nullable: true })
+  @DB.Prop({
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'User',
+    required: false,
+  })
+  usersJoining: [mongoose.Types.ObjectId]
 }
 
 export type EventDocument = Event & mongoose.Document
-export const EventSchema = SchemaFactory.createForClass(Event)
-
-//
-// # Reference Link
-//
-// https://github.com/bmoeskau/Extensible/blob/master/recurrence-overview.md
+export const EventSchema = Event.schema

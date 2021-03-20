@@ -4,9 +4,33 @@
 
 type Calendar {
   _id: ID!
-  events(populate: Boolean!): [Event!]!
+  calendarEvents(populate: Boolean!): [CalendarEvent!]!
   name: String!
   school(populate: Boolean!): School!
+}
+
+type CalendarEvent {
+  _id: ID!
+  calendar(populate: Boolean!): Calendar!
+  description: String
+  durationHours: Float!
+  endDateUtc: DateTime!
+  exceptionsDatesUtc: [DateTime!]
+  isAllDay: Boolean
+  rrule: String
+  startDateUtc: DateTime!
+  title: String!
+}
+
+input CreateCalendarEventInput {
+  calendar: ID!
+  description: String
+  durationHours: Float
+  exceptionsDatesUtc: [DateTime!]
+  isAllDay: Boolean
+  rrule: String
+  startDateUtc: DateTime!
+  title: String!
 }
 
 input CreateCalendarInput {
@@ -15,15 +39,9 @@ input CreateCalendarInput {
 }
 
 input CreateEventInput {
-  calendar: ID!
-  description: String
-  durationHours: Float
-  endDateUtc: DateTime
-  exceptionsDatesUtc: [DateTime!]
-  isAllDay: Boolean
-  rrule: String
-  startDateUtc: DateTime!
-  title: String!
+  calendarEvent: ID!
+  content: String!
+  usersJoining: [ID!]
 }
 
 input CreateSchoolInput {
@@ -45,15 +63,15 @@ scalar DateTime
 
 type Event {
   _id: ID!
-  calendar(populate: Boolean!): Calendar!
-  description: String
-  durationHours: Float!
-  endDateUtc: DateTime!
-  exceptionsDatesUtc: [DateTime!]
-  isAllDay: Boolean
-  rrule: String
-  startDateUtc: DateTime!
-  title: String!
+  calendarEvent(populate: Boolean!): CalendarEvent!
+  content: String!
+  usersJoining(populate: Boolean!): [User!]
+}
+
+input ListCalendarEventInput {
+  _id: ID
+  calendar: ID
+  title: String
 }
 
 input ListCalendarInput {
@@ -64,8 +82,9 @@ input ListCalendarInput {
 
 input ListEventInput {
   _id: ID
-  calendar: ID
-  title: String
+  calendarEvent: ID!
+  content: String!
+  usersJoining: [ID!]
 }
 
 input ListSchoolInput {
@@ -80,14 +99,17 @@ input ListUserInput {
 
 type Mutation {
   createCalendar(payload: CreateCalendarInput!): Calendar!
+  createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createEvent(payload: CreateEventInput!): Event!
   createSchool(payload: CreateSchoolInput!): School!
   createUser(payload: CreateUserInput!): User!
   deleteCalendar(_id: ID!): Calendar
+  deleteCalendarEvent(_id: ID!): CalendarEvent
   deleteEvent(_id: ID!): Event
   deleteSchool(_id: ID!): School!
   deleteUser(_id: ID!): User
   updateCalendar(payload: UpdateCalendarInput!): Calendar
+  updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
   updateSchool(payload: UpdateSchoolInput!): School!
   updateUser(payload: UpdateUserInput!): User
@@ -95,6 +117,8 @@ type Mutation {
 
 type Query {
   calendar(_id: ID!): Calendar!
+  calendarEvent(_id: ID!): CalendarEvent!
+  calendarEvents(filters: ListCalendarEventInput): [CalendarEvent!]!
   calendars(filters: ListCalendarInput): [Calendar!]!
   event(_id: ID!): Event!
   events(filters: ListEventInput): [Event!]!
@@ -110,6 +134,18 @@ type School {
   name: String!
 }
 
+input UpdateCalendarEventInput {
+  _id: ID!
+  calendar: ID
+  description: String
+  durationHours: Float
+  exceptionsDatesUtc: [DateTime!]
+  isAllDay: Boolean
+  rrule: String
+  startDateUtc: DateTime
+  title: String
+}
+
 input UpdateCalendarInput {
   _id: ID!
   name: String
@@ -118,15 +154,9 @@ input UpdateCalendarInput {
 
 input UpdateEventInput {
   _id: ID!
-  calendar: ID
-  description: String
-  durationHours: Float
-  endDateUtc: DateTime
-  exceptionsDatesUtc: [DateTime!]
-  isAllDay: Boolean
-  rrule: String
-  startDateUtc: DateTime
-  title: String
+  calendarEvent: ID!
+  content: String
+  usersJoining: [ID!]
 }
 
 input UpdateSchoolInput {

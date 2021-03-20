@@ -1,46 +1,55 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Field, ObjectType, ID } from '@nestjs/graphql'
+import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
+import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as mongoose from 'mongoose'
-// import dayjs from 'dayjs'
-// import utc from 'dayjs/plugin/utc'
-// import { RRule } from 'rrule'
+import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
-// dayjs.extend(utc)
+import * as Utils from '../utils/Model'
 
-@ObjectType()
-@Schema()
-export class User {
-  @Field(() => ID)
+@GQL.ObjectType()
+@DB.Schema({
+  timestamps: true,
+  // autoIndex: true
+})
+@Utils.ValidateSchema()
+export class User extends Utils.Model {
+  @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @Field(() => String, { nullable: true })
-  @Prop({ required: false })
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false, min: 3, max: 100 })
   fullName: string
 
-  @Field(() => String, { nullable: false })
-  @Prop({ required: true })
+  @GQL.Field(() => String, { nullable: false })
+  @DB.Prop({
+    required: true,
+    lowercase: true,
+    unique: true,
+    min: 3,
+    max: 60,
+  })
   username: string
 
-  @Field(() => String, { nullable: true })
-  @Prop({ required: false })
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false, unique: true, lowercase: true })
   email: string
 
-  @Field(() => String, { nullable: true })
-  @Prop({ required: false })
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false, unique: true, min: 3, max: 60 })
   mobile: string
 
-  @Field(() => String, { nullable: true })
-  @Prop({ required: false })
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false, lowercase: true })
   role: string
 
   // Relations
-  // @Field(() => Calendar, { nullable: false })
-  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
+  // @GQL.Field(() => Calendar, { nullable: false })
+  // @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
   // calendar: mongoose.Types.ObjectId | Calendar
 }
 
 export type UserDocument = User & mongoose.Document
-export const UserSchema = SchemaFactory.createForClass(User)
+export const UserSchema = User.schema
+// UserSchema.index({ field1: 1, field2: 1 }, { unique: true })
 
 //
 // # Reference Link

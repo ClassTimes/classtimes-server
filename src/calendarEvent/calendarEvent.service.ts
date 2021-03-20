@@ -2,36 +2,39 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
-import { School, SchoolDocument } from '../school/school.model'
-import { Calendar, CalendarDocument } from './calendar.model'
+// CalendarEvent
+import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
 import {
-  CreateCalendarInput,
-  ListCalendarInput,
-  UpdateCalendarInput,
-} from './calendar.inputs'
+  CreateCalendarEventInput,
+  ListCalendarEventInput,
+  UpdateCalendarEventInput,
+} from './calendarEvent.inputs'
+
+// Calendar
+import { Calendar, CalendarDocument } from '../calendar/calendar.model'
 
 @Injectable()
-export class CalendarService {
+export class CalendarEventService {
   constructor(
+    @InjectModel(CalendarEvent.name)
+    private model: Model<CalendarEventDocument>,
     @InjectModel(Calendar.name)
-    private model: Model<CalendarDocument>,
-    @InjectModel(School.name)
-    private school: Model<SchoolDocument>,
+    private calendar: Model<CalendarDocument>,
   ) {}
 
-  async create(payload: CreateCalendarInput) {
+  async create(payload: CreateCalendarEventInput) {
     const model = new this.model(payload)
     console.log('before', { model, payload })
 
     await model.save()
 
-    const updateResult = await this.school.findByIdAndUpdate(
-      model.school,
-      { $push: { calendars: model._id } },
+    const updateResult = await this.calendar.findByIdAndUpdate(
+      model.calendar,
+      { $push: { calendarEvents: model._id } },
       { new: true, useFindAndModify: false },
     )
 
-    console.log('calendar', { updateResult })
+    console.log('[CalendarEventService] [create]', { updateResult })
 
     return model
   }
@@ -40,11 +43,11 @@ export class CalendarService {
     return this.model.findById(_id).exec()
   }
 
-  list(filters: ListCalendarInput) {
+  list(filters: ListCalendarEventInput) {
     return this.model.find({ ...filters }).exec()
   }
 
-  update(payload: UpdateCalendarInput) {
+  update(payload: UpdateCalendarEventInput) {
     return this.model
       .findByIdAndUpdate(payload._id, payload, { new: true })
       .exec()
@@ -60,9 +63,9 @@ export class CalendarService {
     }
 
     if (model) {
-      const updateResult = await this.school.findByIdAndUpdate(
+      const updateResult = await this.calendar.findByIdAndUpdate(
         model.school,
-        { $pull: { calendars: _id } },
+        { $pull: { calendarEvents: _id } },
         // { new: true, useFindAndModify: false },
       )
 

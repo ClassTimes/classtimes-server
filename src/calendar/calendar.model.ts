@@ -1,28 +1,34 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Field, ObjectType, ID } from '@nestjs/graphql'
+import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
+import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as mongoose from 'mongoose'
+import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
+import * as Utils from '../utils/Model'
 import { School } from '../school/school.model'
-import { Event } from '../event/event.model'
+import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 
-@ObjectType()
-@Schema()
-export class Calendar {
-  @Field(() => ID)
+@GQL.ObjectType()
+@DB.Schema({
+  timestamps: true,
+  // autoIndex: true
+})
+@Utils.ValidateSchema()
+export class Calendar extends Utils.Model {
+  @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @Field(() => String)
-  @Prop()
+  @GQL.Field(() => String)
+  @DB.Prop()
   name: string
 
-  @Field(() => School)
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
+  @GQL.Field(() => School)
+  @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
   school: mongoose.Types.ObjectId | School
 
-  @Field(() => [Event])
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Event' })
-  events: mongoose.Types.ObjectId[] | Event[]
+  @GQL.Field(() => [CalendarEvent])
+  @DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'CalendarEvent' })
+  calendarEvents: mongoose.Types.ObjectId[] | CalendarEvent[]
 }
 
 export type CalendarDocument = Calendar & mongoose.Document
-export const CalendarSchema = SchemaFactory.createForClass(Calendar)
+export const CalendarSchema = Calendar.schema
