@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import * as GQL from '@nestjs/graphql'
 import { join } from 'path'
+import { SendGridModule } from '@anchan828/nest-sendgrid'
+
 // import {
 //   ApolloErrorConverter, // required: core export
 //   // mapItemBases, // optional: MapItem bases of common Errors that can be extended
@@ -22,6 +24,9 @@ import { UserModule } from './user/user.module'
 
 @Module({
   imports: [
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_API_KEY,
+    }),
     MongooseModule.forRoot(
       process.env.MONGODB || 'mongodb://localhost/classtimes',
     ),

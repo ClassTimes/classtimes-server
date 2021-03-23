@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
+import { SendGridService } from '@anchan828/nest-sendgrid'
 
 // User
 import { User, UserDocument } from './user.model'
 import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
-// // Calendar
+// Calendar
 // import { Calendar, CalendarDocument } from '../calendar/calendar.model'
 
 @Injectable()
@@ -14,6 +15,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name)
     private model: Model<UserDocument>,
+    private readonly sendGrid: SendGridService,
   ) {}
 
   async create(payload: CreateUserInput) {
@@ -21,6 +23,18 @@ export class UserService {
     // console.log('before', { model, payload })
 
     await model.save()
+
+    await this.sendGrid.send({
+      to: model.email,
+      from: 'hey@classtimes.app',
+      subject: 'Welcome to Classtimes!',
+      text: `Hey @${model.username}, 
+      
+      Welcome to Classtimes!
+      
+      https://classtimes.app`,
+      // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    })
 
     // const updateResult = await this.calendar.findByIdAndUpdate(
     //   model.calendar,
