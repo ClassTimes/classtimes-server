@@ -4,9 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { UserService } from './user.service'
 import { User, UserSchema } from './user.model'
 import { UserResolver } from './user.resolver'
-// import { SchoolController } from './schools.controller';
-
-// import { Calendar, CalendarSchema } from '../calendar/calendar.model'
+// import { AuthService } from '../auth/auth.service'
 
 @Module({
   imports: [
@@ -15,13 +13,10 @@ import { UserResolver } from './user.resolver'
         name: User.name,
         schema: UserSchema,
       },
-      // {
-      //   name: Calendar.name,
-      //   schema: CalendarSchema,
-      // },
     ]),
   ],
-  //  controllers: [CalendarsController],
+  // components: [AuthService],
   providers: [UserService, UserResolver],
+  exports: [UserService], // ?
 })
 export class UserModule {}

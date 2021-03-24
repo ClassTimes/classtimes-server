@@ -1,26 +1,10 @@
-import {
-  Args,
-  Mutation,
-  Query,
-  Resolver,
-  ID,
-  // ResolveField,
-  // Parent,
-} from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
 // User
-import {
-  User,
-  // UserDocument
-} from './user.model'
+import { User } from './user.model'
 import { UserService } from './user.service'
-import {
-  CreateUserInput,
-  ListUserInput,
-  UpdateUserInput,
-  // CreateUserInputsSchema,
-} from './user.inputs'
+import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
 // Calendar
 // import { Calendar } from '../calendar/calendar.model'

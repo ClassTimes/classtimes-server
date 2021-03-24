@@ -1,6 +1,6 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../utils/Model'

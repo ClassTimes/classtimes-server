@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Auth {
+  jwt: String!
+  user: User!
+}
+
 type Calendar {
   _id: ID!
   calendarEvents(populate: Boolean!): [CalendarEvent!]!
@@ -98,6 +103,11 @@ input ListUserInput {
   fullName: String
 }
 
+input LoginInput {
+  emailOrUsername: String!
+  password: String!
+}
+
 type Mutation {
   createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
@@ -109,6 +119,7 @@ type Mutation {
   deleteEvent(_id: ID!): Event
   deleteSchool(_id: ID!): School!
   deleteUser(_id: ID!): User
+  loginUser(payload: LoginInput!): Auth!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event

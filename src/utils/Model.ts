@@ -1,7 +1,7 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
+import * as V from 'class-validator'
 import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
-import * as V from 'class-validator'
 
 export class ModelValidationError extends ApolloError {
   public path: any[]

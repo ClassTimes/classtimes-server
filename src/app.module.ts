@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import * as GQL from '@nestjs/graphql'
-import { join } from 'path'
 import { SendGridModule } from '@anchan828/nest-sendgrid'
+import { join } from 'path'
+import gitCommitInfo from 'git-commit-info'
 
 // import {
 //   ApolloErrorConverter, // required: core export
@@ -20,6 +21,8 @@ import { CalendarModule } from './calendar/calendar.module'
 import { EventModule } from './event/event.module'
 import { SchoolModule } from './school/school.module'
 import { UserModule } from './user/user.module'
+import { AuthModule } from './auth/auth.module'
+
 // import { ValidationError } from 'class-validator'
 
 @Module({
@@ -38,13 +41,21 @@ import { UserModule } from './user/user.module'
       playground: true,
       debug: false,
       introspection: true, // TODO Remove in production at release time
+      // context: ({ req }) => ({ req }),
+      context: ({ req }) => {
+        // res.header('key', 'value')
+        return { req }
+      },
       formatResponse: (response, options) => {
-        const meta = {
+        // information of process.cwd() and the latest commit
+        const commit = gitCommitInfo()
+        const extensions = {
           date: new Date().toISOString(),
+          commit,
         }
         return {
           ...response,
-          meta,
+          extensions,
         }
       },
       // formatError: new ApolloErrorConverter({
@@ -53,13 +64,26 @@ import { UserModule } from './user/user.module'
       //   // errorMap
       // }),
     }),
+    AuthModule,
     SchoolModule,
     CalendarModule,
     CalendarEventModule,
     EventModule,
     UserModule,
+
+    // PassportModule.register({ defaultStrategy: 'jwt' }),
+    // JwtModule.register({
+    //   signOptions: {
+    //     expiresIn: 3600,
+    //   },
+    // }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // ObjectidScalar,
+    // Logger,
+    // JwtStrategy,
+  ],
 })
 export class AppModule {}

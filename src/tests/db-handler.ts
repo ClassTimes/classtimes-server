@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
 const MONGO_SERVER = new MongoMemoryServer()

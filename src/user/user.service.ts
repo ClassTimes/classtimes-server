@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 
 // User
 import { User, UserDocument } from './user.model'

@@ -1,5 +1,5 @@
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
 // import { School } from '../school/school.model'
 

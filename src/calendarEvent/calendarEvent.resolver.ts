@@ -9,7 +9,7 @@ import {
   ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 
 // CalendarEvent
 import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
