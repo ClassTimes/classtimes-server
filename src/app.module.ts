@@ -38,6 +38,15 @@ import { UserModule } from './user/user.module'
       playground: true,
       debug: false,
       introspection: true, // TODO Remove in production at release time
+      formatResponse: (response, options) => {
+        const meta = {
+          date: new Date().toISOString(),
+        }
+        return {
+          ...response,
+          meta,
+        }
+      },
       // formatError: new ApolloErrorConverter({
       //   // logger,
       //   // fallback,

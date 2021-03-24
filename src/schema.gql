@@ -52,6 +52,7 @@ input CreateUserInput {
   email: String
   fullName: String
   mobile: String
+  password: String!
   role: String
   username: String!
 }
@@ -169,6 +170,7 @@ input UpdateUserInput {
   email: String
   fullName: String
   mobile: String
+  password: String!
   role: String
   username: String!
 }

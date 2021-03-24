@@ -18,6 +18,7 @@ export class User extends Utils.Model {
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false, min: 3, max: 100 })
   fullName: string
+  // @V.Contains('franco')
 
   @GQL.Field(() => String, { nullable: false })
   @DB.Prop({
@@ -31,7 +32,11 @@ export class User extends Utils.Model {
 
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false, unique: true, lowercase: true })
+  @V.IsEmail()
   email: string
+
+  @DB.Prop({ required: true, unique: false })
+  password: string
 
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false, unique: true, min: 3, max: 60 })

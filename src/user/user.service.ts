@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
+import bcrypt from 'bcrypt'
 
 // User
 import { User, UserDocument } from './user.model'
@@ -19,7 +20,21 @@ export class UserService {
   ) {}
 
   async create(payload: CreateUserInput) {
-    const model = new this.model(payload)
+    const { password, ...payloadWithoutPassword } = payload
+
+    let passwordHash: string
+    try {
+      passwordHash = await bcrypt.hash(password, 10)
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+
+    const finalPayload = {
+      password: passwordHash,
+      ...payloadWithoutPassword,
+    }
+    const model = new this.model(finalPayload)
     // console.log('before', { model, payload })
 
     await model.save()
@@ -45,6 +60,14 @@ export class UserService {
     // console.log('user after', { updateResult })
 
     return model
+  }
+
+  findByEmailOrUsername(emailOrUsername: string): Promise<User | undefined> {
+    return this.model
+      .findOne()
+      .or([{ username: emailOrUsername }, { email: emailOrUsername }])
+      .exec()
+    //.find((user) => user.username === username)
   }
 
   getById(_id: Types.ObjectId) {
