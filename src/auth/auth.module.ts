@@ -3,20 +3,20 @@ import { PassportModule } from '@nestjs/passport'
 import { JwtModule } from '@nestjs/jwt'
 // import { MongooseModule } from '@nestjs/mongoose'
 
+import { UserModule } from '../user/user.module'
 import { JwtStrategy } from './jwt.strategy'
-import { jwtConstants } from './constants'
 import { AuthService } from './auth.service'
 import { AuthResolver } from './auth.resolver'
-import { UserModule } from '../user/user.module'
+import { jwtConstants } from './constants'
 
 @Module({
   imports: [
-    UserModule,
-    PassportModule, // register({defaultStrategy: 'bearer'})
+    PassportModule.register({ defaultStrategy: 'jwt' }), // register({defaultStrategy: 'bearer'})
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '10d' },
     }),
+    UserModule,
   ],
   providers: [AuthService, AuthResolver, JwtStrategy],
   exports: [AuthService, JwtModule],

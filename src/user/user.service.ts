@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import mongoose from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
 import * as bcrypt from 'bcrypt'
 
@@ -15,7 +15,7 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 export class UserService {
   constructor(
     @InjectModel(User.name)
-    private model: Model<UserDocument>,
+    private model: mongoose.Model<UserDocument>,
     private readonly sendGrid: SendGridService,
   ) {}
 
@@ -62,15 +62,22 @@ export class UserService {
     return model
   }
 
-  findByEmailOrUsername(emailOrUsername: string): Promise<User | undefined> {
-    return this.model
-      .findOne()
-      .or([{ username: emailOrUsername }, { email: emailOrUsername }])
-      .exec()
+  findByEmailOrUsername(
+    emailOrUsername: string, //Types.ObjectId |
+  ): Promise<User | undefined> {
+    const conditions = []
+
+    // if (typeof emailOrUsername === 'string') {
+    conditions.push({ email: emailOrUsername })
+    conditions.push({ username: emailOrUsername })
+    // conditions.push({ _id: emailOrUsername })
+    // }
+
     //.find((user) => user.username === username)
+    return this.model.findOne().or(conditions).exec()
   }
 
-  getById(_id: Types.ObjectId) {
+  getById(_id: mongoose.Types.ObjectId) {
     return this.model.findById(_id).exec()
   }
 
@@ -84,7 +91,7 @@ export class UserService {
       .exec()
   }
 
-  async delete(_id: Types.ObjectId) {
+  async delete(_id: mongoose.Types.ObjectId) {
     let model
     try {
       model = await this.model.findByIdAndDelete(_id).exec()

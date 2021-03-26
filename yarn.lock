@@ -731,6 +731,18 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@casl/ability@^5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@casl/ability/-/ability-5.2.2.tgz#8582aaff347dbbf22935d5b7518f3d2a334a45c6"
+  integrity sha512-A0GTDWojP72Z4HSgS0pfbtGnhQWbquhn9luAr4Uc/HnqWWib0NvmpXC4//7gsiMUiVYCoFozQ+nG1oeZuhT7Jg==
+  dependencies:
+    "@ucast/mongo2js" "^1.3.0"
+
+"@casl/mongoose@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@casl/mongoose/-/mongoose-4.0.1.tgz#10220d2a0729c1e278b703a08a388c74a5701199"
+  integrity sha512-LbFLsOOVX/NTesGus89C9q87w0jvEamBtHXIKfR8QJVeffMyd1bw2ziGdGTTxlU3Jpnl2CFKUacJ8ovEzBAZ6Q==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -1719,7 +1731,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^26.0.20":
+"@types/jest@^26.0.21":
   version "26.0.21"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.21.tgz#3a73c2731e7e4f0fbaea56ce7ff8c79cf812bd24"
   integrity sha512-ab9TyM/69yg7eew9eOwKMUmvIZAKEGZYlq/dhe5/0IMUd/QLJv5ldRMdddSn+u22N13FP3s5jYyktxuBwY0kDA==
@@ -1736,6 +1748,13 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+
+"@types/jsonwebtoken@*":
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#56958cb2d80f6d74352bd2e501a018e2506a8a84"
+  integrity sha512-rNAPdomlIUX0i0cg2+I+Q1wOUr531zHBQ+cV/28PJ39bSPKjahatZZ2LMuhiguETkCgLVzfruw/ZvNMNkKoSzw==
+  dependencies:
+    "@types/node" "*"
 
 "@types/jsonwebtoken@8.5.0":
   version "8.5.0"
@@ -1829,7 +1848,24 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/passport@^1.0.6":
+"@types/passport-jwt@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/passport-jwt/-/passport-jwt-3.0.5.tgz#bb0b412130f2739bc223180634295d8d6f767df4"
+  integrity sha512-O6zZ4WKzQUwg3OU0MnOA2AIEQ6KfHyGdLoi4fqBLyb+kV7miGKNA2KNJRtiq45EsQ2QEDO8rKqORjXpWV7UJNg==
+  dependencies:
+    "@types/express" "*"
+    "@types/jsonwebtoken" "*"
+    "@types/passport-strategy" "*"
+
+"@types/passport-strategy@*":
+  version "0.2.35"
+  resolved "https://registry.yarnpkg.com/@types/passport-strategy/-/passport-strategy-0.2.35.tgz#e52f5212279ea73f02d9b06af67efe9cefce2d0c"
+  integrity sha512-o5D19Jy2XPFoX2rKApykY15et3Apgax00RRLf0RUotPDUsYrQa7x4howLYr9El2mlUApHmCMv5CZ1IXqKFQ2+g==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
+"@types/passport@*", "@types/passport@^1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.6.tgz#72343e49d65efa98cb328163cff5f127981947d7"
   integrity sha512-9oKfrJXuAxvyxdrtMCxKkHgmd6DMO8NDOLvMJ1LvIWd6/xP+i81PAkpTaEca7VhJX9S009RciwZL/j6dsLsHrA==
@@ -2032,6 +2068,34 @@
   dependencies:
     "@typescript-eslint/types" "4.18.0"
     eslint-visitor-keys "^2.0.0"
+
+"@ucast/core@^1.0.0", "@ucast/core@^1.4.1", "@ucast/core@^1.6.1":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@ucast/core/-/core-1.8.2.tgz#37f42594861b03c6750c07ca0fb32b0a75c74ecc"
+  integrity sha512-pc+XGjJmZkfypJIIRo38el/FUDtBXBlGQbXafWwRwInocXVwNbJ56efECKLgAQSyI7OCJFSaEeqpf3SrR3D6cw==
+
+"@ucast/js@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@ucast/js/-/js-3.0.1.tgz#679e4d17771c55cfa4b342abe33a4e5ded32c530"
+  integrity sha512-sabiuYsM5VUg4EaCwlDxnqcrHPFvbZcXvBu+P/o4pqK2q046RLTdo0bM7iVCn5Ro4HpCiRv3QzxtW8epcluY1g==
+  dependencies:
+    "@ucast/core" "^1.0.0"
+
+"@ucast/mongo2js@^1.3.0":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@ucast/mongo2js/-/mongo2js-1.3.2.tgz#e2d4f1e2f7b181aa58ff8830c20e799c6997a1b1"
+  integrity sha512-KNOEs61wxo4VJkVGqwP2a03TKuLx9fLMQgW5HD8Th/mrcuP1SspS4W+kUQD+wB1AA5pOn65hzlHUw5wZBwme0Q==
+  dependencies:
+    "@ucast/core" "^1.6.1"
+    "@ucast/js" "^3.0.0"
+    "@ucast/mongo" "^2.4.0"
+
+"@ucast/mongo@^2.4.0":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@ucast/mongo/-/mongo-2.4.1.tgz#da18b9dc962128313f399b3a77e81af7dfc2c3c3"
+  integrity sha512-l/hc3TxjWO9inBrgM5iMCAcsIeV2DToppRlabQa5xB/6uHYtCXfm3TPaJgr8TU1OFxqPlaXEnNQhaV0sVHGsoQ==
+  dependencies:
+    "@ucast/core" "^1.4.1"
 
 "@ungap/global-this@^0.4.2":
   version "0.4.4"

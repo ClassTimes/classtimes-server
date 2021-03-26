@@ -1,5 +1,12 @@
-import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql'
-import { Types } from 'mongoose'
+import { UseGuards } from '@nestjs/common'
+import * as GQL from '@nestjs/graphql' //{ Args, Mutation, Query, Resolver, ID }
+import mongoose from 'mongoose'
+
+// Guard
+import { GqlAuthGuard } from '../auth/gql-auth.guard'
+import { CurrentUser } from '../auth/currentUser'
+import { CheckPolicies, PoliciesGuard } from '../casl/policy.guard'
+import { AppAbility, Action } from '../casl/casl-ability.factory'
 
 // User
 import { User } from './user.model'
@@ -9,39 +16,60 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 // Calendar
 // import { Calendar } from '../calendar/calendar.model'
 
-@Resolver(() => User)
+@GQL.Resolver(() => User)
 export class UserResolver {
   constructor(private service: UserService) {}
 
-  @Query(() => User)
-  async user(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
+  @GQL.Query(() => User)
+  async user(
+    @GQL.Args('_id', { type: () => GQL.ID }) _id: mongoose.Types.ObjectId,
+  ) {
     return this.service.getById(_id)
   }
 
-  @Query(() => [User])
-  async users(@Args('filters', { nullable: true }) filters?: ListUserInput) {
+  // @UseGuards(PoliciesGuard)
+  // @CheckPolicies((ability: AppAbility) => {
+  //   console.log('[User] [CheckPolicies]', { ability })
+  //   return ability.can(Action.Read, User)
+  // })
+  @GQL.Query(() => [User])
+  async users(
+    @GQL.Args('filters', { nullable: true }) filters?: ListUserInput,
+  ) {
     return this.service.list(filters)
   }
 
-  @Mutation(() => User)
-  async createUser(@Args('payload') payload: CreateUserInput) {
+  @GQL.Mutation(() => User)
+  async createUser(@GQL.Args('payload') payload: CreateUserInput) {
     return this.service.create(payload)
   }
 
-  @Mutation(() => User, { nullable: true })
-  async updateUser(@Args('payload') payload: UpdateUserInput) {
+  @GQL.Mutation(() => User, { nullable: true })
+  async updateUser(@GQL.Args('payload') payload: UpdateUserInput) {
     return this.service.update(payload)
   }
 
-  @Mutation(() => User, { nullable: true })
-  async deleteUser(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
+  @GQL.Mutation(() => User, { nullable: true })
+  async deleteUser(
+    @GQL.Args('_id', { type: () => GQL.ID }) _id: mongoose.Types.ObjectId,
+  ) {
     return this.service.delete(_id)
+  }
+
+  /**
+   * Authentificated
+   */
+  @GQL.Query(() => User, { nullable: false })
+  @UseGuards(GqlAuthGuard)
+  whoAmI(@CurrentUser() user: User) {
+    console.log('[UserResolver]', { user })
+    return user //this.service.getById(user._id)
   }
 
   // @ResolveField()
   // async calendar(
   //   @Parent() user: UserDocument,
-  //   @Args('populate') populate: boolean,
+  //   @GQL.Args('populate') populate: boolean,
   // ) {
   //   if (populate) {
   //     await user
@@ -55,5 +83,5 @@ export class UserResolver {
 
 // import { Resolver } from '@nestjs/graphql';
 //
-// @Resolver()
+// @GQL.Resolver()
 // export class UserResolver {}

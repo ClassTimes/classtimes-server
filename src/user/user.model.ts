@@ -1,7 +1,7 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
-import mongoose from 'mongoose'
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
+import mongoose from 'mongoose'
 
 import * as Utils from '../utils/Model'
 
@@ -42,9 +42,9 @@ export class User extends Utils.Model {
   @DB.Prop({ required: false, unique: true, min: 3, max: 60 })
   mobile: string
 
-  @GQL.Field(() => String, { nullable: true })
-  @DB.Prop({ required: false, lowercase: true })
-  role: string
+  @GQL.Field(() => [String], { nullable: true })
+  @DB.Prop({ required: false })
+  roles: string[]
 
   // Relations
   // @GQL.Field(() => Calendar, { nullable: false })

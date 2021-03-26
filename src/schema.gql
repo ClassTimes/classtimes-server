@@ -138,6 +138,7 @@ type Query {
   schools(filters: ListSchoolInput): [School!]!
   user(_id: ID!): User!
   users(filters: ListUserInput): [User!]!
+  whoAmI: User!
 }
 
 type School {
@@ -191,6 +192,6 @@ type User {
   email: String
   fullName: String
   mobile: String
-  role: String
+  roles: [String!]
   username: String!
 }

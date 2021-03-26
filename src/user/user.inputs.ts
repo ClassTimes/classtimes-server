@@ -1,27 +1,27 @@
-import { Field, ID, InputType } from '@nestjs/graphql'
-import { Types } from 'mongoose'
-import { IsEmail } from 'class-validator'
+import * as GQL from '@nestjs/graphql'
+import * as V from 'class-validator'
+import mongoose from 'mongoose'
 // import { School } from '../school/school.model'
 
-@InputType()
+@GQL.InputType()
 export class CreateUserInput {
-  @Field(() => String, { nullable: true })
+  @GQL.Field(() => String, { nullable: true })
   fullName: string
 
-  @Field(() => String, { nullable: false })
+  @GQL.Field(() => String, { nullable: false })
   username: string
 
-  @Field(() => String, { nullable: false })
+  @GQL.Field(() => String, { nullable: false })
   password: string
 
-  @Field(() => String, { nullable: true })
-  @IsEmail()
+  @GQL.Field(() => String, { nullable: true })
+  @V.IsEmail()
   email: string
 
-  @Field(() => String, { nullable: true })
+  @GQL.Field(() => String, { nullable: true })
   mobile: string
 
-  @Field(() => String, { nullable: true })
+  @GQL.Field(() => String, { nullable: true })
   role: string
 
   // Realtions
@@ -29,17 +29,17 @@ export class CreateUserInput {
   // calendar: Types.ObjectId
 }
 
-@InputType()
+@GQL.InputType()
 export class ListUserInput {
-  @Field(() => ID, { nullable: true })
-  _id?: Types.ObjectId
+  @GQL.Field(() => GQL.ID, { nullable: true })
+  _id?: mongoose.Types.ObjectId
 
-  @Field(() => String, { nullable: true })
+  @GQL.Field(() => String, { nullable: true })
   fullName?: string
 }
 
-@InputType()
+@GQL.InputType()
 export class UpdateUserInput extends CreateUserInput {
-  @Field(() => ID)
-  _id: Types.ObjectId
+  @GQL.Field(() => GQL.ID)
+  _id: mongoose.Types.ObjectId
 }

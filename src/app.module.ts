@@ -4,6 +4,7 @@ import * as GQL from '@nestjs/graphql'
 import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { join } from 'path'
 import gitCommitInfo from 'git-commit-info'
+import * as Utils from './utils'
 
 // import {
 //   ApolloErrorConverter, // required: core export
@@ -22,6 +23,7 @@ import { EventModule } from './event/event.module'
 import { SchoolModule } from './school/school.module'
 import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
+import { CaslModule } from './casl/casl.module'
 
 // import { ValidationError } from 'class-validator'
 
@@ -34,7 +36,7 @@ import { AuthModule } from './auth/auth.module'
       process.env.MONGODB || 'mongodb://localhost/classtimes',
     ),
     GQL.GraphQLModule.forRoot({
-      // installSubscriptionHandlers: true,
+      installSubscriptionHandlers: true,
       // dateScalarMode: 'timestamp',
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
@@ -42,17 +44,25 @@ import { AuthModule } from './auth/auth.module'
       debug: false,
       introspection: true, // TODO Remove in production at release time
       // context: ({ req }) => ({ req }),
-      context: ({ req }) => {
+      context: (options) => {
+        // console.log(`[GQL] [context]`, { options: Object.keys(options) })
+        const { req } = options
+        // console.log(`[GQL] [context] [req]`, { req: Object.keys(req) })
         // res.header('key', 'value')
         return { req }
       },
       formatResponse: (response, options) => {
-        // information of process.cwd() and the latest commit
-        const commit = gitCommitInfo()
-        const extensions = {
-          date: new Date().toISOString(),
-          commit,
+        let extensions
+
+        if (Utils.isDev) {
+          const commit = gitCommitInfo() // information of process.cwd() and the latest commit
+          const date = new Date().toISOString()
+          extensions = {
+            ...extensions,
+            env: { date, commit },
+          }
         }
+
         return {
           ...response,
           extensions,
@@ -65,18 +75,12 @@ import { AuthModule } from './auth/auth.module'
       // }),
     }),
     AuthModule,
+    CaslModule,
     SchoolModule,
     CalendarModule,
     CalendarEventModule,
     EventModule,
     UserModule,
-
-    // PassportModule.register({ defaultStrategy: 'jwt' }),
-    // JwtModule.register({
-    //   signOptions: {
-    //     expiresIn: 3600,
-    //   },
-    // }),
   ],
   controllers: [AppController],
   providers: [
