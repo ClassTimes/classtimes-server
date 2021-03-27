@@ -11,7 +11,7 @@ type Calendar {
   _id: ID!
   calendarEvents(populate: Boolean!): [CalendarEvent!]!
   name: String!
-  school(populate: Boolean!): School!
+  subject(populate: Boolean!): Subject!
 }
 
 type CalendarEvent {
@@ -51,6 +51,11 @@ input CreateEventInput {
 
 input CreateSchoolInput {
   name: String!
+}
+
+input CreateSubjectInput {
+  name: String!
+  school: ID!
 }
 
 input CreateUserInput {
@@ -98,6 +103,11 @@ input ListSchoolInput {
   name: String
 }
 
+input ListSubjectInput {
+  _id: ID
+  name: String
+}
+
 input ListUserInput {
   _id: ID
   fullName: String
@@ -113,17 +123,20 @@ type Mutation {
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createEvent(payload: CreateEventInput!): Event!
   createSchool(payload: CreateSchoolInput!): School!
+  createSubject(payload: CreateSubjectInput!): Subject!
   createUser(payload: CreateUserInput!): User!
   deleteCalendar(_id: ID!): Calendar
   deleteCalendarEvent(_id: ID!): CalendarEvent
   deleteEvent(_id: ID!): Event
   deleteSchool(_id: ID!): School!
+  deleteSubject(_id: ID!): Subject!
   deleteUser(_id: ID!): User
   loginUser(payload: LoginInput!): Auth!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
   updateSchool(payload: UpdateSchoolInput!): School!
+  updateSubject(payload: UpdateSubjectInput!): Subject!
   updateUser(payload: UpdateUserInput!): User
 }
 
@@ -136,6 +149,8 @@ type Query {
   events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!
   schools(filters: ListSchoolInput): [School!]!
+  subject(_id: ID!): Subject!
+  subjects(filters: ListSubjectInput): [Subject!]!
   user(_id: ID!): User!
   users(filters: ListUserInput): [User!]!
   whoAmI: User!
@@ -143,8 +158,15 @@ type Query {
 
 type School {
   _id: ID!
+  name: String!
+  subjects(populate: Boolean!): [Subject!]!
+}
+
+type Subject {
+  _id: ID!
   calendars(populate: Boolean!): [Calendar!]!
   name: String!
+  school(populate: Boolean!): School!
 }
 
 input UpdateCalendarEventInput {
@@ -173,6 +195,11 @@ input UpdateEventInput {
 }
 
 input UpdateSchoolInput {
+  _id: ID!
+  name: String
+}
+
+input UpdateSubjectInput {
   _id: ID!
   name: String
 }

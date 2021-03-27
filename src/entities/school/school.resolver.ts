@@ -18,8 +18,8 @@ import {
   UpdateSchoolInput,
 } from './school.inputs'
 
-// Calendar
-import { Calendar } from '../calendar/calendar.model'
+// Subject
+import { Subject } from '../subject/subject.model'
 
 @Resolver(() => School)
 export class SchoolResolver {
@@ -53,16 +53,16 @@ export class SchoolResolver {
   }
 
   @ResolveField()
-  async calendars(
+  async subjects(
     @Parent() school: SchoolDocument,
     @Args('populate') populate: boolean,
   ) {
     if (populate) {
       await school
-        .populate({ path: 'calendars', model: Calendar.name })
+        .populate({ path: 'subjects', model: Subject.name })
         .execPopulate()
     }
 
-    return school.calendars
+    return school.subjects
   }
 }

@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../../utils/Model'
-import { School } from '../school/school.model'
+import { Subject } from '../subject/subject.model'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 
 @GQL.ObjectType()
@@ -21,9 +21,9 @@ export class Calendar extends Utils.Model {
   @DB.Prop()
   name: string
 
-  @GQL.Field(() => School)
-  @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
-  school: mongoose.Types.ObjectId | School
+  @GQL.Field(() => Subject)
+  @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' })
+  subject: mongoose.Types.ObjectId | Subject
 
   @GQL.Field(() => [CalendarEvent])
   @DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'CalendarEvent' })

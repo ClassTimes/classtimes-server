@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { CalendarService } from './calendar.service'
 import { Calendar, CalendarSchema } from './calendar.model'
 import { CalendarResolver } from './calendar.resolver'
-import { School, SchoolSchema } from '../school/school.model'
+import { Subject, SubjectSchema } from '../subject/subject.model'
 // import { SchoolController } from './entities/schools.controller';
 
 @Module({
@@ -15,8 +15,8 @@ import { School, SchoolSchema } from '../school/school.model'
         schema: CalendarSchema,
       },
       {
-        name: School.name,
-        schema: SchoolSchema,
+        name: Subject.name,
+        schema: SubjectSchema,
       },
     ]),
   ],
