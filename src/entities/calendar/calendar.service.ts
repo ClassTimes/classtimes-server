@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
-import { School, SchoolDocument } from '../school/school.model'
+import { Subject, SubjectDocument } from '../subject/subject.model'
 import { Calendar, CalendarDocument } from './calendar.model'
 import {
   CreateCalendarInput,
@@ -15,8 +15,8 @@ export class CalendarService {
   constructor(
     @InjectModel(Calendar.name)
     private model: Model<CalendarDocument>,
-    @InjectModel(School.name)
-    private school: Model<SchoolDocument>,
+    @InjectModel(Subject.name)
+    private subject: Model<SubjectDocument>,
   ) { }
 
   async create(payload: CreateCalendarInput) {
@@ -25,8 +25,8 @@ export class CalendarService {
 
     await model.save()
 
-    const updateResult = await this.school.findByIdAndUpdate(
-      model.school,
+    const updateResult = await this.subject.findByIdAndUpdate(
+      model.subject,
       { $push: { calendars: model._id } },
       { new: true, useFindAndModify: false },
     )
@@ -60,8 +60,8 @@ export class CalendarService {
     }
 
     if (model) {
-      const updateResult = await this.school.findByIdAndUpdate(
-        model.school,
+      const updateResult = await this.subject.findByIdAndUpdate(
+        model.subject,
         { $pull: { calendars: _id } },
         // { new: true, useFindAndModify: false },
       )

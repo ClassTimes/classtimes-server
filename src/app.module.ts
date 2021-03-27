@@ -21,6 +21,7 @@ import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.modu
 import { CalendarModule } from './entities/calendar/calendar.module'
 import { EventModule } from './entities/event/event.module'
 import { SchoolModule } from './entities/school/school.module'
+import { SubjectModule } from './entities/subject/subject.module'
 import { UserModule } from './entities/user/user.module'
 import { AuthModule } from './auth/auth.module'
 import { CaslModule } from './casl/casl.module'
@@ -77,6 +78,7 @@ import { CaslModule } from './casl/casl.module'
     AuthModule,
     CaslModule,
     SchoolModule,
+    SubjectModule,
     CalendarModule,
     CalendarEventModule,
     EventModule,
