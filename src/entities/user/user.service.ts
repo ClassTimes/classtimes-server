@@ -17,7 +17,7 @@ export class UserService {
     @InjectModel(User.name)
     private model: mongoose.Model<UserDocument>,
     private readonly sendGrid: SendGridService,
-  ) {}
+  ) { }
 
   async create(payload: CreateUserInput) {
     const { password, ...payloadWithoutPassword } = payload

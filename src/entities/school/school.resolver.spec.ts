@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { EventResolver } from './event.resolver'
+import { SchoolResolver } from './entities/school.resolver'
 
-describe('EventResolver', () => {
-  let resolver: EventResolver
+describe('SchoolResolver', () => {
+  let resolver: SchoolResolver
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [EventResolver],
+      providers: [SchoolResolver],
     }).compile()
 
-    resolver = module.get<EventResolver>(EventResolver)
+    resolver = module.get<SchoolResolver>(SchoolResolver)
   })
 
   it('should be defined', () => {

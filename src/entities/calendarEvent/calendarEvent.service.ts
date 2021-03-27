@@ -20,7 +20,7 @@ export class CalendarEventService {
     private model: Model<CalendarEventDocument>,
     @InjectModel(Calendar.name)
     private calendar: Model<CalendarDocument>,
-  ) {}
+  ) { }
 
   async create(payload: CreateCalendarEventInput) {
     const model = new this.model(payload)

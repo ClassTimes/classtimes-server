@@ -37,4 +37,4 @@ import { EventResolver } from './event.resolver'
     // },
   ],
 })
-export class EventModule {}
+export class EventModule { }

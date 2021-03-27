@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 // import * as V from 'class-validator'
 
 import { connectFakeMongo, disconnectFakeMongo } from '../tests/db-handler'
-import { Event } from './event.model'
+import { Event } from './entities/event.model'
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
 

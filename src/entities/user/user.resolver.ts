@@ -3,10 +3,10 @@ import * as GQL from '@nestjs/graphql' //{ Args, Mutation, Query, Resolver, ID }
 import mongoose from 'mongoose'
 
 // Guard
-import { GqlAuthGuard } from '../auth/gql-auth.guard'
-import { CurrentUser } from '../auth/currentUser'
-import { CheckPolicies, PoliciesGuard } from '../casl/policy.guard'
-import { AppAbility, Action } from '../casl/casl-ability.factory'
+import { GqlAuthGuard } from '../../auth/gql-auth.guard'
+import { CurrentUser } from '../../auth/currentUser'
+import { CheckPolicies, PoliciesGuard } from '../../casl/policy.guard'
+import { AppAbility, Action } from '../../casl/casl-ability.factory'
 
 // User
 import { User } from './user.model'
@@ -18,7 +18,7 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
 @GQL.Resolver(() => User)
 export class UserResolver {
-  constructor(private service: UserService) {}
+  constructor(private service: UserService) { }
 
   @GQL.Query(() => User)
   async user(

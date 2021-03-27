@@ -17,11 +17,11 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 // Models
-import { CalendarEventModule } from './calendarEvent/calendarEvent.module'
-import { CalendarModule } from './calendar/calendar.module'
-import { EventModule } from './event/event.module'
-import { SchoolModule } from './school/school.module'
-import { UserModule } from './user/user.module'
+import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
+import { CalendarModule } from './entities/calendar/calendar.module'
+import { EventModule } from './entities/event/event.module'
+import { SchoolModule } from './entities/school/school.module'
+import { UserModule } from './entities/user/user.module'
 import { AuthModule } from './auth/auth.module'
 import { CaslModule } from './casl/casl.module'
 
@@ -90,4 +90,4 @@ import { CaslModule } from './casl/casl.module'
     // JwtStrategy,
   ],
 })
-export class AppModule {}
+export class AppModule { }

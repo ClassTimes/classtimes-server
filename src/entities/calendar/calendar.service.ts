@@ -17,7 +17,7 @@ export class CalendarService {
     private model: Model<CalendarDocument>,
     @InjectModel(School.name)
     private school: Model<SchoolDocument>,
-  ) {}
+  ) { }
 
   async create(payload: CreateCalendarInput) {
     const model = new this.model(payload)

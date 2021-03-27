@@ -14,7 +14,7 @@ export class SchoolService {
   constructor(
     @InjectModel(School.name)
     private model: Model<SchoolDocument>,
-  ) {}
+  ) { }
 
   create(payload: CreateSchoolInput) {
     const model = new this.model(payload)

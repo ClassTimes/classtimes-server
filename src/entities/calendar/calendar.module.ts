@@ -5,7 +5,7 @@ import { CalendarService } from './calendar.service'
 import { Calendar, CalendarSchema } from './calendar.model'
 import { CalendarResolver } from './calendar.resolver'
 import { School, SchoolSchema } from '../school/school.model'
-// import { SchoolController } from './schools.controller';
+// import { SchoolController } from './entities/schools.controller';
 
 @Module({
   imports: [
@@ -23,4 +23,4 @@ import { School, SchoolSchema } from '../school/school.model'
   //  controllers: [CalendarsController],
   providers: [CalendarService, CalendarResolver],
 })
-export class CalendarModule {}
+export class CalendarModule { }

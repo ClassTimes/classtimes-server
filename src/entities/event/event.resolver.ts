@@ -29,7 +29,7 @@ import { User } from '../user/user.model'
 
 @Resolver(() => Event)
 export class EventResolver {
-  constructor(private service: EventService) {}
+  constructor(private service: EventService) { }
 
   @Query(() => Event)
   async event(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {

@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 
 // User
-import { UserService } from '../user/user.service'
+import { UserService } from '../entities/user/user.service'
 import { LoginInput } from './auth.inputs'
 import { AuthenticationError } from './auth.errors'
 
@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(payload: LoginInput): Promise<CT.JWTLoginResponse> | undefined {
     const user = await this.usersService.findByEmailOrUsername(
