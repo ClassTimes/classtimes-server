@@ -23,7 +23,7 @@ import { Calendar } from '../calendar/calendar.model'
 
 @Resolver(() => School)
 export class SchoolResolver {
-  constructor(private service: SchoolService) {}
+  constructor(private service: SchoolService) { }
 
   @Query(() => School)
   async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {

@@ -8,8 +8,8 @@ import {
   ExtractSubjectType,
 } from '@casl/ability'
 
-import type { User } from '../user/user.model'
-import type { School } from '../school/school.model'
+import type { User } from '../entities/user/user.model'
+import type { School } from '../entities/school/school.model'
 
 type Subjects = InferSubjects<typeof School | typeof User> | 'all'
 

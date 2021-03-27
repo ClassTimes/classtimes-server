@@ -22,4 +22,4 @@ import { Calendar, CalendarSchema } from '../calendar/calendar.model'
   //  controllers: [CalendarsController],
   providers: [CalendarEventService, CalendarEventResolver],
 })
-export class CalendarEventModule {}
+export class CalendarEventModule { }

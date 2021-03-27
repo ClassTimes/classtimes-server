@@ -18,7 +18,7 @@ export class EventService {
   constructor(
     @InjectModel(Event.name)
     private model: Model<EventDocument>,
-  ) {}
+  ) { }
   // @InjectModel(Calendar.name)
   // private calendar: Model<CalendarDocument>,
 

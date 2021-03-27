@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { SchoolService } from './school.service'
 import { School, SchoolSchema } from './school.model'
 import { SchoolResolver } from './school.resolver'
-// import { SchoolController } from './schools.controller';
+// import { SchoolController } from './entities/schools.controller';
 // import { School, SchoolSchema } from './schemas/school.schema'
 
 @Module({
@@ -19,4 +19,4 @@ import { SchoolResolver } from './school.resolver'
   //   controllers: [SchoolsController],
   providers: [SchoolService, SchoolResolver],
 })
-export class SchoolModule {}
+export class SchoolModule { }

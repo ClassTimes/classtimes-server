@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { CalendarEventResolver } from './calendarEvent.resolver'
+import { CalendarEventResolver } from './entities/calendarEvent.resolver'
 
 describe('CalendarEventResolver', () => {
   let resolver: CalendarEventResolver

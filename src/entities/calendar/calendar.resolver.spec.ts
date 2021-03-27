@@ -1,16 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { CalendarResolver } from './entities/calendar.resolver'
 
-import { UserResolver } from './user.resolver'
-
-describe('UserResolver', () => {
-  let resolver: UserResolver
+describe('CalendarResolver', () => {
+  let resolver: CalendarResolver
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserResolver],
+      providers: [CalendarResolver],
     }).compile()
 
-    resolver = module.get<UserResolver>(UserResolver)
+    resolver = module.get<CalendarResolver>(CalendarResolver)
   })
 
   it('should be defined', () => {

@@ -1,5 +1,5 @@
 declare namespace CT {
-  type User = import('../user/user.model').User
+  type User = import('../entities/user/user.model').User
 
   interface JWTPayload {
     sub: string

@@ -3,7 +3,7 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
 
-import * as Utils from '../utils/Model'
+import * as Utils from '../../utils/Model'
 
 @GQL.ObjectType()
 @DB.Schema({
