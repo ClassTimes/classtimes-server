@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose'
 
 import { School, SchoolDocument } from './school.model'
 import { Subject, SubjectDocument } from '../subject/subject.model'
+import { SubjectService } from '../subject/subject.service'
 
 import {
   CreateSchoolInput,
@@ -18,6 +19,8 @@ export class SchoolService {
     private model: Model<SchoolDocument>,
     @InjectModel(Subject.name)
     private subject: Model<SubjectDocument>,
+
+    private subjectService: SubjectService
   ) { }
 
   create(payload: CreateSchoolInput) {
@@ -41,6 +44,7 @@ export class SchoolService {
 
   async delete(_id: Types.ObjectId) {
     let model: any // Model<SchoolDocument>
+
     try {
       model = await this.model.findByIdAndDelete(_id).exec()
     } catch (error) {
@@ -49,10 +53,11 @@ export class SchoolService {
     }
 
     if (model) {
-      const updateResult = await this.subject.findByIdAndDelete(model.subjects);
+      const deleteSubject = await this.subjectService.deleteMany(model.subjects)
+      //const updateResult = await this.subject.findByIdAndDelete(model.subjects);
       //console.log('delete updateResult', { updateResult })
     }
 
-    return { ...model };
+    return model;
   }
 }
