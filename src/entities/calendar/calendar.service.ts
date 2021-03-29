@@ -21,7 +21,7 @@ export class CalendarService {
 
   async create(payload: CreateCalendarInput) {
     const model = new this.model(payload)
-    console.log('before', { model, payload })
+    //console.log('before', { model, payload })
 
     await model.save()
 
@@ -30,8 +30,7 @@ export class CalendarService {
       { $push: { calendars: model._id } },
       { new: true, useFindAndModify: false },
     )
-
-    console.log('calendar', { updateResult })
+    //console.log('calendar', { updateResult })
 
     return model
   }
@@ -66,7 +65,7 @@ export class CalendarService {
         // { new: true, useFindAndModify: false },
       )
 
-      console.log('delete updateResult', { updateResult })
+      //console.log('delete updateResult', { updateResult })
     }
 
     return model

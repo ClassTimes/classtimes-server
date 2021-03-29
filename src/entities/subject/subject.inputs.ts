@@ -8,7 +8,7 @@ export class CreateSubjectInput {
 
   // Relations
   @Field(() => ID)
-  school: Types.ObjectId
+  school?: Types.ObjectId
 }
 
 @InputType()
@@ -27,4 +27,7 @@ export class UpdateSubjectInput {
 
   @Field(() => String, { nullable: true })
   name?: string
+
+  @Field(() => ID)
+  school?: Types.ObjectId
 }

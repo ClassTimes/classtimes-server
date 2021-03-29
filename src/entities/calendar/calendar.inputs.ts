@@ -1,15 +1,13 @@
 import { Field, ID, InputType } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
-// import { School } from '../school/school.model'
-
 @InputType()
 export class CreateCalendarInput {
   @Field(() => String)
   name: string
 
   @Field(() => ID)
-  school: Types.ObjectId
+  subject: Types.ObjectId
 }
 
 @InputType()
@@ -21,7 +19,7 @@ export class ListCalendarInput {
   name?: string
 
   @Field(() => ID, { nullable: true })
-  school: Types.ObjectId
+  subject: Types.ObjectId
 }
 
 @InputType()
@@ -33,5 +31,5 @@ export class UpdateCalendarInput {
   name?: string
 
   @Field(() => ID, { nullable: true })
-  school: Types.ObjectId
+  subject: Types.ObjectId
 }

@@ -40,7 +40,7 @@ input CreateCalendarEventInput {
 
 input CreateCalendarInput {
   name: String!
-  school: ID!
+  subject: ID!
 }
 
 input CreateEventInput {
@@ -88,7 +88,7 @@ input ListCalendarEventInput {
 input ListCalendarInput {
   _id: ID
   name: String
-  school: ID
+  subject: ID
 }
 
 input ListEventInput {
@@ -184,7 +184,7 @@ input UpdateCalendarEventInput {
 input UpdateCalendarInput {
   _id: ID!
   name: String
-  school: ID
+  subject: ID
 }
 
 input UpdateEventInput {
@@ -202,6 +202,7 @@ input UpdateSchoolInput {
 input UpdateSubjectInput {
   _id: ID!
   name: String
+  school: ID!
 }
 
 input UpdateUserInput {

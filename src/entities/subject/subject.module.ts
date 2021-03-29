@@ -5,9 +5,8 @@ import { SubjectService } from './subject.service'
 import { Subject, SubjectSchema } from './subject.model'
 import { SubjectResolver } from './subject.resolver'
 
-
-// import { SchoolController } from './entities/schools.controller';
-// import { School, SchoolSchema } from './schemas/school.schema'
+import { Calendar, CalendarSchema } from '../calendar/calendar.model'
+import { School, SchoolSchema } from '../school/school.model'
 
 @Module({
   imports: [
@@ -15,6 +14,14 @@ import { SubjectResolver } from './subject.resolver'
       {
         name: Subject.name,
         schema: SubjectSchema,
+      },
+      {
+        name: School.name,
+        schema: SchoolSchema,
+      },
+      {
+        name: Calendar.name,
+        schema: CalendarSchema,
       },
     ]),
   ],
