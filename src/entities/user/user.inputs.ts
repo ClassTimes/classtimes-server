@@ -12,10 +12,10 @@ export class CreateUserInput {
   username: string
 
   @GQL.Field(() => String, { nullable: false })
+  @V.MinLength(10)
   password: string
 
   @GQL.Field(() => String, { nullable: true })
-  @V.IsEmail()
   email: string
 
   @GQL.Field(() => String, { nullable: true })

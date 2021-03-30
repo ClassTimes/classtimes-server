@@ -31,12 +31,10 @@ export class UserService {
     }
 
     const finalPayload = {
-      password: passwordHash,
+      passwordHash,
       ...payloadWithoutPassword,
     }
     const model = new this.model(finalPayload)
-    // console.log('before', { model, payload })
-
     await model.save()
 
     await this.sendGrid.send({
