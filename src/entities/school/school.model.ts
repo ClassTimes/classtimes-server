@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import * as Utils from '../../utils/Model'
 import { Subject } from '../subject/subject.model'
 
+//@Utils.HasMany({ field: 'subjects', ref: 'Subject' })
 @GQL.ObjectType()
 @DB.Schema({
   timestamps: true,
@@ -20,10 +21,20 @@ export class School extends Utils.Model {
   @DB.Prop()
   name: string
 
+  //@DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Subject' })
   @GQL.Field(() => [Subject])
-  @DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Subject' })
+  @Utils.OneToMany()
   subjects: mongoose.Types.ObjectId[] | Subject[]
 }
 
 export type SchoolDocument = School & mongoose.Document
 export const SchoolSchema = School.schema
+// SchoolSchema.virtual('subjects', {
+//   ref: 'Subject',
+//   localField: '_id',
+//   foreignField: 'school'
+// })
+
+// SchoolSchema.set('toObject', { virtuals: true })
+// SchoolSchema.set('toJSON', { virtuals: true })
+

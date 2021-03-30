@@ -1,5 +1,6 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as V from 'class-validator'
+import * as Reflect from 'reflect-metadata'
 import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
 
@@ -31,11 +32,55 @@ export function ValidateSchema() {
   }
 }
 
+function WithRelations() {
+  return function <T extends typeof Model>(target: T) {
+    target.__withRelations__ = true
+    return target
+  }
+}
+
+
+/*export function HasMany(options: {
+  field: string,
+  ref: string,
+  //foreignField: string
+}) {
+  const { field, ref } = options
+  return function <T extends typeof Model>(target: T) {
+    target.schema.virtual(field, {
+      ref,
+      localField: '_id',
+      foreignField: target.name.toLowerCase()
+    })
+    //console.log(target.name.toLowerCase())
+    target.schema.set('toObject', { virtuals: true })
+    target.schema.set('toJSON', { virtuals: true })
+
+    return target
+  }
+}*/
+
+type ObjectType<T> = { new(): T } | Function;
+// string | ((type?: any) => ObjectType<T>)
+export function OneToMany<T>(typeFunctionOrTarget?: string | ((type?: any) => ObjectType<T>)): PropertyDecorator {
+  return function (object: Object, propertyName: string) {
+    console.log(arguments)
+    console.log(object)
+  }
+}
+
+// function format(formatString: string) {
+//   return Reflect.metadata(formatMetadataKey, formatString);
+// }
+
+
 /**
  * Base Model
  */
+@WithRelations()
 export class Model {
   static __validate__: boolean | undefined
+  static __withRelations__: boolean | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
 }
 
@@ -50,6 +95,13 @@ Object.defineProperty(Model, 'schema', {
     this[SCHEMA_CACHE_KEY] = schema
     // eslint-disable-next-line
     const klass = this
+
+    if (this['__withRelations__']) {
+      schema.pre('findOneAndDelete', async function (next) {
+        console.log('findOneAndDelete:', this)
+        next(undefined)
+      })
+    }
 
     if (this['__validate__']) {
       schema.pre('validate', async function (next) {
