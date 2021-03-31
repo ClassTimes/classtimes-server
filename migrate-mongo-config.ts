@@ -31,4 +31,4 @@ export const config = {
 
 export default config
 // Return the config as a promise
-module.exports = config
+// module.exports = config

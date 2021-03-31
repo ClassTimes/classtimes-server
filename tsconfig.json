@@ -11,6 +11,6 @@
     "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true,
-    "typeRoots": ["./src/types/*.d.ts"]
+    "typeRoots": ["./src/types/*.d.ts", "@types", "node_modules/@types"]
   }
 }
