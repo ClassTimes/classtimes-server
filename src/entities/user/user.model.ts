@@ -35,8 +35,8 @@ export class User extends Utils.Model {
   @V.IsEmail()
   email: string
 
-  @DB.Prop({ required: true, unique: false })
-  password: string
+  @DB.Prop({ required: true })
+  passwordHash: string
 
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false, unique: true, min: 3, max: 60 })

@@ -4,11 +4,14 @@ import { Model, Types } from 'mongoose'
 
 import { Subject, SubjectDocument } from '../subject/subject.model'
 import { Calendar, CalendarDocument } from './calendar.model'
+import { CalendarEvent, CalendarEventDocument } from '../calendarEvent/calendarEvent.model'
 import {
   CreateCalendarInput,
   ListCalendarInput,
   UpdateCalendarInput,
 } from './calendar.inputs'
+
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 
 @Injectable()
 export class CalendarService {
@@ -17,11 +20,15 @@ export class CalendarService {
     private model: Model<CalendarDocument>,
     @InjectModel(Subject.name)
     private subject: Model<SubjectDocument>,
+    @InjectModel(CalendarEvent.name)
+    private calendarEvent: Model<CalendarEventDocument>,
+
+    private calendarEventService: CalendarEventService
   ) { }
 
   async create(payload: CreateCalendarInput) {
     const model = new this.model(payload)
-    console.log('before', { model, payload })
+    //console.log('before', { model, payload })
 
     await model.save()
 
@@ -30,8 +37,7 @@ export class CalendarService {
       { $push: { calendars: model._id } },
       { new: true, useFindAndModify: false },
     )
-
-    console.log('calendar', { updateResult })
+    //console.log('calendar', { updateResult })
 
     return model
   }
@@ -66,9 +72,18 @@ export class CalendarService {
         // { new: true, useFindAndModify: false },
       )
 
-      console.log('delete updateResult', { updateResult })
+      const deleteCalendarEvents = await this.calendarEventService.deleteMany(model.calendarEvents)
+      //console.log('delete updateResult', { updateResult })
     }
 
+    return model
+  }
+
+  async deleteMany(_ids: Types.ObjectId[]) {
+    let model
+    for (let _id of _ids) {
+      model = await this.delete(_id)
+    }
     return model
   }
 }

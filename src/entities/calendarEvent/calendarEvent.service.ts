@@ -74,4 +74,12 @@ export class CalendarEventService {
 
     return model
   }
+
+  async deleteMany(_ids: Types.ObjectId[]) {
+    let model
+    for (let _id of _ids) {
+      model = await this.delete(_id)
+    }
+    return model
+  }
 }

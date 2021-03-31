@@ -20,7 +20,7 @@ export class AuthService {
     )
     if (user) {
       try {
-        const match = await bcrypt.compare(payload.password, user.password)
+        const match = await bcrypt.compare(payload.password, user.passwordHash)
         if (match) {
           // const { password, ...result } = user
           const jwtPayload: CT.JWTPayload = {
