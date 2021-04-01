@@ -38,7 +38,7 @@ interface IOneToManyOptions {
 }
 
 export function OneToMany(options: IOneToManyOptions = {}) {
-  const { ref } = options
+  const { ref, foreignField, localField } = options
   return (target: any, propertyKey: string) => {
     const model = target.constructor as typeof Model
     model.__assoc__ = model.__assoc__ || {}
