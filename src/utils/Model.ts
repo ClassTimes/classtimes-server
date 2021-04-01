@@ -1,8 +1,9 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as V from 'class-validator'
-import * as Reflect from 'reflect-metadata'
 import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
+import pluralize from 'pluralize'
+import titleize from 'titleize'
 
 export class ModelValidationError extends ApolloError {
   public path: any[]
@@ -17,8 +18,6 @@ export class ModelValidationError extends ApolloError {
   ) {
     super(message, 'MODEL_VALIDATION_FAILED', extensions)
     this.path = path
-    // this.name = 'ModelValidationError'
-    // Object.defineProperty(this, 'name', { value: 'ValidationError' })
   }
 }
 
@@ -32,55 +31,35 @@ export function ValidateSchema() {
   }
 }
 
-function WithRelations() {
-  return function <T extends typeof Model>(target: T) {
-    target.__withRelations__ = true
-    return target
-  }
+interface IOneToManyOptions {
+  ref?: string
+  foreignField?: string
+  localField?: string
 }
 
-
-/*export function HasMany(options: {
-  field: string,
-  ref: string,
-  //foreignField: string
-}) {
-  const { field, ref } = options
-  return function <T extends typeof Model>(target: T) {
-    target.schema.virtual(field, {
+export function OneToMany(options: IOneToManyOptions = {}) {
+  const { ref } = options
+  return (target: any, propertyKey: string) => {
+    const model = target.constructor as typeof Model
+    model.__assoc__ = model.__assoc__ || {}
+    model.__assoc__['OneToMany'] = model.__assoc__['OneToMany'] || []
+    model.__assoc__['OneToMany'].push({
+      target,
+      propertyKey,
       ref,
-      localField: '_id',
-      foreignField: target.name.toLowerCase()
+      foreignField,
+      localField,
     })
-    //console.log(target.name.toLowerCase())
-    target.schema.set('toObject', { virtuals: true })
-    target.schema.set('toJSON', { virtuals: true })
-
-    return target
-  }
-}*/
-
-type ObjectType<T> = { new(): T } | Function;
-// string | ((type?: any) => ObjectType<T>)
-export function OneToMany<T>(typeFunctionOrTarget?: string | ((type?: any) => ObjectType<T>)): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
-    console.log(arguments)
-    console.log(object)
   }
 }
-
-// function format(formatString: string) {
-//   return Reflect.metadata(formatMetadataKey, formatString);
-// }
-
 
 /**
  * Base Model
  */
-@WithRelations()
+@ValidateSchema()
 export class Model {
   static __validate__: boolean | undefined
-  static __withRelations__: boolean | undefined
+  static __assoc__: Record<string, any> | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
 }
 
@@ -96,18 +75,36 @@ Object.defineProperty(Model, 'schema', {
     // eslint-disable-next-line
     const klass = this
 
-    if (this['__withRelations__']) {
-      schema.pre('findOneAndDelete', async function (next) {
-        console.log('findOneAndDelete:', this)
-        next(undefined)
-      })
+    const assocs = this?.__assoc__?.['OneToMany']
+    if (assocs) {
+      for (const assoc of assocs) {
+        // TODO Cleanup to a function
+        const {
+          target,
+          propertyKey,
+          foreignField: _foreignField,
+          ref: _ref,
+          localField: _localField,
+        } = assoc
+        const model = target.constructor as typeof Model
+        const foreignField = _foreignField ?? model.name.toLowerCase()
+        const localField = _localField ?? '_id'
+        const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))
+        model?.schema.virtual(propertyKey, {
+          ref,
+          localField,
+          foreignField,
+        })
+        model?.schema.set('toObject', { virtuals: true })
+        model?.schema.set('toJSON', { virtuals: true })
+      }
     }
 
     if (this['__validate__']) {
+      // TODO Cleanup to a function
       schema.pre('validate', async function (next) {
         const modelData = this.toObject()
         const model = plainToClass(klass, modelData)
-
         try {
           console.log('model', model)
           await V.validateOrReject(model)

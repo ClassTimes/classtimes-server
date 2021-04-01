@@ -10,7 +10,6 @@ import * as Utils from '../../utils/Model'
   timestamps: true,
   // autoIndex: true
 })
-@Utils.ValidateSchema()
 export class User extends Utils.Model {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
@@ -18,7 +17,6 @@ export class User extends Utils.Model {
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false, min: 3, max: 100 })
   fullName: string
-  // @V.Contains('franco')
 
   @GQL.Field(() => String, { nullable: false })
   @DB.Prop({

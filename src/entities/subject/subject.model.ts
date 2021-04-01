@@ -12,7 +12,6 @@ import { School } from '../school/school.model'
   timestamps: true,
   // autoIndex: true
 })
-@Utils.ValidateSchema()
 export class Subject extends Utils.Model {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId

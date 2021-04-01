@@ -159,7 +159,7 @@ type Query {
 type School {
   _id: ID!
   name: String!
-  subjects(populate: Boolean!): [Subject!]!
+  subjects(populate: Boolean!): [Subject!]
 }
 
 type Subject {
