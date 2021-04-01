@@ -2,6 +2,8 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as V from 'class-validator'
 import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
+import pluralize from 'pluralize'
+import titleize from 'titleize'
 
 export class ModelValidationError extends ApolloError {
   public path: any[]
@@ -16,8 +18,6 @@ export class ModelValidationError extends ApolloError {
   ) {
     super(message, 'MODEL_VALIDATION_FAILED', extensions)
     this.path = path
-    // this.name = 'ModelValidationError'
-    // Object.defineProperty(this, 'name', { value: 'ValidationError' })
   }
 }
 
@@ -31,11 +31,35 @@ export function ValidateSchema() {
   }
 }
 
+interface IOneToManyOptions {
+  ref?: string
+  foreignField?: string
+  localField?: string
+}
+
+export function OneToMany(options: IOneToManyOptions = {}) {
+  const { ref } = options
+  return (target: any, propertyKey: string) => {
+    const model = target.constructor as typeof Model
+    model.__assoc__ = model.__assoc__ || {}
+    model.__assoc__['OneToMany'] = model.__assoc__['OneToMany'] || []
+    model.__assoc__['OneToMany'].push({
+      target,
+      propertyKey,
+      ref,
+      foreignField,
+      localField,
+    })
+  }
+}
+
 /**
  * Base Model
  */
+@ValidateSchema()
 export class Model {
   static __validate__: boolean | undefined
+  static __assoc__: Record<string, any> | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
 }
 
@@ -51,11 +75,36 @@ Object.defineProperty(Model, 'schema', {
     // eslint-disable-next-line
     const klass = this
 
+    const assocs = this?.__assoc__?.['OneToMany']
+    if (assocs) {
+      for (const assoc of assocs) {
+        // TODO Cleanup to a function
+        const {
+          target,
+          propertyKey,
+          foreignField: _foreignField,
+          ref: _ref,
+          localField: _localField,
+        } = assoc
+        const model = target.constructor as typeof Model
+        const foreignField = _foreignField ?? model.name.toLowerCase()
+        const localField = _localField ?? '_id'
+        const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))
+        model?.schema.virtual(propertyKey, {
+          ref,
+          localField,
+          foreignField,
+        })
+        model?.schema.set('toObject', { virtuals: true })
+        model?.schema.set('toJSON', { virtuals: true })
+      }
+    }
+
     if (this['__validate__']) {
+      // TODO Cleanup to a function
       schema.pre('validate', async function (next) {
         const modelData = this.toObject()
         const model = plainToClass(klass, modelData)
-
         try {
           console.log('model', model)
           await V.validateOrReject(model)
