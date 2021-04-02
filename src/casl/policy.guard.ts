@@ -38,10 +38,23 @@ export class PoliciesGuard implements CanActivate {
         context.getHandler(),
       ) || []
 
-    const { user } = context.switchToHttp().getRequest()
-    console.log('[Current user]', user)
-    if (user) {
+    const isPublic = this.reflector.get<boolean>(
+      'isPublic',
+      context.getHandler(),
+    )
+    const ctx = GqlExecutionContext.create(context)
+    const req = ctx.getContext().req
+    const user = req?.user
+    console.log('[Policy.Guard] [User]', user)
+
+    if (isPublic) {
+      // Whitelist public resolvers
+      // (for now, only loginUser)
       return true
+    } else {
+      if (user) {
+        return true
+      }
     }
 
     throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED)

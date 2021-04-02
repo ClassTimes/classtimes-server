@@ -27,19 +27,15 @@ export class UserResolver {
     return this.service.getById(_id)
   }
 
-  // @UseGuards(PoliciesGuard)
   // @CheckPolicies((ability: AppAbility) => {
   //   console.log('[User] [CheckPolicies]', { ability })
   //   return ability.can(Action.Read, User)
   // })
 
-  // @UseGuards(GqlAuthGuard, PoliciesGuard)
   @GQL.Query(() => [User])
   async users(
     @GQL.Args('filters', { nullable: true }) filters?: ListUserInput,
-    @CurrentUser() currentUser?: User,
   ) {
-    console.log('[User]', { currentUser })
     return this.service.list(filters) //, currentUser)
   }
 

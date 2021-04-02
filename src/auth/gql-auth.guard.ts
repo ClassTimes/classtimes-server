@@ -29,7 +29,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     //const user = ctx.getContext<CT.GQL.CTX>().req?.user
     //console.log(user)
     const req = ctx.getContext().req
-    console.log('[GqlAuthGuard] - 2', { ctx, context, req, thiss: this })
+    //console.log('[GqlAuthGuard] - 2', { ctx, context, req, thiss: this })
     return req
   }
 }
