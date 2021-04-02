@@ -65,14 +65,6 @@ export class PoliciesGuard implements CanActivate {
     console.log('[Policy.Guard] [Ability result] ', result)
 
     return result
-
-    //throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED)
-    /*const ability = this.caslAbilityFactory.createForUser(user)
-    return policyHandlers.every((handler) =>
-      this.execPolicyHandler(handler, ability),
-    )*/
-
-    // return false
   }
 
   private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {
