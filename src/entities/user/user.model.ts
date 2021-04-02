@@ -53,7 +53,6 @@ export class User extends Utils.BaseModel {
 
 export type UserDocument = User & mongoose.Document
 export const UserSchema = User.schema
-UserSchema.plugin(accessibleRecordsPlugin)
 
 // UserSchema.index({ field1: 1, field2: 1 }, { unique: true })
 

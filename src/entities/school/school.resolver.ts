@@ -25,9 +25,30 @@ import {
 // Subject
 import { Subject } from '../subject/subject.model'
 
+// User
+import { User } from '../user/user.model'
+import { UserService } from '../user/user.service'
+
 @Resolver(() => School)
 export class SchoolResolver {
-  constructor(private service: SchoolService) {}
+  constructor(
+    private service: SchoolService,
+    private userService: UserService,
+  ) {}
+
+  @ResolveField('createdBy', () => User)
+  @CheckPolicies((a) => a.can(Action.List, User))
+  async createBy(
+    @Parent() school: SchoolDocument,
+    @Args('populate') populate: boolean,
+  ) {
+    if (populate) {
+      await school
+        .populate({ path: 'createdBy', model: User.name })
+        .execPopulate()
+    }
+    return school.createdBy
+  }
 
   @Query(() => School)
   @CheckPolicies((a) => a.can(Action.Read, School))

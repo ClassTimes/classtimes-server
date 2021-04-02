@@ -23,8 +23,8 @@ export class SubjectService {
     @InjectModel(School.name)
     private school: Model<SchoolDocument>,
 
-    private calendarService: CalendarService
-  ) { }
+    private calendarService: CalendarService,
+  ) {}
 
   async create(payload: CreateSubjectInput) {
     const model = new this.model(payload)
@@ -71,7 +71,9 @@ export class SubjectService {
         // { new: true, useFindAndModify: false },
       )
 
-      const deleteCalendars = await this.calendarService.deleteMany(model.calendars)
+      const deleteCalendars = await this.calendarService.deleteMany(
+        model.calendars,
+      )
     }
 
     return model
