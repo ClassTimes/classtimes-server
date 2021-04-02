@@ -9,6 +9,10 @@ import {
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
+// Auth
+import { CheckPolicies } from '../../casl/policy.guard'
+import { AppAbility, Action } from '../../casl/casl-ability.factory'
+
 // School
 import { School, SchoolDocument } from './school.model'
 import { SchoolService } from './school.service'
@@ -31,6 +35,10 @@ export class SchoolResolver {
   }
 
   @Query(() => [School])
+  @CheckPolicies((ability: AppAbility) => {
+    // console.log('[User] [CheckPolicies]', { ability })
+    return ability.can(Action.Read, School)
+  })
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
   ) {

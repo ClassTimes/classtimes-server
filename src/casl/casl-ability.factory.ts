@@ -9,7 +9,7 @@ import {
 } from '@casl/ability'
 
 import { User } from '../entities/user/user.model'
-import type { School } from '../entities/school/school.model'
+import { School } from '../entities/school/school.model'
 
 type Subjects = InferSubjects<typeof School | typeof User> | 'all'
 
@@ -25,28 +25,17 @@ export type AppAbility = Ability<[Action, Subjects]>
 
 @Injectable()
 export class CaslAbilityFactory {
-  //  createForUser(user: User) {
-  createForUser(user: User) {
+  createForUser(user: User | undefined) {
     const { can, cannot, build } = new AbilityBuilder<
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>)
 
-    console.log('[CaslAbilityFactory] #createForUser', {
-      user,
-      can,
-      cannot,
-      build,
-    })
+    if (user?.roles?.includes('admin')) {
+      can(Action.Read, School)
+    }
 
-    cannot(Action.Read, 'all')
-    //cannot(Action.Read, User)
-
-    // if (user.isAdmin) {
-    //   can(Action.Manage, 'all') // read-write access to everything
-    // } else {
-    //   can(Action.Read, 'all') // read-only access to everything
-    // }
-
+    // cannot(Action.Read, 'all')
+    // cannot(Action.Read, User)
     // can(Action.Update, Article, { authorId: user.id })
     // cannot(Action.Delete, Article, { isPublished: true })
 
@@ -55,7 +44,5 @@ export class CaslAbilityFactory {
       detectSubjectType: (item) =>
         item.constructor as ExtractSubjectType<Subjects>,
     })
-
-    // Frank: this creates an ability object for a User.
   }
 }

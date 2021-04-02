@@ -3,8 +3,6 @@ import {
   SetMetadata,
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { GqlExecutionContext } from '@nestjs/graphql'
@@ -48,25 +46,33 @@ export class PoliciesGuard implements CanActivate {
       return true
     }
 
+    // Forbid by default when there's no policy set for the current action
+    if (!policyHandlers?.length) {
+      return false
+    }
+
     const ctx = GqlExecutionContext.create(context)
     const req = ctx.getContext().req
     const user = req?.user
-    console.log('[Policy.Guard] [User]', user)
 
-    // if (user) {
     const ability = this.caslAbilityFactory.createForUser(user)
     const result = policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability),
     )
-    console.log('[Ability result] ', result)
+
+    console.log('[Policy.Guard] [User]', user)
+    console.log('[Policy.Guard] [Ability policies] ', policyHandlers)
+    console.log('[Policy.Guard] [Ability result] ', result)
+
     return result
-    // }
 
     //throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED)
     /*const ability = this.caslAbilityFactory.createForUser(user)
     return policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability),
     )*/
+
+    // return false
   }
 
   private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {

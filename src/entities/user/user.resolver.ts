@@ -32,7 +32,7 @@ export class UserResolver {
 
   @GQL.Query(() => [User])
   @CheckPolicies((ability: AppAbility) => {
-    console.log('[User] [CheckPolicies]', { ability })
+    // console.log('[User] [CheckPolicies]', { ability })
     return ability.can(Action.Read, User)
   })
   async users(
