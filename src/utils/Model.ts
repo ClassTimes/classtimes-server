@@ -4,6 +4,12 @@ import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
 import pluralize from 'pluralize'
 import titleize from 'titleize'
+import {
+  accessibleFieldsPlugin,
+  accessibleRecordsPlugin,
+  AccessibleModel,
+  AccessibleFieldsDocument,
+} from '@casl/mongoose'
 
 export class ModelValidationError extends ApolloError {
   public path: any[]
@@ -25,7 +31,7 @@ export class ModelValidationError extends ApolloError {
  * Decorator
  */
 export function ValidateSchema() {
-  return function <T extends typeof Model>(target: T) {
+  return function <T extends typeof BaseModel>(target: T) {
     target.__validate__ = true
     return target
   }
@@ -40,7 +46,7 @@ interface IOneToManyOptions {
 export function OneToMany(options: IOneToManyOptions = {}) {
   const { ref, foreignField, localField } = options
   return (target: any, propertyKey: string) => {
-    const model = target.constructor as typeof Model
+    const model = target.constructor as typeof BaseModel
     model.__assoc__ = model.__assoc__ || {}
     model.__assoc__['OneToMany'] = model.__assoc__['OneToMany'] || []
     model.__assoc__['OneToMany'].push({
@@ -57,7 +63,7 @@ export function OneToMany(options: IOneToManyOptions = {}) {
  * Base Model
  */
 @ValidateSchema()
-export class Model {
+export class BaseModel {
   static __validate__: boolean | undefined
   static __assoc__: Record<string, any> | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
@@ -65,7 +71,7 @@ export class Model {
 
 // Validation
 const SCHEMA_CACHE_KEY = `__schema__`
-Object.defineProperty(Model, 'schema', {
+Object.defineProperty(BaseModel, 'schema', {
   get: function () {
     if (this[SCHEMA_CACHE_KEY]) {
       return this[SCHEMA_CACHE_KEY]
@@ -86,7 +92,7 @@ Object.defineProperty(Model, 'schema', {
           ref: _ref,
           localField: _localField,
         } = assoc
-        const model = target.constructor as typeof Model
+        const model = target.constructor as typeof BaseModel
         const foreignField = _foreignField ?? model.name.toLowerCase()
         const localField = _localField ?? '_id'
         const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))

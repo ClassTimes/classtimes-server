@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     })
-    console.log('[JwtStrategy] #constructor')
+    //console.log('[JwtStrategy] #constructor')
   }
 
   async validate(payload: CT.JWTPayload): Promise<User> {
@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       console.error(error)
       throw error
     } finally {
-      console.log('[JwtStrategy] #validate', { payload, user })
+      //console.log('[JwtStrategy] #validate', { payload, user })
     }
     return user // { userId: payload.sub, username: payload.username }
   }

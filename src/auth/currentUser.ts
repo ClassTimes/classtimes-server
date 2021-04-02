@@ -8,9 +8,9 @@ export const CurrentUser = createParamDecorator<
   ExecutionContext,
   User
 >((data, context) => {
-  console.log('[CurrentUser] - 1')
+  //console.log('[CurrentUser] - 1')
   const ctx = GqlExecutionContext.create(context)
   const user = ctx.getContext<CT.GQL.CTX>().req?.user
-  console.log('[CurrentUser] - 2', { ctx, user })
+  //console.log('[CurrentUser] - 2', { ctx, user })
   return user
 })

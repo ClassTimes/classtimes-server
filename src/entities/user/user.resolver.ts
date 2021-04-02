@@ -18,7 +18,7 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
 @GQL.Resolver(() => User)
 export class UserResolver {
-  constructor(private service: UserService) { }
+  constructor(private service: UserService) {}
 
   @GQL.Query(() => User)
   async user(
@@ -32,11 +32,15 @@ export class UserResolver {
   //   console.log('[User] [CheckPolicies]', { ability })
   //   return ability.can(Action.Read, User)
   // })
+
+  // @UseGuards(GqlAuthGuard, PoliciesGuard)
   @GQL.Query(() => [User])
   async users(
     @GQL.Args('filters', { nullable: true }) filters?: ListUserInput,
+    @CurrentUser() currentUser?: User,
   ) {
-    return this.service.list(filters)
+    console.log('[User]', { currentUser })
+    return this.service.list(filters) //, currentUser)
   }
 
   @GQL.Mutation(() => User)
@@ -57,12 +61,12 @@ export class UserResolver {
   }
 
   /**
-   * Authentificated
+   * Authenticated
    */
   @GQL.Query(() => User, { nullable: false })
   @UseGuards(GqlAuthGuard)
   whoAmI(@CurrentUser() user: User) {
-    console.log('[UserResolver]', { user })
+    console.log('[User]', { user })
     return user //this.service.getById(user._id)
   }
 

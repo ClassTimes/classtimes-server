@@ -3,12 +3,14 @@ import * as GQL from '@nestjs/graphql'
 import { Auth } from './auth.model'
 import { AuthService } from './auth.service'
 import { LoginInput } from './auth.inputs'
+import { SkipAuth } from './decorators'
 
 @GQL.Resolver(() => Auth)
 export class AuthResolver {
   constructor(private service: AuthService) {}
 
   @GQL.Mutation(() => Auth)
+  @SkipAuth()
   async loginUser(
     @GQL.Args('payload') payload: LoginInput,
   ): Promise<CT.JWTLoginResponse> {

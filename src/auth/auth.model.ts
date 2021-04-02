@@ -4,7 +4,7 @@ import * as Utils from '../utils/Model'
 import { User } from '../entities/user/user.model'
 
 @GQL.ObjectType()
-export class Auth extends Utils.Model {
+export class Auth extends Utils.BaseModel {
   @GQL.Field(() => String, { nullable: false })
   jwt: string
 

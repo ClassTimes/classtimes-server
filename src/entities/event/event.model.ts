@@ -11,7 +11,7 @@ import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 @DB.Schema({
   autoIndex: true,
 })
-export class Event extends Utils.Model {
+export class Event extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 

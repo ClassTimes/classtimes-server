@@ -12,7 +12,7 @@ import { Subject } from '../subject/subject.model'
   timestamps: true,
   // autoIndex: true
 })
-export class School extends Utils.Model {
+export class School extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 

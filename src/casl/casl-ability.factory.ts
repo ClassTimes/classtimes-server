@@ -38,6 +38,8 @@ export class CaslAbilityFactory {
       build,
     })
 
+    can(Action.Manage, 'all')
+
     // if (user.isAdmin) {
     //   can(Action.Manage, 'all') // read-write access to everything
     // } else {
@@ -52,5 +54,7 @@ export class CaslAbilityFactory {
       detectSubjectType: (item) =>
         item.constructor as ExtractSubjectType<Subjects>,
     })
+
+    // Frank: this creates an ability object for a User.
   }
 }

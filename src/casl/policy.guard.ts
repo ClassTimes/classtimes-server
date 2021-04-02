@@ -3,8 +3,11 @@ import {
   SetMetadata,
   CanActivate,
   ExecutionContext,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+import { GqlExecutionContext } from '@nestjs/graphql'
 
 import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory'
 
@@ -27,7 +30,8 @@ export class PoliciesGuard implements CanActivate {
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  //async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext) {
     const policyHandlers =
       this.reflector.get<PolicyHandler[]>(
         CHECK_POLICIES_KEY,
@@ -35,11 +39,16 @@ export class PoliciesGuard implements CanActivate {
       ) || []
 
     const { user } = context.switchToHttp().getRequest()
-    const ability = this.caslAbilityFactory.createForUser(user)
+    console.log('[Current user]', user)
+    if (user) {
+      return true
+    }
 
+    throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED)
+    /*const ability = this.caslAbilityFactory.createForUser(user)
     return policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability),
-    )
+    )*/
   }
 
   private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {

@@ -11,6 +11,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import weekday from 'dayjs/plugin/weekday'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import { GqlAuthGuard } from './auth/gql-auth.guard'
 
 import { AppModule } from './app.module'
 
@@ -23,6 +24,7 @@ dayjs.extend(timezone)
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  // app.useGlobalGuards(new GqlAuthGuard())
   if (process.env.NODE_ENV === 'production') {
     app.enableCors() // protection
   }
