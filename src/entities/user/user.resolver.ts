@@ -24,6 +24,7 @@ export class UserResolver {
   constructor(private service: UserService) {}
 
   @GQL.Query(() => User)
+  @CheckPolicies((a) => a.can(Action.Read, User))
   async user(
     @GQL.Args('_id', { type: () => GQL.ID }) _id: mongoose.Types.ObjectId,
   ) {

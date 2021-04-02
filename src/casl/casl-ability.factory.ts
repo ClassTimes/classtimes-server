@@ -10,8 +10,11 @@ import {
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
+import { Subject } from '../entities/subject/subject.model'
 
-type Subjects = InferSubjects<typeof School | typeof User> | 'all'
+type Subjects =
+  | InferSubjects<typeof School | typeof User | typeof Subject>
+  | 'all'
 
 export enum Action {
   Manage = 'manage',
@@ -33,6 +36,12 @@ export class CaslAbilityFactory {
 
     if (user?.roles?.includes('admin')) {
       can(Action.List, School)
+      can(Action.Read, School)
+      can(Action.Create, School)
+
+      can(Action.Manage, Subject)
+
+      can(Action.Manage, User)
     }
 
     // cannot(Action.Read, 'all')

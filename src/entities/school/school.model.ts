@@ -25,13 +25,12 @@ export class School extends Utils.BaseModel {
   @Utils.OneToMany()
   subjects: mongoose.Types.ObjectId[] | Subject[]
 
+  // TODO: no es necesario un virtual. El virtual se usa cuando la relacion esta en otro
+  // modelo; en este caso, esta guardado en este mismo record (user_id)
+  // Lo que no entiendo es por que no me deja popular la query...
   @GQL.Field(() => User, { nullable: false })
-  @Utils.OneToMany({
-    foreignField: '_id',
-    localField: 'createdBy',
-    ref: 'User',
-  })
-  createdBy: mongoose.Types.ObjectId | User[]
+  @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  createdBy: mongoose.Types.ObjectId | User
 }
 
 export type SchoolDocument = School & mongoose.Document

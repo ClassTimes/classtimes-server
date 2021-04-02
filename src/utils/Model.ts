@@ -41,17 +41,18 @@ interface IOneToManyOptions {
   ref?: string
   foreignField?: string
   localField?: string
+  propertyKey?: string
 }
 
 export function OneToMany(options: IOneToManyOptions = {}) {
-  const { ref, foreignField, localField } = options
+  const { ref, foreignField, localField, propertyKey: _propertyKey } = options
   return (target: any, propertyKey: string) => {
     const model = target.constructor as typeof BaseModel
     model.__assoc__ = model.__assoc__ || {}
     model.__assoc__['OneToMany'] = model.__assoc__['OneToMany'] || []
     model.__assoc__['OneToMany'].push({
       target,
-      propertyKey,
+      propertyKey: _propertyKey ?? propertyKey,
       ref,
       foreignField,
       localField,
@@ -81,6 +82,7 @@ Object.defineProperty(BaseModel, 'schema', {
     // eslint-disable-next-line
     const klass = this
 
+    // One-to-Many virtuals
     const assocs = this?.__assoc__?.['OneToMany']
     if (assocs) {
       for (const assoc of assocs) {
@@ -106,6 +108,7 @@ Object.defineProperty(BaseModel, 'schema', {
       }
     }
 
+    // Validations
     if (this['__validate__']) {
       // TODO Cleanup to a function
       schema.pre('validate', async function (next) {

@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Inject } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
@@ -6,6 +7,8 @@ import { School, SchoolDocument } from './school.model'
 import { Subject, SubjectDocument } from '../subject/subject.model'
 import { SubjectService } from '../subject/subject.service'
 
+import { CurrentUser } from '../../auth/currentUser'
+import { User } from '../user/user.model'
 import {
   CreateSchoolInput,
   ListSchoolInput,
@@ -19,12 +22,18 @@ export class SchoolService {
     private model: Model<SchoolDocument>,
     @InjectModel(Subject.name)
     private subject: Model<SubjectDocument>,
+    @Inject(REQUEST) private request: any,
 
-    private subjectService: SubjectService
-  ) { }
+    private subjectService: SubjectService,
+  ) {}
 
   create(payload: CreateSchoolInput) {
-    const model = new this.model(payload)
+    console.log('[CreateSchool] [User]', this.request.req.user)
+    const updatedPayload = {
+      createdBy: this.request.req.user,
+      ...payload,
+    }
+    const model = new this.model(updatedPayload)
     return model.save()
   }
 
@@ -58,6 +67,6 @@ export class SchoolService {
       //console.log('delete updateResult', { updateResult })
     }
 
-    return model;
+    return model
   }
 }
