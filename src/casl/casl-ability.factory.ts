@@ -8,7 +8,7 @@ import {
   ExtractSubjectType,
 } from '@casl/ability'
 
-import type { User } from '../entities/user/user.model'
+import { User } from '../entities/user/user.model'
 import type { School } from '../entities/school/school.model'
 
 type Subjects = InferSubjects<typeof School | typeof User> | 'all'
@@ -38,7 +38,8 @@ export class CaslAbilityFactory {
       build,
     })
 
-    can(Action.Manage, 'all')
+    cannot(Action.Read, 'all')
+    //cannot(Action.Read, User)
 
     // if (user.isAdmin) {
     //   can(Action.Manage, 'all') // read-write access to everything
