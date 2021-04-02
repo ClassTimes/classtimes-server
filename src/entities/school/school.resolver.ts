@@ -30,15 +30,13 @@ export class SchoolResolver {
   constructor(private service: SchoolService) {}
 
   @Query(() => School)
+  @CheckPolicies((a) => a.can(Action.Read, School))
   async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.getById(_id)
   }
 
   @Query(() => [School])
-  @CheckPolicies((ability: AppAbility) => {
-    // console.log('[User] [CheckPolicies]', { ability })
-    return ability.can(Action.Read, School)
-  })
+  @CheckPolicies((a) => a.can(Action.List, School))
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
   ) {
@@ -46,20 +44,24 @@ export class SchoolResolver {
   }
 
   @Mutation(() => School)
+  @CheckPolicies((a) => a.can(Action.Create, School))
   async createSchool(@Args('payload') payload: CreateSchoolInput) {
     return this.service.create(payload)
   }
 
   @Mutation(() => School)
+  @CheckPolicies((a) => a.can(Action.Update, School))
   async updateSchool(@Args('payload') payload: UpdateSchoolInput) {
     return this.service.update(payload)
   }
 
   @Mutation(() => School)
+  @CheckPolicies((a) => a.can(Action.Delete, School))
   async deleteSchool(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
   }
 
+  // @CheckPolicies((a) => a.can(Action.Update, School))
   @ResolveField()
   async subjects(
     @Parent() school: SchoolDocument,

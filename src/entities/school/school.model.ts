@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 import * as Utils from '../../utils/Model'
 import { Subject } from '../subject/subject.model'
+import { User } from '../user/user.model'
 
 //@Utils.HasMany({ field: 'subjects', ref: 'Subject' })
 @GQL.ObjectType()
@@ -23,6 +24,14 @@ export class School extends Utils.BaseModel {
   @GQL.Field(() => [Subject], { nullable: true })
   @Utils.OneToMany()
   subjects: mongoose.Types.ObjectId[] | Subject[]
+
+  @GQL.Field(() => User, { nullable: false })
+  @Utils.OneToMany({
+    foreignField: '_id',
+    localField: 'createdBy',
+    ref: 'User',
+  })
+  createdBy: mongoose.Types.ObjectId | User[]
 }
 
 export type SchoolDocument = School & mongoose.Document

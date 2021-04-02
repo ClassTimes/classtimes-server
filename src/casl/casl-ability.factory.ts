@@ -17,6 +17,7 @@ export enum Action {
   Manage = 'manage',
   Create = 'create',
   Read = 'read',
+  List = 'list',
   Update = 'update',
   Delete = 'delete',
 }
@@ -31,7 +32,7 @@ export class CaslAbilityFactory {
     >(Ability as AbilityClass<AppAbility>)
 
     if (user?.roles?.includes('admin')) {
-      can(Action.Read, School)
+      can(Action.List, School)
     }
 
     // cannot(Action.Read, 'all')
