@@ -30,7 +30,6 @@ export class PoliciesGuard implements CanActivate {
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
-  //async canActivate(context: ExecutionContext): Promise<boolean> {
   canActivate(context: ExecutionContext) {
     const policyHandlers =
       this.reflector.get<PolicyHandler[]>(
@@ -38,6 +37,7 @@ export class PoliciesGuard implements CanActivate {
         context.getHandler(),
       ) || []
 
+    // Skip Auth Check
     const isPublic = this.reflector.get<boolean>(
       'isPublic',
       context.getHandler(),
@@ -53,14 +53,14 @@ export class PoliciesGuard implements CanActivate {
     const user = req?.user
     console.log('[Policy.Guard] [User]', user)
 
-    if (user) {
-      const ability = this.caslAbilityFactory.createForUser(user)
-      const result = policyHandlers.every((handler) =>
-        this.execPolicyHandler(handler, ability),
-      )
-      console.log('[Ability result] ', result)
-      return result
-    }
+    // if (user) {
+    const ability = this.caslAbilityFactory.createForUser(user)
+    const result = policyHandlers.every((handler) =>
+      this.execPolicyHandler(handler, ability),
+    )
+    console.log('[Ability result] ', result)
+    return result
+    // }
 
     //throw new HttpException('Unauthorized access', HttpStatus.UNAUTHORIZED)
     /*const ability = this.caslAbilityFactory.createForUser(user)

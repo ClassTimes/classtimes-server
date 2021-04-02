@@ -1,12 +1,15 @@
-import { UseGuards } from '@nestjs/common'
+// import { UseGuards } from '@nestjs/common'
 import * as GQL from '@nestjs/graphql' //{ Args, Mutation, Query, Resolver, ID }
 import mongoose from 'mongoose'
 
 // Guard
-import { GqlAuthGuard } from '../../auth/gql-auth.guard'
+// import { GqlAuthGuard } from '../../auth/gql-auth.guard'
 import { CurrentUser } from '../../auth/currentUser'
-import { CheckPolicies, PoliciesGuard } from '../../casl/policy.guard'
+import { CheckPolicies } from '../../casl/policy.guard'
 import { AppAbility, Action } from '../../casl/casl-ability.factory'
+
+// Auth
+import { SkipAuth } from '../../auth/decorators'
 
 // User
 import { User } from './user.model'
@@ -27,11 +30,6 @@ export class UserResolver {
     return this.service.getById(_id)
   }
 
-  // @CheckPolicies((ability: AppAbility) => {
-  //   console.log('[User] [CheckPolicies]', { ability })
-  //   return ability.can(Action.Read, User)
-  // })
-
   @GQL.Query(() => [User])
   @CheckPolicies((ability: AppAbility) => {
     console.log('[User] [CheckPolicies]', { ability })
@@ -44,6 +42,7 @@ export class UserResolver {
   }
 
   @GQL.Mutation(() => User)
+  @SkipAuth()
   async createUser(@GQL.Args('payload') payload: CreateUserInput) {
     return this.service.create(payload)
   }
@@ -63,8 +62,8 @@ export class UserResolver {
   /**
    * Authenticated
    */
+  // @UseGuards(GqlAuthGuard)
   @GQL.Query(() => User, { nullable: false })
-  @UseGuards(GqlAuthGuard)
   whoAmI(@CurrentUser() user: User) {
     console.log('[User]', { user })
     return user //this.service.getById(user._id)
