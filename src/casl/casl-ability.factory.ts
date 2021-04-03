@@ -51,21 +51,22 @@ export class CaslAbilityFactory {
     // Any user (incluing guests) can read, list, and create a school
     // can(Action.Read, School)
     // can(Action.List, School)
-
+    console.log('CAS AVILITY FACTOR', user)
     if (user) {
       // Any logged in user can...
       can(Action.Manage, Auth)
 
       // Create a school
       // can(Action.Create, School)
-      can(Action.Manage, School)
+      // can(Action.Manage, School)
 
       // But only it's owner can manage it
       // user._id
       // { createdBy: "asdf" }
-      // can(Action.Manage, School, {
-      //   createdBy: { $eq: user._id },
-      // }) // NOT WORKING
+      console.log('User Id', user._id)
+      can(Action.List, School, {
+        createdBy: user,
+      }) // NOT WORKING
     }
 
     // cannot(Action.Read, 'all')

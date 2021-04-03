@@ -53,6 +53,30 @@ export class SchoolResolver {
   }
 
   @Query(() => [School])
+  @CheckPolicies((a) => {
+    //
+    // Policies
+    //    user:gaston -> [ 'subject/school:id/100:action/update' ]
+    // 1. dame toda los persmisos del current User
+    // 2. agarra el id (si lo hay) del input {_id: 100 }
+    // 3. fijate los permisos que tiene para el school con id estan
+    // 4. fake object school = new School({ createBy: currentUser })
+
+    // or
+    // 1. fake object school = new School({ id })
+    //
+
+    // 1. Pedir a la DB el modelo
+    // 2. check permissions
+    // a.can(Action.List, school)
+    return new Promise((resolve) => {
+      console.log('test1')
+      setTimeout(() => {
+        console.log('test1')
+        resolve(true)
+      }, 5000)
+    })
+  }) //  {schoolId: '23424'}
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
   ) {

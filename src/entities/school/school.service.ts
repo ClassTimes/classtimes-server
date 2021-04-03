@@ -37,7 +37,6 @@ export class SchoolService {
     return this.model.findById(_id).exec()
   }
 
-  @CheckPolicies((a) => a.can(Action.List, School))
   list(filters: ListSchoolInput) {
     return this.model.find({ ...filters }).exec()
   }
