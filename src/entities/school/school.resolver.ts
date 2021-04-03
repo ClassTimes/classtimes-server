@@ -36,73 +36,22 @@ import { User } from '../user/user.model'
 export class SchoolResolver {
   constructor(private service: SchoolService) {}
 
-  @ResolveField('createdBy', () => User)
-  @CheckPolicies((a) => a.can(Action.List, User))
-  async createBy(
-    @Parent() school: SchoolDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await school
-        .populate({ path: 'createdBy', model: User.name })
-        .execPopulate()
-    }
-    return school.createdBy
-  }
-
   @Query(() => School)
   @CheckPolicies((a) => true)
-  async school(
-    @Args('_id', { type: () => ID }) _id: Types.ObjectId,
-    @CurrentUser() currentUser?: User,
-  ) {
-    const doc = await this.service.getById(_id)
-    const modelData = doc.toObject()
-    // this.service.model.modelName === 'School'
-    const model = plainToClass(School, modelData)
-
-    console.log('doc', doc)
-    console.log('modelData', modelData)
-    console.log('model', model)
-
-    const ability = CaslAbilityFactory.createForUser(currentUser)
-    ForbiddenError.from(ability).throwUnlessCan(Action.Read, model)
-    return model
+  async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
+    return this.service.getById(_id)
   }
 
-  // @CheckPolicies((a) => {
-  //   //
-  //   // Policies
-  //   //    user:gaston -> [ 'subject/school:id/100:action/update' ]
-  //   // 1. dame toda los persmisos del current User
-  //   // 2. agarra el id (si lo hay) del input {_id: 100 }
-  //   // 3. fijate los permisos que tiene para el school con id estan
-  //   // 4. fake object school = new School({ createBy: currentUser })
-
-  //   // or
-  //   // 1. fake object school = new School({ id })
-  //   //
-
-  //   // 1. Pedir a la DB el modelo
-  //   // 2. check permissions
-  //   // a.can(Action.List, school)
-  //   return new Promise((resolve) => {
-  //     console.log('test1')
-  //     setTimeout(() => {
-  //       console.log('test1')
-  //       resolve(true)
-  //     }, 5000)
-  //   })
-  // }) //  {schoolId: '23424'}
   @Query(() => [School])
   @CheckPolicies((a) => true)
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
-    @CurrentUser() currentUser?: User,
   ) {
-    const ability = CaslAbilityFactory.createForUser(currentUser)
-    ForbiddenError.from(ability).throwUnlessCan(Action.List, School)
-    return this.service.list(filters)
+    const schoolList = await this.service.list(filters)
+    for (const school of schoolList) {
+      await this.service.checkPermissons(Action.Read, school._id)
+    }
+    return schoolList
   }
 
   @Mutation(() => School)
@@ -112,16 +61,21 @@ export class SchoolResolver {
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => a.can(Action.Update, School))
+  @CheckPolicies((a) => true)
   async updateSchool(@Args('payload') payload: UpdateSchoolInput) {
     return this.service.update(payload)
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => a.can(Action.Delete, School)) // Obviously not working
+  @CheckPolicies((a) => true)
   async deleteSchool(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
+    //await this.service.checkPermissons(Action.Delete, _id)
     return this.service.delete(_id)
   }
+
+  //
+  // Field resolvers
+  //
 
   @ResolveField()
   async subjects(
@@ -135,5 +89,19 @@ export class SchoolResolver {
     }
 
     return school.subjects
+  }
+
+  @ResolveField('createdBy', () => User)
+  async createdBy(
+    @Parent() school: SchoolDocument,
+    @Args('populate') populate: boolean,
+  ) {
+    if (populate) {
+      console.log(school)
+      await school
+        .populate({ path: 'createdBy', model: User.name })
+        .execPopulate()
+    }
+    return school.createdBy
   }
 }

@@ -7,6 +7,7 @@ import {
   AbilityClass,
   ExtractSubjectType,
 } from '@casl/ability'
+import { plainToClass } from 'class-transformer'
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
@@ -51,25 +52,20 @@ export class CaslAbilityFactory {
     // Any user (incluing guests) can read, list, and create a school
     // can(Action.Read, School)
     // can(Action.List, School)
-    console.log('CAS AVILITY FACTOR', user)
+    //console.log('CAS AVILITY FACTOR', user)
     if (user) {
       // Any logged in user can...
       can(Action.Manage, Auth)
 
-      // Create a school
-      // can(Action.Create, School)
-      // can(Action.Manage, School)
-
-      // But only it's owner can manage it
-      // user._id
-      // { createdBy: "asdf" }
-      console.log('User Id', user._id)
+      // School abilities
       can(Action.Create, School)
       can(Action.List, School)
-      can(Action.Read, School, {
-        createdBy: user._id,
-      })
-      // can(Action.Read, School)
+      can(Action.Read, School, { createdBy: user._id })
+      can(Action.Update, School, { createdBy: user._id })
+      can(Action.Delete, School, { createdBy: user._id })
+      if (user?.roles?.includes('admin')) {
+        can(Action.Read, School)
+      }
     }
 
     // cannot(Action.Read, 'all')
