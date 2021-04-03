@@ -3,13 +3,12 @@ import { REQUEST } from '@nestjs/core'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
+// Auth
+import { CheckPolicies } from '../../casl/policy.guard'
+import { Action } from '../../casl/casl-ability.factory'
+
+// School
 import { School, SchoolDocument } from './school.model'
-import { Subject, SubjectDocument } from '../subject/subject.model'
-import { SubjectService } from '../subject/subject.service'
-
-import { User, UserDocument } from '../user/user.model'
-import { CurrentUser } from '../../auth/currentUser'
-
 import {
   CreateSchoolInput,
   ListSchoolInput,
@@ -38,6 +37,7 @@ export class SchoolService {
     return this.model.findById(_id).exec()
   }
 
+  @CheckPolicies((a) => a.can(Action.List, School))
   list(filters: ListSchoolInput) {
     return this.model.find({ ...filters }).exec()
   }

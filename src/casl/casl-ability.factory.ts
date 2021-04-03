@@ -18,6 +18,9 @@ type Subjects =
   | 'all'
 
 export enum Action {
+  // *manage* and *all* are special keywords in CASL.
+  // *manage* represents any action and *all* represents any subject
+  // https://casl.js.org/v5/en/guide/intro
   Manage = 'manage',
   Create = 'create',
   Read = 'read',
@@ -38,26 +41,31 @@ export class CaslAbilityFactory {
     // Super admin
     if (user?.roles?.includes('admin')) {
       // School
-      can(Action.Manage, School)
+      // can(Action.Manage, School)
       // Subject
-      can(Action.Manage, Subject)
+      // can(Action.Manage, Subject)
       // User
-      can(Action.Manage, User)
+      // can(Action.Manage, User)
     }
 
     // Any user (incluing guests) can read, list, and create a school
-    can(Action.Read, School)
-    can(Action.List, School)
+    // can(Action.Read, School)
+    // can(Action.List, School)
 
     if (user) {
       // Any logged in user can...
-
       can(Action.Manage, Auth)
 
       // Create a school
-      can(Action.Create, School)
+      // can(Action.Create, School)
+      can(Action.Manage, School)
+
       // But only it's owner can manage it
-      can(Action.Manage, School, { createdBy: user._id }) // NOT WORKING
+      // user._id
+      // { createdBy: "asdf" }
+      // can(Action.Manage, School, {
+      //   createdBy: { $eq: user._id },
+      // }) // NOT WORKING
     }
 
     // cannot(Action.Read, 'all')

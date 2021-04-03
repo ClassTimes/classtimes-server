@@ -11,7 +11,7 @@ import { Types } from 'mongoose'
 
 // Auth
 import { CheckPolicies } from '../../casl/policy.guard'
-import { AppAbility, Action } from '../../casl/casl-ability.factory'
+import { Action } from '../../casl/casl-ability.factory'
 
 // School
 import { School, SchoolDocument } from './school.model'
@@ -27,8 +27,6 @@ import { Subject } from '../subject/subject.model'
 
 // User
 import { User } from '../user/user.model'
-import { UserService } from '../user/user.service'
-import { CurrentUser } from '../../auth/currentUser'
 
 @Resolver(() => School)
 export class SchoolResolver {
@@ -55,7 +53,6 @@ export class SchoolResolver {
   }
 
   @Query(() => [School])
-  @CheckPolicies((a) => a.can(Action.List, School))
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
   ) {
