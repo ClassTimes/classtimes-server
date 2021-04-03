@@ -31,22 +31,22 @@ export enum Action {
 
 export type AppAbility = Ability<[Action, Subjects]>
 
-@Injectable()
+// @Injectable()
 export class CaslAbilityFactory {
-  createForUser(user: User | undefined) {
+  static createForUser(user: User | undefined) {
     const { can, cannot, build } = new AbilityBuilder<
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>)
 
     // Super admin
-    if (user?.roles?.includes('admin')) {
-      // School
-      // can(Action.Manage, School)
-      // Subject
-      // can(Action.Manage, Subject)
-      // User
-      // can(Action.Manage, User)
-    }
+    // if (user?.roles?.includes('admin')) {
+    //   School
+    //   can(Action.Manage, School)
+    //   Subject
+    //   can(Action.Manage, Subject)
+    //   User
+    //   can(Action.Manage, User)
+    // }
 
     // Any user (incluing guests) can read, list, and create a school
     // can(Action.Read, School)
@@ -64,9 +64,12 @@ export class CaslAbilityFactory {
       // user._id
       // { createdBy: "asdf" }
       console.log('User Id', user._id)
-      can(Action.List, School, {
-        createdBy: user,
-      }) // NOT WORKING
+      can(Action.Create, School)
+      can(Action.List, School)
+      can(Action.Read, School, {
+        createdBy: user._id,
+      })
+      // can(Action.Read, School)
     }
 
     // cannot(Action.Read, 'all')

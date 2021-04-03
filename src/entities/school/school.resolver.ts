@@ -8,10 +8,14 @@ import {
   ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
+import { plainToClass } from 'class-transformer'
 
 // Auth
+import { ForbiddenError } from '@casl/ability'
 import { CheckPolicies } from '../../casl/policy.guard'
 import { Action } from '../../casl/casl-ability.factory'
+import { CaslAbilityFactory } from '../../casl/casl-ability.factory'
+import { CurrentUser } from '../../auth/currentUser'
 
 // School
 import { School, SchoolDocument } from './school.model'
@@ -47,44 +51,62 @@ export class SchoolResolver {
   }
 
   @Query(() => School)
-  @CheckPolicies((a) => a.can(Action.Read, School))
-  async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
-    return this.service.getById(_id)
+  @CheckPolicies((a) => true)
+  async school(
+    @Args('_id', { type: () => ID }) _id: Types.ObjectId,
+    @CurrentUser() currentUser?: User,
+  ) {
+    const doc = await this.service.getById(_id)
+    const modelData = doc.toObject()
+    // this.service.model.modelName === 'School'
+    const model = plainToClass(School, modelData)
+
+    console.log('doc', doc)
+    console.log('modelData', modelData)
+    console.log('model', model)
+
+    const ability = CaslAbilityFactory.createForUser(currentUser)
+    ForbiddenError.from(ability).throwUnlessCan(Action.Read, model)
+    return model
   }
 
+  // @CheckPolicies((a) => {
+  //   //
+  //   // Policies
+  //   //    user:gaston -> [ 'subject/school:id/100:action/update' ]
+  //   // 1. dame toda los persmisos del current User
+  //   // 2. agarra el id (si lo hay) del input {_id: 100 }
+  //   // 3. fijate los permisos que tiene para el school con id estan
+  //   // 4. fake object school = new School({ createBy: currentUser })
+
+  //   // or
+  //   // 1. fake object school = new School({ id })
+  //   //
+
+  //   // 1. Pedir a la DB el modelo
+  //   // 2. check permissions
+  //   // a.can(Action.List, school)
+  //   return new Promise((resolve) => {
+  //     console.log('test1')
+  //     setTimeout(() => {
+  //       console.log('test1')
+  //       resolve(true)
+  //     }, 5000)
+  //   })
+  // }) //  {schoolId: '23424'}
   @Query(() => [School])
-  @CheckPolicies((a) => {
-    //
-    // Policies
-    //    user:gaston -> [ 'subject/school:id/100:action/update' ]
-    // 1. dame toda los persmisos del current User
-    // 2. agarra el id (si lo hay) del input {_id: 100 }
-    // 3. fijate los permisos que tiene para el school con id estan
-    // 4. fake object school = new School({ createBy: currentUser })
-
-    // or
-    // 1. fake object school = new School({ id })
-    //
-
-    // 1. Pedir a la DB el modelo
-    // 2. check permissions
-    // a.can(Action.List, school)
-    return new Promise((resolve) => {
-      console.log('test1')
-      setTimeout(() => {
-        console.log('test1')
-        resolve(true)
-      }, 5000)
-    })
-  }) //  {schoolId: '23424'}
+  @CheckPolicies((a) => true)
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
+    @CurrentUser() currentUser?: User,
   ) {
+    const ability = CaslAbilityFactory.createForUser(currentUser)
+    ForbiddenError.from(ability).throwUnlessCan(Action.List, School)
     return this.service.list(filters)
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => a.can(Action.Create, School))
+  @CheckPolicies((a) => true)
   async createSchool(@Args('payload') payload: CreateSchoolInput) {
     return this.service.create(payload)
   }
