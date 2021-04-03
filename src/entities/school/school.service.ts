@@ -21,13 +21,7 @@ export class SchoolService {
   constructor(
     @InjectModel(School.name)
     private model: Model<SchoolDocument>,
-    @InjectModel(User.name)
-    private user: Model<UserDocument>,
-    @InjectModel(Subject.name)
-    private subject: Model<SubjectDocument>,
     @Inject(REQUEST) private request: any,
-
-    private subjectService: SubjectService,
   ) {}
 
   create(payload: CreateSchoolInput) {
@@ -62,12 +56,6 @@ export class SchoolService {
     } catch (error) {
       console.error(error)
       return
-    }
-
-    if (model) {
-      const deleteSubject = await this.subjectService.deleteMany(model.subjects)
-      //const updateResult = await this.subject.findByIdAndDelete(model.subjects);
-      //console.log('delete updateResult', { updateResult })
     }
 
     return model

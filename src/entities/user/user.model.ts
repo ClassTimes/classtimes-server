@@ -38,7 +38,7 @@ export class User extends Utils.BaseModel {
   passwordHash: string
 
   @GQL.Field(() => String, { nullable: true })
-  @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
+  @DB.Prop({ required: false, min: 3, max: 60, unique: false }) // unique: true,
   mobile: string
 
   @GQL.Field(() => [String], { nullable: true })

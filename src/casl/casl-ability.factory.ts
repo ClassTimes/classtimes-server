@@ -11,9 +11,10 @@ import {
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
 import { Subject } from '../entities/subject/subject.model'
+import { Auth } from '../auth/auth.model'
 
 type Subjects =
-  | InferSubjects<typeof School | typeof User | typeof Subject>
+  | InferSubjects<typeof School | typeof User | typeof Subject | typeof Auth>
   | 'all'
 
 export enum Action {
@@ -34,14 +35,29 @@ export class CaslAbilityFactory {
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>)
 
+    // Super admin
     if (user?.roles?.includes('admin')) {
-      can(Action.List, School)
-      can(Action.Read, School)
-      can(Action.Create, School)
-
+      // School
+      can(Action.Manage, School)
+      // Subject
       can(Action.Manage, Subject)
-
+      // User
       can(Action.Manage, User)
+    }
+
+    // Any user (incluing guests) can read, list, and create a school
+    can(Action.Read, School)
+    can(Action.List, School)
+
+    if (user) {
+      // Any logged in user can...
+
+      can(Action.Manage, Auth)
+
+      // Create a school
+      can(Action.Create, School)
+      // But only it's owner can manage it
+      can(Action.Manage, School, { createdBy: user._id }) // NOT WORKING
     }
 
     // cannot(Action.Read, 'all')

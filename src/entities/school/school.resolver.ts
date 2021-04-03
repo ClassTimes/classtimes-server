@@ -28,13 +28,11 @@ import { Subject } from '../subject/subject.model'
 // User
 import { User } from '../user/user.model'
 import { UserService } from '../user/user.service'
+import { CurrentUser } from '../../auth/currentUser'
 
 @Resolver(() => School)
 export class SchoolResolver {
-  constructor(
-    private service: SchoolService,
-    private userService: UserService,
-  ) {}
+  constructor(private service: SchoolService) {}
 
   @ResolveField('createdBy', () => User)
   @CheckPolicies((a) => a.can(Action.List, User))
@@ -77,12 +75,11 @@ export class SchoolResolver {
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => a.can(Action.Delete, School))
+  @CheckPolicies((a) => a.can(Action.Delete, School)) // Obviously not working
   async deleteSchool(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
   }
 
-  // @CheckPolicies((a) => a.can(Action.Update, School))
   @ResolveField()
   async subjects(
     @Parent() school: SchoolDocument,

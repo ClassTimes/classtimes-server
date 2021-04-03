@@ -115,7 +115,7 @@ Object.defineProperty(BaseModel, 'schema', {
         const modelData = this.toObject()
         const model = plainToClass(klass, modelData)
         try {
-          console.log('model', model)
+          //console.log('model', model)
           await V.validateOrReject(model)
         } catch (_errors) {
           console.log('_errors', _errors)

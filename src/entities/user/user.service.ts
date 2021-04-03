@@ -41,6 +41,7 @@ export class UserService {
       ...payloadWithoutPassword,
     }
     const model = new this.model(finalPayload)
+    console.log('[User create()] [User]', model)
     await model.save()
 
     await this.sendGrid.send({

@@ -10,6 +10,7 @@ import { AppAbility, Action } from '../../casl/casl-ability.factory'
 
 // Auth
 import { SkipAuth } from '../../auth/decorators'
+import { Auth } from '../../auth/auth.model'
 
 // User
 import { User } from './user.model'
@@ -65,6 +66,7 @@ export class UserResolver {
    */
   // @UseGuards(GqlAuthGuard)
   @GQL.Query(() => User, { nullable: false })
+  @CheckPolicies((a) => a.can(Action.Read, Auth))
   whoAmI(@CurrentUser() user: User) {
     console.log('[User]', { user })
     return user //this.service.getById(user._id)
