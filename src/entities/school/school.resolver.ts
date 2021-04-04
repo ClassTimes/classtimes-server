@@ -8,14 +8,6 @@ import {
   ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
-import { plainToClass } from 'class-transformer'
-
-// Auth
-import { ForbiddenError } from '@casl/ability'
-import { CheckPolicies } from '../../casl/policy.guard'
-import { Action } from '../../casl/casl-ability.factory'
-import { CaslAbilityFactory } from '../../casl/casl-ability.factory'
-import { CurrentUser } from '../../auth/currentUser'
 
 // School
 import { School, SchoolDocument } from './school.model'
@@ -37,39 +29,29 @@ export class SchoolResolver {
   constructor(private service: SchoolService) {}
 
   @Query(() => School)
-  @CheckPolicies((a) => true)
   async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.getById(_id)
   }
 
   @Query(() => [School])
-  @CheckPolicies((a) => true)
   async schools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
   ) {
-    const schoolList = await this.service.list(filters)
-    for (const school of schoolList) {
-      await this.service.checkPermissons(Action.Read, school._id)
-    }
-    return schoolList
+    return this.service.list(filters)
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => true)
   async createSchool(@Args('payload') payload: CreateSchoolInput) {
     return this.service.create(payload)
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => true)
   async updateSchool(@Args('payload') payload: UpdateSchoolInput) {
     return this.service.update(payload)
   }
 
   @Mutation(() => School)
-  @CheckPolicies((a) => true)
   async deleteSchool(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
-    //await this.service.checkPermissons(Action.Delete, _id)
     return this.service.delete(_id)
   }
 

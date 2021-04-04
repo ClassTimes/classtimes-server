@@ -7,7 +7,7 @@ import gitCommitInfo from 'git-commit-info'
 import * as Utils from './utils'
 import { APP_GUARD } from '@nestjs/core'
 import { GqlAuthGuard } from './auth/gql-auth.guard'
-import { PoliciesGuard } from './casl/policy.guard'
+// import { PoliciesGuard } from './casl/policy.guard'
 
 // import {
 //   ApolloErrorConverter, // required: core export
@@ -94,10 +94,10 @@ import { CaslModule } from './casl/casl.module'
       provide: APP_GUARD,
       useClass: GqlAuthGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: PoliciesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PoliciesGuard,
+    // },
     // ObjectidScalar,
     // Logger,
     // JwtStrategy,

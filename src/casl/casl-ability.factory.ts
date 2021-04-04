@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common'
 import {
   //   ForbiddenError,
   InferSubjects,
@@ -7,7 +6,6 @@ import {
   AbilityClass,
   ExtractSubjectType,
 } from '@casl/ability'
-import { plainToClass } from 'class-transformer'
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
@@ -32,7 +30,6 @@ export enum Action {
 
 export type AppAbility = Ability<[Action, Subjects]>
 
-// @Injectable()
 export class CaslAbilityFactory {
   static createForUser(user: User | undefined) {
     const { can, cannot, build } = new AbilityBuilder<
@@ -60,6 +57,7 @@ export class CaslAbilityFactory {
       // School abilities
       can(Action.Create, School)
       can(Action.List, School)
+      // can(Action.Read, School, { createdBy: user._id })
       can(Action.Read, School, { createdBy: user._id })
       can(Action.Update, School, { createdBy: user._id })
       can(Action.Delete, School, { createdBy: user._id })
