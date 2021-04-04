@@ -1,18 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common'
-import { Args, ID } from '@nestjs/graphql'
-import { REQUEST } from '@nestjs/core'
+import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
-import { plainToClass } from 'class-transformer'
+
+// Service
+import { BaseService } from '../../utils/BaseService'
 
 // Auth
-import { ForbiddenError } from '@casl/ability'
-import { CaslAbilityFactory } from '../../casl/casl-ability.factory'
-import { CheckPolicies } from '../../casl/policy.guard'
 import { Action } from '../../casl/casl-ability.factory'
-
-// User
-import { User } from '../user/user.model'
 
 // School
 import { School, SchoolDocument } from './school.model'
@@ -22,36 +17,32 @@ import {
   UpdateSchoolInput,
 } from './school.inputs'
 
-@Injectable()
-export class SchoolService {
-  constructor(
-    @InjectModel(School.name)
-    private model: Model<SchoolDocument>,
-    @Inject(REQUEST) private request: any,
-  ) {}
+const MODEL_CLASS = School
+type TModelDocType = SchoolDocument
 
-  async checkPermissons(action: Action, _id?: Types.ObjectId) {
-    // Checks permissons for a single record
-    const currentUser = this.request.req?.user
-    const ability = CaslAbilityFactory.createForUser(currentUser)
-    if (_id) {
-      const doc = await this.model.findById(_id).exec()
-      const model = plainToClass(School, doc?.toObject())
-      ForbiddenError.from(ability).throwUnlessCan(action, model)
-      return doc
-    } else {
-      ForbiddenError.from(ability).throwUnlessCan(action, School)
-      return true // Necessary?
-    }
+@Injectable()
+export class SchoolService extends BaseService {
+  modelClass = MODEL_CLASS
+  dbModel: Model<TModelDocType>
+  context: any
+
+  constructor(
+    @InjectModel(MODEL_CLASS.name)
+    dbModel: Model<TModelDocType>,
+    @Inject(CONTEXT) context: any,
+  ) {
+    super()
+    this.dbModel = dbModel
+    this.context = context
   }
 
   async create(payload: CreateSchoolInput) {
     await this.checkPermissons(Action.Create)
     const updatedPayload = {
-      createdBy: this.request.req.user,
+      createdBy: this.currentUser,
       ...payload,
     }
-    const model = new this.model(updatedPayload)
+    const model = new this.dbModel(updatedPayload)
     return model.save()
   }
 
@@ -59,28 +50,23 @@ export class SchoolService {
     return this.checkPermissons(Action.Read, _id)
   }
 
-  list(filters: ListSchoolInput) {
-    return this.model.find({ ...filters }).exec()
+  async list(filters: ListSchoolInput) {
+    const docs = await this.dbModel.find({ ...filters }).exec()
+    for (const doc of docs) {
+      await this.checkPermissons(Action.Read, doc._id)
+    }
+    return docs
   }
 
   async update(payload: UpdateSchoolInput) {
     await this.checkPermissons(Action.Update, payload._id)
-    return this.model
+    return this.dbModel
       .findByIdAndUpdate(payload._id, payload, { new: true })
       .exec()
   }
 
   async delete(_id: Types.ObjectId) {
     await this.checkPermissons(Action.Delete, _id)
-    let model: any // Model<SchoolDocument>
-
-    try {
-      model = await this.model.findByIdAndDelete(_id).exec()
-    } catch (error) {
-      console.error(error)
-      return
-    }
-
-    return model
+    return this.dbModel.findByIdAndDelete(_id).exec()
   }
 }

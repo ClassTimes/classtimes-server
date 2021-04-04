@@ -8,8 +8,9 @@ import { User, UserSchema } from './user.model'
 import { UserResolver } from './user.resolver'
 // import { AuthModule } from '../auth/auth.module'
 
-import { PoliciesGuard } from '../../casl/policy.guard'
 import { CaslAbilityFactory } from '../../casl/casl-ability.factory'
+// import { PoliciesGuard } from '../../casl/policy.guard'
+
 @Module({
   imports: [
     // AuthModule,
