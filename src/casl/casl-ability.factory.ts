@@ -60,9 +60,9 @@ export class CaslAbilityFactory {
       // School abilities
       can(Action.Create, School)
       can(Action.List, School)
-      can(Action.Read, School, { createdBy: user._id })
-      can(Action.Update, School, { createdBy: user._id })
-      can(Action.Delete, School, { createdBy: user._id })
+      can(Action.Read, School, { 'createdBy._id': user._id } as any)
+      can(Action.Update, School, { 'createdBy._id': user._id } as any)
+      can(Action.Delete, School, { 'createdBy._id': user._id } as any)
       if (user?.roles?.includes('admin')) {
         can(Action.Read, School)
       }

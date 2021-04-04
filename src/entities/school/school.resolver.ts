@@ -74,10 +74,10 @@ export class SchoolResolver {
   }
 
   //
-  // Field resolvers
+  // Field resolvers (deprecated in favor of mongoose-autopopulate)
   //
 
-  @ResolveField()
+  /*@ResolveField()
   async subjects(
     @Parent() school: SchoolDocument,
     @Args('populate') populate: boolean,
@@ -103,5 +103,5 @@ export class SchoolResolver {
         .execPopulate()
     }
     return school.createdBy
-  }
+  }*/
 }

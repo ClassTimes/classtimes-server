@@ -158,9 +158,9 @@ type Query {
 
 type School {
   _id: ID!
-  createdBy(populate: Boolean!): User!
+  createdBy: User!
   name: String!
-  subjects(populate: Boolean!): [Subject!]
+  subjects: [Subject!]
 }
 
 type Subject {
