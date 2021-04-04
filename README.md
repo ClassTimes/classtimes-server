@@ -45,7 +45,7 @@ $ npm run test:cov
 
 ## Stay in touch
 
-- Authors - [Gaston Morixe](https://gastonmorixe.com) [Itay Brenner](https://twitter.com/itaybrenner)
+- Authors - [Gaston Morixe](https://gastonmorixe.com) [Itay Brenner](https://twitter.com/itaybrenner) [Franco Mangone](https://github.com/frankmangone)
 - Website - [https://classtimes.app](https://classtimes.app/)
 - Twitter - [@classtimesapp](https://twitter.com/classtimesapp)
 - Instagram - [@classtimess.app](https://instagram.com/classtimes.app)
