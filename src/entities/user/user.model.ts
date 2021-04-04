@@ -2,6 +2,7 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
+import { accessibleRecordsPlugin } from '@casl/mongoose'
 
 import * as Utils from '../../utils/Model'
 
@@ -10,7 +11,7 @@ import * as Utils from '../../utils/Model'
   timestamps: true,
   // autoIndex: true
 })
-export class User extends Utils.Model {
+export class User extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
@@ -37,7 +38,7 @@ export class User extends Utils.Model {
   passwordHash: string
 
   @GQL.Field(() => String, { nullable: true })
-  @DB.Prop({ required: false, unique: true, min: 3, max: 60 })
+  @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
 
   @GQL.Field(() => [String], { nullable: true })
@@ -52,6 +53,7 @@ export class User extends Utils.Model {
 
 export type UserDocument = User & mongoose.Document
 export const UserSchema = User.schema
+
 // UserSchema.index({ field1: 1, field2: 1 }, { unique: true })
 
 //

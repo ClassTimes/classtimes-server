@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { AccessibleRecordModel } from '@casl/mongoose'
+import { defineAbility } from '@casl/ability'
+import { CurrentUser } from '../../auth/currentUser'
 import mongoose from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
 import * as bcrypt from 'bcrypt'
 
 // User
-import { User, UserDocument } from './user.model'
+import { User, UserSchema, UserDocument } from './user.model'
 import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
 // Calendar
@@ -15,9 +18,12 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 export class UserService {
   constructor(
     @InjectModel(User.name)
-    private model: mongoose.Model<UserDocument>,
+    private model: mongoose.Model<
+      UserDocument,
+      AccessibleRecordModel<UserDocument>
+    >,
     private readonly sendGrid: SendGridService,
-  ) { }
+  ) {}
 
   async create(payload: CreateUserInput) {
     const { password, ...payloadWithoutPassword } = payload
@@ -35,6 +41,7 @@ export class UserService {
       ...payloadWithoutPassword,
     }
     const model = new this.model(finalPayload)
+    console.log('[User create()] [User]', model)
     await model.save()
 
     await this.sendGrid.send({

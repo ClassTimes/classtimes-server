@@ -21,6 +21,9 @@ import {
 // Subject
 import { Subject } from '../subject/subject.model'
 
+// User
+import { User } from '../user/user.model'
+
 @Resolver(() => School)
 export class SchoolResolver {
   constructor(private service: SchoolService) {}
@@ -52,7 +55,11 @@ export class SchoolResolver {
     return this.service.delete(_id)
   }
 
-  @ResolveField()
+  //
+  // Field resolvers (deprecated in favor of mongoose-autopopulate)
+  //
+
+  /*@ResolveField()
   async subjects(
     @Parent() school: SchoolDocument,
     @Args('populate') populate: boolean,
@@ -65,4 +72,18 @@ export class SchoolResolver {
 
     return school.subjects
   }
+
+  @ResolveField('createdBy', () => User)
+  async createdBy(
+    @Parent() school: SchoolDocument,
+    @Args('populate') populate: boolean,
+  ) {
+    if (populate) {
+      console.log(school)
+      await school
+        .populate({ path: 'createdBy', model: User.name })
+        .execPopulate()
+    }
+    return school.createdBy
+  }*/
 }

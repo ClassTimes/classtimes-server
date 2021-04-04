@@ -9,6 +9,9 @@ import {
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
+import { CheckPolicies } from '../../casl/policy.guard'
+import { AppAbility, Action } from '../../casl/casl-ability.factory'
+
 // School
 import { Subject, SubjectDocument } from './subject.model'
 import { SubjectService } from './subject.service'
@@ -22,10 +25,9 @@ import {
 import { Calendar } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
 
-
 @Resolver(() => Subject)
 export class SubjectResolver {
-  constructor(private service: SubjectService) { }
+  constructor(private service: SubjectService) {}
 
   @Query(() => Subject)
   async subject(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -33,6 +35,7 @@ export class SubjectResolver {
   }
 
   @Query(() => [Subject])
+  @CheckPolicies((a) => a.can(Action.List, Subject))
   async subjects(
     @Args('filters', { nullable: true }) filters?: ListSubjectInput,
   ) {
@@ -40,6 +43,7 @@ export class SubjectResolver {
   }
 
   @Mutation(() => Subject)
+  @CheckPolicies((a) => a.can(Action.Create, Subject))
   async createSubject(@Args('payload') payload: CreateSubjectInput) {
     return this.service.create(payload)
   }

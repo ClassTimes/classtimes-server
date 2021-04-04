@@ -4,6 +4,12 @@ import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
 import pluralize from 'pluralize'
 import titleize from 'titleize'
+import {
+  accessibleFieldsPlugin,
+  accessibleRecordsPlugin,
+  AccessibleModel,
+  AccessibleFieldsDocument,
+} from '@casl/mongoose'
 
 export class ModelValidationError extends ApolloError {
   public path: any[]
@@ -25,7 +31,7 @@ export class ModelValidationError extends ApolloError {
  * Decorator
  */
 export function ValidateSchema() {
-  return function <T extends typeof Model>(target: T) {
+  return function <T extends typeof BaseModel>(target: T) {
     target.__validate__ = true
     return target
   }
@@ -35,17 +41,18 @@ interface IOneToManyOptions {
   ref?: string
   foreignField?: string
   localField?: string
+  propertyKey?: string
 }
 
 export function OneToMany(options: IOneToManyOptions = {}) {
-  const { ref, foreignField, localField } = options
+  const { ref, foreignField, localField, propertyKey: _propertyKey } = options
   return (target: any, propertyKey: string) => {
-    const model = target.constructor as typeof Model
+    const model = target.constructor as typeof BaseModel
     model.__assoc__ = model.__assoc__ || {}
     model.__assoc__['OneToMany'] = model.__assoc__['OneToMany'] || []
     model.__assoc__['OneToMany'].push({
       target,
-      propertyKey,
+      propertyKey: _propertyKey ?? propertyKey,
       ref,
       foreignField,
       localField,
@@ -57,7 +64,7 @@ export function OneToMany(options: IOneToManyOptions = {}) {
  * Base Model
  */
 @ValidateSchema()
-export class Model {
+export class BaseModel {
   static __validate__: boolean | undefined
   static __assoc__: Record<string, any> | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
@@ -65,7 +72,7 @@ export class Model {
 
 // Validation
 const SCHEMA_CACHE_KEY = `__schema__`
-Object.defineProperty(Model, 'schema', {
+Object.defineProperty(BaseModel, 'schema', {
   get: function () {
     if (this[SCHEMA_CACHE_KEY]) {
       return this[SCHEMA_CACHE_KEY]
@@ -75,6 +82,7 @@ Object.defineProperty(Model, 'schema', {
     // eslint-disable-next-line
     const klass = this
 
+    // One-to-Many virtuals
     const assocs = this?.__assoc__?.['OneToMany']
     if (assocs) {
       for (const assoc of assocs) {
@@ -86,7 +94,7 @@ Object.defineProperty(Model, 'schema', {
           ref: _ref,
           localField: _localField,
         } = assoc
-        const model = target.constructor as typeof Model
+        const model = target.constructor as typeof BaseModel
         const foreignField = _foreignField ?? model.name.toLowerCase()
         const localField = _localField ?? '_id'
         const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))
@@ -100,13 +108,14 @@ Object.defineProperty(Model, 'schema', {
       }
     }
 
+    // Validations
     if (this['__validate__']) {
       // TODO Cleanup to a function
       schema.pre('validate', async function (next) {
         const modelData = this.toObject()
         const model = plainToClass(klass, modelData)
         try {
-          console.log('model', model)
+          //console.log('model', model)
           await V.validateOrReject(model)
         } catch (_errors) {
           console.log('_errors', _errors)

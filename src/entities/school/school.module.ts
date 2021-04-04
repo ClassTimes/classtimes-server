@@ -8,10 +8,17 @@ import { SchoolResolver } from './school.resolver'
 import { Subject, SubjectSchema } from '../subject/subject.model'
 import { SubjectService } from '../subject/subject.service'
 
+import { User, UserSchema } from '../user/user.model'
+import { UserService } from '../user/user.service'
+import { UserResolver } from '../user/user.resolver'
+
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
 import { CalendarService } from '../calendar/calendar.service'
 
-import { CalendarEvent, CalendarEventSchema } from '../calendarEvent/calendarEvent.model'
+import {
+  CalendarEvent,
+  CalendarEventSchema,
+} from '../calendarEvent/calendarEvent.model'
 import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 
 @Module({
@@ -26,6 +33,10 @@ import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
         schema: SubjectSchema,
       },
       {
+        name: User.name,
+        schema: UserSchema,
+      },
+      {
         name: Calendar.name,
         schema: CalendarSchema,
       },
@@ -36,11 +47,14 @@ import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
     ]),
   ],
   //   controllers: [SchoolsController],
-  providers: [SchoolService,
+  providers: [
+    SchoolService,
     SchoolResolver,
     SubjectService,
     CalendarService,
-    CalendarEventService
+    CalendarEventService,
+    UserService,
+    UserResolver,
   ],
 })
-export class SchoolModule { }
+export class SchoolModule {}

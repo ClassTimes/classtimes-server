@@ -5,6 +5,9 @@ import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { join } from 'path'
 import gitCommitInfo from 'git-commit-info'
 import * as Utils from './utils'
+import { APP_GUARD } from '@nestjs/core'
+import { GqlAuthGuard } from './auth/gql-auth.guard'
+// import { PoliciesGuard } from './casl/policy.guard'
 
 // import {
 //   ApolloErrorConverter, // required: core export
@@ -87,9 +90,17 @@ import { CaslModule } from './casl/casl.module'
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_GUARD,
+      useClass: GqlAuthGuard,
+    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PoliciesGuard,
+    // },
     // ObjectidScalar,
     // Logger,
     // JwtStrategy,
   ],
 })
-export class AppModule { }
+export class AppModule {}

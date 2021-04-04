@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async login(payload: LoginInput): Promise<CT.JWTLoginResponse> | undefined {
     const user = await this.usersService.findByEmailOrUsername(

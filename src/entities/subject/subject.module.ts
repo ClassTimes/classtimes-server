@@ -11,8 +11,10 @@ import { Calendar, CalendarSchema } from '../calendar/calendar.model'
 import { School, SchoolSchema } from '../school/school.model'
 
 import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
-import { CalendarEvent, CalendarEventSchema } from '../calendarEvent/calendarEvent.model'
-
+import {
+  CalendarEvent,
+  CalendarEventSchema,
+} from '../calendarEvent/calendarEvent.model'
 
 @Module({
   imports: [
@@ -36,9 +38,11 @@ import { CalendarEvent, CalendarEventSchema } from '../calendarEvent/calendarEve
     ]),
   ],
   //   controllers: [SchoolsController],
-  providers: [SubjectService,
+  providers: [
+    SubjectService,
     SubjectResolver,
     CalendarService,
-    CalendarEventService],
+    CalendarEventService,
+  ],
 })
-export class SubjectModule { }
+export class SubjectModule {}
