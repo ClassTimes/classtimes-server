@@ -45,7 +45,7 @@ import { CaslModule } from './casl/casl.module'
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: true,
-      debug: true,
+      debug: false,
       introspection: true, // TODO Remove in production at release time
       // context: ({ req }) => ({ req }),
       context: (options) => {
