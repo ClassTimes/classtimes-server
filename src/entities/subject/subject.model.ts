@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import * as Utils from '../../utils/Model'
 import { Calendar } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
+import { User } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -27,6 +28,10 @@ export class Subject extends Utils.BaseModel {
   @GQL.Field(() => School)
   @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'School' })
   school: mongoose.Types.ObjectId | School
+
+  @GQL.Field(() => [User])
+  @DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User' })
+  professors: mongoose.Types.ObjectId[] | User[]
 }
 
 export type SubjectDocument = Subject & mongoose.Document

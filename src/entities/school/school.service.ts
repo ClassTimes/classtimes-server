@@ -18,18 +18,16 @@ import {
 } from './school.inputs'
 
 const MODEL_CLASS = School
-type TModelDocType = SchoolDocument
-
 @Injectable()
 export class SchoolService extends BaseService {
   modelClass = MODEL_CLASS
-  dbModel: Model<TModelDocType>
-  context: any
+  dbModel: Model<SchoolDocument>
+  context
 
   constructor(
     @InjectModel(MODEL_CLASS.name)
-    dbModel: Model<TModelDocType>,
-    @Inject(CONTEXT) context: any,
+    dbModel: Model<SchoolDocument>,
+    @Inject(CONTEXT) context,
   ) {
     super()
     this.dbModel = dbModel
