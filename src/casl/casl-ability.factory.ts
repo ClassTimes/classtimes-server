@@ -57,12 +57,22 @@ export class CaslAbilityFactory {
       // School abilities
       can(Action.Create, School)
       can(Action.List, School)
-      can(Action.Read, School, { 'createdBy._id': user._id } as any)
-      can(Action.Update, School, { 'createdBy._id': user._id } as any)
-      can(Action.Delete, School, { 'createdBy._id': user._id } as any)
+      can([Action.Read, Action.Update, Action.Delete], School, {
+        'createdBy._id': user._id,
+      } as any)
+
       if (user?.roles?.includes('admin')) {
         can(Action.Read, School)
       }
+
+      // Subject abilities
+      can([Action.Read, Action.List], Subject)
+      can([Action.Update], Subject, {
+        'roles.professors._id': user._id,
+      } as any)
+      can([Action.Create, Action.Delete], Subject, {
+        'school.roles.admins._id': user._id,
+      } as any)
     }
 
     // cannot(Action.Read, 'all')

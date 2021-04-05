@@ -158,6 +158,7 @@ type Query {
 
 type School {
   _id: ID!
+  admins: [User!]!
   createdBy: User!
   name: String!
   subjects: [Subject!]
