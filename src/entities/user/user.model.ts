@@ -2,7 +2,6 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
-import { accessibleRecordsPlugin } from '@casl/mongoose'
 
 import * as Utils from '../../utils/Model'
 
@@ -41,9 +40,9 @@ export class User extends Utils.BaseModel {
   @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
 
-  @GQL.Field(() => [String], { nullable: true })
-  @DB.Prop({ required: false })
-  roles: string[]
+  // @GQL.Field(() => Boolean, { nullable: true })
+  // @DB.Prop({ required: false })
+  // isSuperAdmin: boolean
 
   // Relations
   // @GQL.Field(() => Calendar, { nullable: false })

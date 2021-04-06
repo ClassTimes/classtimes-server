@@ -38,11 +38,6 @@ export class Subject extends Utils.BaseModel {
   })
   school: mongoose.Types.ObjectId | School
 
-  @DB.Prop({
-    type: mongoose.Schema.Types.Mixed,
-  })
-  roles: typeof mongoose.Schema.Types.Mixed
-
   // @GQL.Field(() => [User])
   // @DB.Prop({
   //   type: [mongoose.Schema.Types.ObjectId],

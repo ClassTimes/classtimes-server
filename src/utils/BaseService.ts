@@ -23,12 +23,17 @@ export abstract class BaseService {
   async checkPermissons(
     action: Action,
     id?: mongoose.Types.ObjectId,
+    modelClass?: any,
+    dbModel?: any,
   ): Promise<mongoose.Model<mongoose.Document>> {
     // Checks permissons for a single record
     const ability = CaslAbilityFactory.createForUser(this.currentUser)
     if (id) {
-      const doc = await this.dbModel.findById(id).exec()
-      const model = plainToClass(this.modelClass, doc?.toObject()) as any
+      const doc = await (dbModel || this.dbModel).findById(id).exec()
+      const model = plainToClass(
+        modelClass || this.modelClass,
+        doc?.toObject(),
+      ) as any
       ForbiddenError.from(ability).throwUnlessCan(action, model)
       return doc
     } else {

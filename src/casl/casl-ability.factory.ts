@@ -6,6 +6,7 @@ import {
   AbilityClass,
   ExtractSubjectType,
 } from '@casl/ability'
+import { plainToClass } from 'class-transformer'
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
@@ -36,49 +37,46 @@ export class CaslAbilityFactory {
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>)
 
-    // Super admin
-    // if (user?.roles?.includes('admin')) {
-    //   School
-    //   can(Action.Manage, School)
-    //   Subject
-    //   can(Action.Manage, Subject)
-    //   User
-    //   can(Action.Manage, User)
-    // }
+    // Public Resources
+    can([Action.Read], School)
 
-    // Any user (incluing guests) can read, list, and create a school
-    // can(Action.Read, School)
-    // can(Action.List, School)
-    //console.log('CAS AVILITY FACTOR', user)
     if (user) {
+      // user = plainToClass(User, user)
+      // Super admin abilities
+      if (user?.roles?.superAdmin) {
+        can(Action.Manage, School)
+        can(Action.Manage, Subject)
+      }
+
       // Any logged in user can...
       can(Action.Manage, Auth)
 
       // School abilities
-      can(Action.Create, School)
-      can(Action.List, School)
-      can([Action.Read, Action.Update, Action.Delete], School, {
+      can([Action.Update, Action.Delete], School, {
         'createdBy._id': user._id,
       } as any)
 
-      if (user?.roles?.includes('admin')) {
-        can(Action.Read, School)
-      }
+      // roles: {
+      //   superAdmin: boolean,
+      //   professors: User[],
+      //   admins: User[]
+      // }
 
       // Subject abilities
-      can([Action.Read, Action.List], Subject)
+      can([Action.Read], Subject) // TODO: Add search Action
       can([Action.Update], Subject, {
-        'roles.professors._id': user._id,
+        'subject.roles.professors._id': user._id,
       } as any)
       can([Action.Create, Action.Delete], Subject, {
-        'school.roles.admins._id': user._id,
+        'subject.roles.admins._id': user._id,
       } as any)
     }
 
-    // cannot(Action.Read, 'all')
-    // cannot(Action.Read, User)
-    // cannot(Action.Delete, Article, { isPublished: true })
-    // can(Action.Update, Article, { authorId: user.id })
+    // TODO: Action.Update tiene que whitelistearse por key
+
+    // User can
+    can([Action.Read, Action.Create], User)
+    can([Action.Update], User, ['email', 'username'], { _id: user._id })
 
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details

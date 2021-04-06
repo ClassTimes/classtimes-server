@@ -1,5 +1,6 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as V from 'class-validator'
+import mongoose from 'mongoose'
 import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
 import pluralize from 'pluralize'
@@ -64,10 +65,19 @@ export function OneToMany(options: IOneToManyOptions = {}) {
  * Base Model
  */
 @ValidateSchema()
+@DB.Schema({
+  timestamps: true,
+  // autoIndex: true
+})
 export class BaseModel {
   static __validate__: boolean | undefined
   static __assoc__: Record<string, any> | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
+
+  @DB.Prop({
+    type: mongoose.Schema.Types.Mixed,
+  })
+  roles: Record<string | symbol, unknown> // TODO: Improve model
 }
 
 // Validation
