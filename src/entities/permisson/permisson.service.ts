@@ -61,26 +61,14 @@ export class PermissonService extends BaseService {
     // Get currentRoles
     const resource = await dbModel.findById(payload.resourceId)
     const model = plainToClass(modelClass, resource?.toObject()) as any
-    let roles = {}
 
-    if (model.roles) {
-      if (model.roles[payload.role]) {
-        roles = model.roles
-      } else {
-        roles = model.roles
-        roles[payload.role] = []
-      }
-    } else {
-      roles[payload.role] = []
-    }
-
+    const roles = model?.roles ?? {}
+    roles[payload.role] = roles[payload.role] ?? []
     roles[payload.role].push({ userId: payload.subjectId })
 
     const updatedModel = await dbModel.findByIdAndUpdate(payload.resourceId, {
       roles,
     })
     return payload
-
-    // Should return a Permisson!
   }
 }

@@ -25,6 +25,7 @@ export abstract class BaseService {
     id?: mongoose.Types.ObjectId,
     modelClass?: any,
     dbModel?: any,
+    record?: any, // Record to be persisted, on create
   ): Promise<mongoose.Model<mongoose.Document>> {
     // Checks permissons for a single record
     const ability = CaslAbilityFactory.createForUser(this.currentUser)
@@ -34,12 +35,12 @@ export abstract class BaseService {
         modelClass || this.modelClass,
         doc?.toObject(),
       ) as any
-      ForbiddenError.from(ability).throwUnlessCan(action, model)
+      ForbiddenError.from(ability).throwUnlessCan(action, record || model)
       return doc
     } else {
       ForbiddenError.from(ability).throwUnlessCan(
         action,
-        this.modelClass as any,
+        record || (this.modelClass as any),
       )
     }
   }

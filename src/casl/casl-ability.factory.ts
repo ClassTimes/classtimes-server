@@ -32,6 +32,12 @@ export enum Action {
 
 export type AppAbility = Ability<[Action, Subjects]>
 
+// roles: {
+//   superAdmin: boolean,
+//   professors: User[],
+//   admins: User[]
+// }
+
 export class CaslAbilityFactory {
   static createForUser(user: User | undefined) {
     const { can, cannot, build } = new AbilityBuilder<
@@ -57,25 +63,28 @@ export class CaslAbilityFactory {
         'createdBy._id': user._id,
       } as any)
 
-      // roles: {
-      //   superAdmin: boolean,
-      //   professors: User[],
-      //   admins: User[]
-      // }
-
       // Subject abilities
       can([Action.Read], Subject) // TODO: Add search Action
       can([Action.Update], Subject, {
-        'subject.roles.professors._id': user._id,
+        'roles.admin.userId': user._id,
       } as any)
       can([Action.Create, Action.Delete], Subject, {
-        'subject.roles.admins._id': user._id,
+        'school.roles.admin.userId': user._id,
+      } as any)
+
+      // Writing permissons
+      can([Action.GrantPermisson], School, {
+        'roles.admin.userId': user._id,
+      } as any)
+      can([Action.GrantPermisson], Subject, {
+        'roles.admin.userId': user._id,
+        'school.roles.admin.userId': user._id,
       } as any)
     }
 
     // TODO: Action.Update tiene que whitelistearse por key
 
-    // User can
+    // User abilities
     can([Action.Read, Action.Create], User)
     can([Action.Update], User, ['email', 'username'], { _id: user._id })
 
