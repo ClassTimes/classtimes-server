@@ -1,6 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common'
+import { Injectable, Inject, OnModuleInit } from '@nestjs/common'
+import { ModuleRef } from '@nestjs/core'
 import { CONTEXT } from '@nestjs/graphql'
-import { InjectModel } from '@nestjs/mongoose'
+import { getModelToken, InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
 // Service
@@ -20,6 +21,7 @@ import {
 const MODEL_CLASS = School
 @Injectable()
 export class SchoolService extends BaseService {
+  // implements OnModuleInit
   modelClass = MODEL_CLASS
   dbModel: Model<SchoolDocument>
   context
@@ -27,12 +29,20 @@ export class SchoolService extends BaseService {
   constructor(
     @InjectModel(MODEL_CLASS.name)
     dbModel: Model<SchoolDocument>,
+    private moduleRef: ModuleRef,
     @Inject(CONTEXT) context,
   ) {
     super()
+    // const test = InjectModel(MODEL_CLASS.name)
     this.dbModel = dbModel
+    // console.log('test', test)
     this.context = context
   }
+
+  // onModuleInit() {
+  //   const test = this.moduleRef.get(getModelToken('School'))
+  //   console.log('test', test)
+  // }
 
   async create(payload: CreateSchoolInput) {
     await this.checkPermissons(Action.Create)
@@ -49,6 +59,9 @@ export class SchoolService extends BaseService {
   }
 
   async list(filters: ListSchoolInput) {
+    const test = this.moduleRef.get(getModelToken(MODEL_CLASS.name))
+    console.log('test', test)
+
     const docs = await this.dbModel.find({ ...filters }).exec()
     for (const doc of docs) {
       await this.checkPermissons(Action.Read, doc._id)
