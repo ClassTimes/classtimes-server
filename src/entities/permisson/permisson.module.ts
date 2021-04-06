@@ -1,26 +1,23 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { SchoolService } from './school.service'
-import { School, SchoolSchema } from './school.model'
-import { SchoolResolver } from './school.resolver'
+// import { SchoolService } from './school.service'
+// import { SchoolResolver } from './school.resolver'
+import { School, SchoolSchema } from '../school/school.model'
 
 import { Subject, SubjectSchema } from '../subject/subject.model'
-import { SubjectService } from '../subject/subject.service'
 
 import { User, UserSchema } from '../user/user.model'
-import { UserService } from '../user/user.service'
-import { UserResolver } from '../user/user.resolver'
 
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
-import { CalendarService } from '../calendar/calendar.service'
 
 import {
   CalendarEvent,
   CalendarEventSchema,
 } from '../calendarEvent/calendarEvent.model'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 
+import { PermissonResolver } from './permisson.resolver'
+import { PermissonService } from './permisson.service'
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -47,13 +44,6 @@ import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
     ]),
   ],
   //   controllers: [SchoolsController],
-  providers: [
-    SchoolService,
-    SchoolResolver,
-    SubjectService,
-    CalendarService,
-    CalendarEventService,
-    UserService,
-  ],
+  providers: [PermissonResolver, PermissonService],
 })
-export class SchoolModule {}
+export class PermissonModule {}

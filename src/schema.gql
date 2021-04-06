@@ -138,6 +138,14 @@ type Mutation {
   updateSchool(payload: UpdateSchoolInput!): School!
   updateSubject(payload: UpdateSubjectInput!): Subject!
   updateUser(payload: UpdateUserInput!): User
+  writePermisson(payload: WritePermissonsInput!): Permisson!
+}
+
+type Permisson {
+  resourceId: ID!
+  resourceName: String!
+  role: String!
+  subjectId: ID!
 }
 
 type Query {
@@ -222,4 +230,11 @@ type User {
   fullName: String
   mobile: String
   username: String!
+}
+
+input WritePermissonsInput {
+  resourceId: ID!
+  resourceName: String!
+  role: String!
+  subjectId: ID!
 }

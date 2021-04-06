@@ -26,6 +26,7 @@ import { EventModule } from './entities/event/event.module'
 import { SchoolModule } from './entities/school/school.module'
 import { SubjectModule } from './entities/subject/subject.module'
 import { UserModule } from './entities/user/user.module'
+import { PermissonModule } from './entities/permisson/permisson.module'
 import { AuthModule } from './auth/auth.module'
 import { CaslModule } from './casl/casl.module'
 
@@ -86,6 +87,7 @@ import { CaslModule } from './casl/casl.module'
     CalendarEventModule,
     EventModule,
     UserModule,
+    PermissonModule,
   ],
   controllers: [AppController],
   providers: [
