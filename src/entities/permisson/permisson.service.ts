@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
+import { plainToClass } from 'class-transformer'
 
 // Service
 import { BaseService } from '../../utils/BaseService'
@@ -56,9 +57,29 @@ export class PermissonService extends BaseService {
       payload.resourceId,
       modelClass,
       dbModel,
-    ) //, payload._id)
-    // return this.dbModel.findById(payload.resourceId).exec()
-    //return this.dbModel.findById(payload.resourceId, payload, { new: true }).exec()
+    )
+    // Get currentRoles
+    const resource = await dbModel.findById(payload.resourceId)
+    const model = plainToClass(modelClass, resource?.toObject()) as any
+    let roles = {}
+
+    if (model.roles) {
+      if (model.roles[payload.role]) {
+        roles = model.roles
+      } else {
+        roles = model.roles
+        roles[payload.role] = []
+      }
+    } else {
+      roles[payload.role] = []
+    }
+
+    roles[payload.role].push({ userId: payload.subjectId })
+
+    const updatedModel = await dbModel.findByIdAndUpdate(payload.resourceId, {
+      roles,
+    })
+    return payload
 
     // Should return a Permisson!
   }

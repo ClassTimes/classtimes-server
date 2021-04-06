@@ -33,14 +33,6 @@ import { PermissonService } from './permisson.service'
         name: User.name,
         schema: UserSchema,
       },
-      {
-        name: Calendar.name,
-        schema: CalendarSchema,
-      },
-      {
-        name: CalendarEvent.name,
-        schema: CalendarEventSchema,
-      },
     ]),
   ],
   //   controllers: [SchoolsController],

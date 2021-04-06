@@ -1,5 +1,4 @@
-import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql'
-import { Types } from 'mongoose'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { Permisson } from './permisson.model'
 import { PermissonService } from './permisson.service'
 import { WritePermissonsInput } from './permisson.inputs'
