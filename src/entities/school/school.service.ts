@@ -59,7 +59,9 @@ export class SchoolService extends BaseService {
   }
 
   async list(filters: ListSchoolInput) {
-    const test = this.moduleRef.get(getModelToken(MODEL_CLASS.name))
+    const test = this.moduleRef.get(getModelToken(MODEL_CLASS.name), {
+      strict: false,
+    })
     console.log('test', test)
 
     const docs = await this.dbModel.find({ ...filters }).exec()

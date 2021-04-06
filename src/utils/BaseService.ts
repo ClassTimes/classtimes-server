@@ -10,7 +10,7 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory'
 // User
 import { User } from '../entities/user/user.model'
 
-@Injectable()
+// @Injectable()
 export abstract class BaseService {
   abstract dbModel: any // mongoose.Model<mongoose.Document>
   abstract modelClass: any //{ new (): any }
