@@ -25,6 +25,7 @@ export enum Action {
   Create = 'create',
   Read = 'read',
   List = 'list',
+  GrantPermisson = 'grantPermisson',
   Update = 'update',
   Delete = 'delete',
 }

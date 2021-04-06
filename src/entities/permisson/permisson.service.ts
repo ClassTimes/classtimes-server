@@ -22,6 +22,7 @@ export class PermissonService extends BaseService {
   dbModel: any // Not using it
   context
   dbModels: any
+  modelClasses: any
 
   constructor(
     @InjectModel(School.name)
@@ -39,18 +40,23 @@ export class PermissonService extends BaseService {
       subject,
       user,
     }
+    this.modelClasses = {
+      school: School,
+      subject: Subject,
+      user: User,
+    }
   }
 
   async writePermisson(payload: WritePermissonsInput) {
     // Buscar como inyectar modelo a partir de un string
     const dbModel = this.dbModels[payload.resourceName.toLowerCase()]
-    console.log(dbModel)
-    // await this.checkPermissons(
-    //   Action.Update, // TODO: Change this action
-    //   payload.resourceId,
-    //   this.modelClass,
-    //   this.dbModel,
-    // ) //, payload._id)
+    const modelClass = this.modelClasses[payload.resourceName.toLowerCase()]
+    await this.checkPermissons(
+      Action.GrantPermisson,
+      payload.resourceId,
+      modelClass,
+      dbModel,
+    ) //, payload._id)
     // return this.dbModel.findById(payload.resourceId).exec()
     //return this.dbModel.findById(payload.resourceId, payload, { new: true }).exec()
 
