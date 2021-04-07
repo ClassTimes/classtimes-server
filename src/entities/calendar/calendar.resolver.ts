@@ -25,7 +25,7 @@ import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 
 @Resolver(() => Calendar)
 export class CalendarResolver {
-  constructor(private service: CalendarService) { }
+  constructor(private service: CalendarService) {}
 
   @Query(() => Calendar)
   async calendar(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {

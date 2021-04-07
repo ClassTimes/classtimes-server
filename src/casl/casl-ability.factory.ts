@@ -11,10 +11,17 @@ import { plainToClass } from 'class-transformer'
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
 import { Subject } from '../entities/subject/subject.model'
+import { Calendar } from '../entities/calendar/calendar.model'
 import { Auth } from '../auth/auth.model'
 
 type Subjects =
-  | InferSubjects<typeof School | typeof User | typeof Subject | typeof Auth>
+  | InferSubjects<
+      | typeof School
+      | typeof User
+      | typeof Subject
+      | typeof Calendar
+      | typeof Auth
+    >
   | 'all'
 
 export enum Action {
@@ -46,9 +53,8 @@ export class CaslAbilityFactory {
 
     // Public Resources
     can([Action.Read], School)
-
+    console.log('[User] ', user)
     if (user) {
-      // user = plainToClass(User, user)
       // Super admin abilities
       if (user?.roles?.superAdmin) {
         can(Action.Manage, School)
@@ -61,7 +67,7 @@ export class CaslAbilityFactory {
       // School abilities
       can([Action.Update, Action.Delete], School, {
         'createdBy._id': user._id,
-      } as any)
+      } as any) // Obsolete
 
       // Subject abilities
       can([Action.Read], Subject) // TODO: Add search Action
@@ -70,6 +76,15 @@ export class CaslAbilityFactory {
       } as any)
       can([Action.Create, Action.Delete], Subject, {
         'school.roles.admin.userId': user._id,
+      } as any)
+
+      // Calendar abilities
+      //can([Action.Read], Subject) // TODO: Add search Action
+      // can([Action.Update], Subject, {
+      //   'roles.admin.userId': user._id,
+      // } as any)
+      can([Action.Create], Calendar, {
+        'calendar.subject.roles.admin.userId': user._id,
       } as any)
 
       // Writing permissons

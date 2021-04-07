@@ -23,11 +23,7 @@ export class Subject extends Utils.BaseModel {
   name: string
 
   @GQL.Field(() => [Calendar])
-  @DB.Prop({
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Calendar',
-    autopopulate: true,
-  })
+  @Utils.OneToMany()
   calendars: mongoose.Types.ObjectId[] | Calendar[]
 
   @GQL.Field(() => School)

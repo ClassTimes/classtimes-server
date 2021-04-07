@@ -44,7 +44,7 @@ export class SchoolService extends BaseService {
     return model.save()
   }
 
-  getById(_id: Types.ObjectId) {
+  async getById(_id: Types.ObjectId) {
     return this.checkPermissons(Action.Read, _id)
   }
 
