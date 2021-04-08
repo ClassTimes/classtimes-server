@@ -52,10 +52,15 @@ export class CaslAbilityFactory {
     >(Ability as AbilityClass<AppAbility>)
 
     // Public Resources
+    // TODO: Filter fields!!!!!!!
+    // TODO: Add search Action to all searchable resources
+    // TODO: Add Action.RemovePermisson
     can([Action.Read], School)
-    console.log('[User] ', user)
+    can([Action.Read], Subject)
+    can([Action.Read], Calendar)
+
     if (user) {
-      // Super admin abilities
+      // Super Admin abilities -----------------------------------------
       if (user?.roles?.superAdmin) {
         can(Action.Manage, School)
         can(Action.Manage, Subject)
@@ -64,42 +69,38 @@ export class CaslAbilityFactory {
       // Any logged in user can...
       can(Action.Manage, Auth)
 
-      // School abilities
+      // School abilities -----------------------------------------
       can([Action.Update, Action.Delete], School, {
         'createdBy._id': user._id,
       } as any) // Obsolete
+      can([Action.GrantPermisson], School, {
+        'roles.admin.userId': user._id,
+      } as any)
 
-      // Subject abilities
-      can([Action.Read], Subject) // TODO: Add search Action
+      // Subject abilities -----------------------------------------
       can([Action.Update], Subject, {
         'roles.admin.userId': user._id,
+      } as any)
+      can([Action.Update], Subject, {
+        'roles.professor.userId': user._id,
       } as any)
       can([Action.Create, Action.Delete], Subject, {
         'school.roles.admin.userId': user._id,
       } as any)
-
-      // Calendar abilities
-      //can([Action.Read], Subject) // TODO: Add search Action
-      // can([Action.Update], Subject, {
-      //   'roles.admin.userId': user._id,
-      // } as any)
-      can([Action.Create], Calendar, {
-        'calendar.subject.roles.admin.userId': user._id,
-      } as any)
-
-      // Writing permissons
-      can([Action.GrantPermisson], School, {
+      can([Action.GrantPermisson], Subject, {
         'roles.admin.userId': user._id,
       } as any)
       can([Action.GrantPermisson], Subject, {
-        'roles.admin.userId': user._id,
         'school.roles.admin.userId': user._id,
+      } as any)
+
+      // Calendar abilities -----------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], Calendar, {
+        'calendar.subject.roles.admin.userId': user._id,
       } as any)
     }
 
-    // TODO: Action.Update tiene que whitelistearse por key
-
-    // User abilities
+    // User abilities -----------------------------------------
     can([Action.Read, Action.Create], User)
     can([Action.Update], User, ['email', 'username'], { _id: user._id })
 

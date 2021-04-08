@@ -20,17 +20,18 @@ export abstract class BaseService {
     return this.context.req?.user
   }
 
-  async checkPermissons(
-    action: Action,
-    id?: mongoose.Types.ObjectId,
-    modelClass?: any,
-    dbModel?: any,
-    record?: any, // Record to be persisted, on create
-  ): Promise<mongoose.Model<mongoose.Document>> {
+  async checkPermissons(params: {
+    action: Action
+    resourceId?: mongoose.Types.ObjectId
+    modelClass?: any
+    dbModel?: any
+    record?: any // Record to be persisted, on create
+  }): Promise<mongoose.Model<mongoose.Document>> {
+    const { action, resourceId, modelClass, dbModel, record } = params
     // Checks permissons for a single record
     const ability = CaslAbilityFactory.createForUser(this.currentUser)
-    if (id) {
-      const doc = await (dbModel || this.dbModel).findById(id).exec()
+    if (resourceId) {
+      const doc = await (dbModel || this.dbModel).findById(resourceId).exec()
       const model = plainToClass(
         modelClass || this.modelClass,
         doc?.toObject(),
@@ -38,6 +39,7 @@ export abstract class BaseService {
       ForbiddenError.from(ability).throwUnlessCan(action, record || model)
       return doc
     } else {
+      console.log(record.roles)
       ForbiddenError.from(ability).throwUnlessCan(
         action,
         record || (this.modelClass as any),

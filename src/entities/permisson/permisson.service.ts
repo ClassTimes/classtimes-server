@@ -52,12 +52,12 @@ export class PermissonService extends BaseService {
     // Buscar como inyectar modelo a partir de un string
     const dbModel = this.dbModels[payload.resourceName.toLowerCase()]
     const modelClass = this.modelClasses[payload.resourceName.toLowerCase()]
-    await this.checkPermissons(
-      Action.GrantPermisson,
-      payload.resourceId,
+    await this.checkPermissons({
+      action: Action.GrantPermisson,
+      resourceId: payload.resourceId,
       modelClass,
       dbModel,
-    )
+    })
     // Get currentRoles
     const resource = await dbModel.findById(payload.resourceId)
     const model = plainToClass(modelClass, resource?.toObject()) as any

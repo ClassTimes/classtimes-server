@@ -39,46 +39,41 @@ export class SubjectService extends BaseService {
   }
 
   async create(payload: CreateSubjectInput) {
-    const school = await this.schoolModel.findById(payload.school).exec()
-    const subject = plainToClass(Subject, payload)
-    subject.school = school
-    await this.checkPermissons(
-      Action.Create,
-      undefined,
-      undefined,
-      undefined,
-      subject,
+    const school = plainToClass(
+      School,
+      await this.schoolModel.findById(payload.school).exec(),
     )
+    await this.checkPermissons({
+      action: Action.Create,
+      record: new Subject(school),
+    })
     const model = new this.dbModel(payload)
     await model.save()
     return model
   }
 
   getById(_id: Types.ObjectId) {
-    return this.dbModel.findById(_id).exec()
+    return this.checkPermissons({ action: Action.Read, resourceId: _id })
   }
 
+  // TODO: Change to SEARCH
   list(filters: ListSubjectInput) {
     return this.dbModel.find({ ...filters }).exec()
   }
 
-  update(payload: UpdateSubjectInput) {
+  async update(payload: UpdateSubjectInput) {
+    await this.checkPermissons({
+      action: Action.Update,
+      resourceId: payload._id,
+    })
     return this.dbModel
       .findByIdAndUpdate(payload._id, payload, { new: true })
       .exec()
   }
 
   async delete(_id: Types.ObjectId) {
-    let model
-
-    try {
-      model = await this.dbModel.findByIdAndDelete(_id).exec()
-    } catch (error) {
-      console.error(error)
-      return
-    }
-
-    return model
+    await this.checkPermissons({ action: Action.Delete, resourceId: _id })
+    return this.dbModel.findByIdAndDelete(_id).exec()
   }
 
   async deleteMany(_ids: Types.ObjectId[]) {
