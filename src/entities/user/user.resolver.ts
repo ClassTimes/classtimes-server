@@ -64,6 +64,7 @@ export class UserResolver {
   /**
    * Authenticated
    */
+
   // @UseGuards(GqlAuthGuard)
   @GQL.Query(() => User, { nullable: false })
   @CheckPolicies((a) => a.can(Action.Read, Auth))
@@ -72,22 +73,22 @@ export class UserResolver {
     return user //this.service.getById(user._id)
   }
 
-  // @ResolveField()
-  // async calendar(
-  //   @Parent() user: UserDocument,
-  //   @GQL.Args('populate') populate: boolean,
-  // ) {
-  //   if (populate) {
-  //     await user
-  //       .populate({ path: 'calendar', model: Calendar.name })
-  //       .execPopulate()
-  //   }
+  /**
+   * Interactions
+   */
 
-  //   return user.calendar
-  // }
+  @GQL.Mutation(() => User, { nullable: true })
+  followSchool(
+    @GQL.Args('schoolId', { type: () => GQL.ID })
+    schoolId: mongoose.Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    console.log('[School to follow]', schoolId)
+    // Steps:
+    // 1) Check if school exists. If not, break?
+    // 2) Save school to currentUser if logged in ( if(user) )
+    // 3) Return something. Wtf do I return?
+    return user
+    // return school
+  }
 }
-
-// import { Resolver } from '@nestjs/graphql';
-//
-// @GQL.Resolver()
-// export class UserResolver {}

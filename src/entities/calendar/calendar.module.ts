@@ -5,8 +5,11 @@ import { CalendarService } from './calendar.service'
 import { Calendar, CalendarSchema } from './calendar.model'
 import { CalendarResolver } from './calendar.resolver'
 
-import { CalendarEvent, CalendarEventSchema } from '../calendarEvent/calendarEvent.model'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service';
+import {
+  CalendarEvent,
+  CalendarEventSchema,
+} from '../calendarEvent/calendarEvent.model'
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 import { Subject, SubjectSchema } from '../subject/subject.model'
 // import { SchoolController } from './entities/schools.controller';
 
@@ -30,4 +33,4 @@ import { Subject, SubjectSchema } from '../subject/subject.model'
   //  controllers: [CalendarsController],
   providers: [CalendarService, CalendarResolver, CalendarEventService],
 })
-export class CalendarModule { }
+export class CalendarModule {}

@@ -53,37 +53,4 @@ export class CalendarResolver {
   async deleteCalendar(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
   }
-
-  @ResolveField()
-  async subject(
-    @Parent() calendar: CalendarDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await calendar
-        .populate({ path: 'subject', model: Subject.name })
-        .execPopulate()
-    }
-
-    return calendar.subject
-  }
-
-  @ResolveField()
-  async calendarEvents(
-    @Parent() calendar: CalendarDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await calendar
-        .populate({ path: 'calendarEvents', model: CalendarEvent.name })
-        .execPopulate()
-    }
-
-    return calendar.calendarEvents
-  }
 }
-
-// import { Resolver } from '@nestjs/graphql';
-//
-// @Resolver()
-// export class CalendarResolver {}

@@ -35,7 +35,6 @@ export class SubjectResolver {
   }
 
   @Query(() => [Subject])
-  @CheckPolicies((a) => a.can(Action.List, Subject))
   async subjects(
     @Args('filters', { nullable: true }) filters?: ListSubjectInput,
   ) {
@@ -43,7 +42,6 @@ export class SubjectResolver {
   }
 
   @Mutation(() => Subject)
-  @CheckPolicies((a) => a.can(Action.Create, Subject))
   async createSubject(@Args('payload') payload: CreateSubjectInput) {
     return this.service.create(payload)
   }
@@ -56,33 +54,5 @@ export class SubjectResolver {
   @Mutation(() => Subject)
   async deleteSubject(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
-  }
-
-  @ResolveField()
-  async calendars(
-    @Parent() subject: SubjectDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await subject
-        .populate({ path: 'calendars', model: Calendar.name })
-        .execPopulate()
-    }
-
-    return subject.calendars
-  }
-
-  @ResolveField()
-  async school(
-    @Parent() subject: SubjectDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await subject
-        .populate({ path: 'school', model: School.name })
-        .execPopulate()
-    }
-
-    return subject.school
   }
 }

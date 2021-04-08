@@ -5,6 +5,9 @@ import mongoose from 'mongoose'
 
 import * as Utils from '../../utils/Model'
 
+// Models
+import { School } from '../school/school.model'
+
 @GQL.ObjectType()
 @DB.Schema({
   timestamps: true,
@@ -39,6 +42,14 @@ export class User extends Utils.BaseModel {
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
+
+  @GQL.Field(() => [School])
+  @DB.Prop({
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'School',
+    autopopulate: true,
+  })
+  followedSchools: mongoose.Types.ObjectId | School[]
 
   // @GQL.Field(() => Boolean, { nullable: true })
   // @DB.Prop({ required: false })

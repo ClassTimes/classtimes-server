@@ -21,12 +21,9 @@ import {
   // CreateCalendarEventInputsSchema,
 } from './calendarEvent.inputs'
 
-// Calendar
-import { Calendar } from '../calendar/calendar.model'
-
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
-  constructor(private service: CalendarEventService) { }
+  constructor(private service: CalendarEventService) {}
 
   @Query(() => CalendarEvent)
   async calendarEvent(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -76,22 +73,5 @@ export class CalendarEventResolver {
     })
 
     return _endDateUtc.toDate()
-  }
-
-  //
-  // Relations
-
-  @ResolveField()
-  async calendar(
-    @Parent() calendarEvent: CalendarEventDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await calendarEvent
-        .populate({ path: 'calendar', model: Calendar.name })
-        .execPopulate()
-    }
-
-    return calendarEvent.calendar
   }
 }

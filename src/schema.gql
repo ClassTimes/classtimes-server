@@ -9,14 +9,14 @@ type Auth {
 
 type Calendar {
   _id: ID!
-  calendarEvents(populate: Boolean!): [CalendarEvent!]!
+  calendarEvents: [CalendarEvent!]!
   name: String!
-  subject(populate: Boolean!): Subject!
+  subject: Subject!
 }
 
 type CalendarEvent {
   _id: ID!
-  calendar(populate: Boolean!): Calendar!
+  calendar: Calendar!
   description: String
   durationHours: Float!
   endDateUtc: DateTime!
@@ -131,6 +131,7 @@ type Mutation {
   deleteSchool(_id: ID!): School!
   deleteSubject(_id: ID!): Subject!
   deleteUser(_id: ID!): User
+  followSchool(schoolId: ID!): User
   loginUser(payload: LoginInput!): Auth!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
@@ -173,9 +174,9 @@ type School {
 
 type Subject {
   _id: ID!
-  calendars(populate: Boolean!): [Calendar!]!
+  calendars: [Calendar!]!
   name: String!
-  school(populate: Boolean!): School!
+  school: School!
 }
 
 input UpdateCalendarEventInput {
@@ -227,6 +228,7 @@ input UpdateUserInput {
 type User {
   _id: ID!
   email: String
+  followedSchools: [School!]!
   fullName: String
   mobile: String
   username: String!
