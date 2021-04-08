@@ -41,7 +41,7 @@ export class SubjectService extends BaseService {
   async create(payload: CreateSubjectInput) {
     const school = plainToClass(
       School,
-      await this.schoolModel.findById(payload.school).exec(),
+      (await this.schoolModel.findById(payload.school).exec()).toObject(),
     )
     await this.checkPermissons({
       action: Action.Create,
@@ -52,35 +52,35 @@ export class SubjectService extends BaseService {
     return model
   }
 
-  getById(_id: Types.ObjectId) {
-    return this.checkPermissons({ action: Action.Read, resourceId: _id })
-  }
+  // getById(_id: Types.ObjectId) {
+  //   return this.checkPermissons({ action: Action.Read, resourceId: _id })
+  // }
 
   // TODO: Change to SEARCH
   list(filters: ListSubjectInput) {
     return this.dbModel.find({ ...filters }).exec()
   }
 
-  async update(payload: UpdateSubjectInput) {
-    await this.checkPermissons({
-      action: Action.Update,
-      resourceId: payload._id,
-    })
-    return this.dbModel
-      .findByIdAndUpdate(payload._id, payload, { new: true })
-      .exec()
-  }
+  // async update(payload: UpdateSubjectInput) {
+  //   await this.checkPermissons({
+  //     action: Action.Update,
+  //     resourceId: payload._id,
+  //   })
+  //   return this.dbModel
+  //     .findByIdAndUpdate(payload._id, payload, { new: true })
+  //     .exec()
+  // }
 
-  async delete(_id: Types.ObjectId) {
-    await this.checkPermissons({ action: Action.Delete, resourceId: _id })
-    return this.dbModel.findByIdAndDelete(_id).exec()
-  }
+  // async delete(_id: Types.ObjectId) {
+  //   await this.checkPermissons({ action: Action.Delete, resourceId: _id })
+  //   return this.dbModel.findByIdAndDelete(_id).exec()
+  // }
 
-  async deleteMany(_ids: Types.ObjectId[]) {
-    let model
-    for (const _id of _ids) {
-      model = await this.delete(_id)
-    }
-    return model
-  }
+  // async deleteMany(_ids: Types.ObjectId[]) {
+  //   let model
+  //   for (const _id of _ids) {
+  //     model = await this.delete(_id)
+  //   }
+  //   return model
+  // }
 }

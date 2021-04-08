@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Inject } from '@nestjs/common'
+import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
+import { plainToClass } from 'class-transformer'
 
 // CalendarEvent
 import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
@@ -13,73 +15,89 @@ import {
 // Calendar
 import { Calendar, CalendarDocument } from '../calendar/calendar.model'
 
+// Auth
+import { Action } from '../../casl/casl-ability.factory'
+
+// Service methods
+import { BaseService } from '../../utils/BaseService'
+
+const MODEL_CLASS = CalendarEvent
 @Injectable()
-export class CalendarEventService {
+export class CalendarEventService extends BaseService {
+  modelClass = MODEL_CLASS
+  dbModel: Model<CalendarEventDocument>
+  context
+
   constructor(
     @InjectModel(CalendarEvent.name)
-    private model: Model<CalendarEventDocument>,
+    dbModel: Model<CalendarEventDocument>,
     @InjectModel(Calendar.name)
-    private calendar: Model<CalendarDocument>,
-  ) { }
+    private calendarModel: Model<CalendarDocument>,
+    @Inject(CONTEXT) context,
+
+    // private calendarEventService: CalendarEventService,
+  ) {
+    super()
+    this.dbModel = dbModel
+    this.context = context
+  }
 
   async create(payload: CreateCalendarEventInput) {
-    const model = new this.model(payload)
-    console.log('before', { model, payload })
-
-    await model.save()
-
-    const updateResult = await this.calendar.findByIdAndUpdate(
-      model.calendar,
-      { $push: { calendarEvents: model._id } },
-      { new: true, useFindAndModify: false },
+    const calendar = plainToClass(
+      Calendar,
+      (await this.calendarModel.findById(payload.calendar).exec()).toObject(),
     )
+    await this.checkPermissons({
+      action: Action.Create,
+      record: new CalendarEvent(calendar),
+    })
 
-    console.log('[CalendarEventService] [create]', { updateResult })
-
+    const model = new this.dbModel(payload)
+    await model.save()
     return model
   }
 
-  getById(_id: Types.ObjectId) {
-    return this.model.findById(_id).exec()
-  }
+  // getById(_id: Types.ObjectId) {
+  //   return this.model.findById(_id).exec()
+  // }
 
   list(filters: ListCalendarEventInput) {
-    return this.model.find({ ...filters }).exec()
+    return this.dbModel.find({ ...filters }).exec()
   }
 
-  update(payload: UpdateCalendarEventInput) {
-    return this.model
-      .findByIdAndUpdate(payload._id, payload, { new: true })
-      .exec()
-  }
+  // update(payload: UpdateCalendarEventInput) {
+  //   return this.model
+  //     .findByIdAndUpdate(payload._id, payload, { new: true })
+  //     .exec()
+  // }
 
-  async delete(_id: Types.ObjectId) {
-    let model
-    try {
-      model = await this.model.findByIdAndDelete(_id).exec()
-    } catch (error) {
-      console.error(error)
-      return
-    }
+  // async delete(_id: Types.ObjectId) {
+  //   let model
+  //   try {
+  //     model = await this.model.findByIdAndDelete(_id).exec()
+  //   } catch (error) {
+  //     console.error(error)
+  //     return
+  //   }
 
-    if (model) {
-      const updateResult = await this.calendar.findByIdAndUpdate(
-        model.school,
-        { $pull: { calendarEvents: _id } },
-        // { new: true, useFindAndModify: false },
-      )
+  //   if (model) {
+  //     const updateResult = await this.calendar.findByIdAndUpdate(
+  //       model.school,
+  //       { $pull: { calendarEvents: _id } },
+  //       // { new: true, useFindAndModify: false },
+  //     )
 
-      console.log('delete updateResult', { updateResult })
-    }
+  //     console.log('delete updateResult', { updateResult })
+  //   }
 
-    return model
-  }
+  //   return model
+  // }
 
-  async deleteMany(_ids: Types.ObjectId[]) {
-    let model
-    for (let _id of _ids) {
-      model = await this.delete(_id)
-    }
-    return model
-  }
+  // async deleteMany(_ids: Types.ObjectId[]) {
+  //   let model
+  //   for (let _id of _ids) {
+  //     model = await this.delete(_id)
+  //   }
+  //   return model
+  // }
 }

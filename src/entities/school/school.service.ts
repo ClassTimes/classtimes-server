@@ -44,30 +44,11 @@ export class SchoolService extends BaseService {
     return model.save()
   }
 
-  async getById(_id: Types.ObjectId) {
-    return this.checkPermissons({ action: Action.Read, resourceId: _id })
-  }
-
   async list(filters: ListSchoolInput) {
     const docs = await this.dbModel.find({ ...filters }).exec()
     for (const doc of docs) {
       await this.checkPermissons({ action: Action.Read, resourceId: doc._id })
     }
     return docs
-  }
-
-  async update(payload: UpdateSchoolInput) {
-    await this.checkPermissons({
-      action: Action.Update,
-      resourceId: payload._id,
-    })
-    return this.dbModel
-      .findByIdAndUpdate(payload._id, payload, { new: true })
-      .exec()
-  }
-
-  async delete(_id: Types.ObjectId) {
-    await this.checkPermissons({ action: Action.Delete, resourceId: _id })
-    return this.dbModel.findByIdAndDelete(_id).exec()
   }
 }

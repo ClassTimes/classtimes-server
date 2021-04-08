@@ -6,12 +6,13 @@ import {
   AbilityClass,
   ExtractSubjectType,
 } from '@casl/ability'
-import { plainToClass } from 'class-transformer'
+// import { plainToClass } from 'class-transformer'
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
 import { Subject } from '../entities/subject/subject.model'
 import { Calendar } from '../entities/calendar/calendar.model'
+import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
 import { Auth } from '../auth/auth.model'
 
 type Subjects =
@@ -20,6 +21,7 @@ type Subjects =
       | typeof User
       | typeof Subject
       | typeof Calendar
+      | typeof CalendarEvent
       | typeof Auth
     >
   | 'all'
@@ -58,6 +60,7 @@ export class CaslAbilityFactory {
     can([Action.Read], School)
     can([Action.Read], Subject)
     can([Action.Read], Calendar)
+    can([Action.Read], CalendarEvent)
 
     if (user) {
       // Super Admin abilities -----------------------------------------
@@ -96,7 +99,15 @@ export class CaslAbilityFactory {
 
       // Calendar abilities -----------------------------------------
       can([Action.Create, Action.Update, Action.Delete], Calendar, {
+        'subject.roles.admin.userId': user._id,
+      } as any)
+
+      // CalendarEvent abilities -----------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
         'calendar.subject.roles.admin.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
+        'calendar.subject.roles.professor.userId': user._id,
       } as any)
     }
 

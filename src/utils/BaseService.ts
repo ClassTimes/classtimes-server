@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { plainToClass } from 'class-transformer'
-import mongoose from 'mongoose'
+import { Model, Types, Document } from 'mongoose'
 
 // Auth
 import { ForbiddenError } from '@casl/ability'
@@ -9,7 +9,6 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory'
 
 // User
 import { User } from '../entities/user/user.model'
-
 @Injectable()
 export abstract class BaseService {
   abstract dbModel: any // mongoose.Model<mongoose.Document>
@@ -22,11 +21,11 @@ export abstract class BaseService {
 
   async checkPermissons(params: {
     action: Action
-    resourceId?: mongoose.Types.ObjectId
+    resourceId?: Types.ObjectId
     modelClass?: any
     dbModel?: any
     record?: any // Record to be persisted, on create
-  }): Promise<mongoose.Model<mongoose.Document>> {
+  }): Promise<Model<Document>> {
     const { action, resourceId, modelClass, dbModel, record } = params
     // Checks permissons for a single record
     const ability = CaslAbilityFactory.createForUser(this.currentUser)
@@ -39,11 +38,29 @@ export abstract class BaseService {
       ForbiddenError.from(ability).throwUnlessCan(action, record || model)
       return doc
     } else {
-      console.log(record.roles)
       ForbiddenError.from(ability).throwUnlessCan(
         action,
         record || (this.modelClass as any),
       )
     }
+  }
+
+  async getById(_id: Types.ObjectId) {
+    return this.checkPermissons({ action: Action.Read, resourceId: _id })
+  }
+
+  async update(payload) {
+    await this.checkPermissons({
+      action: Action.Update,
+      resourceId: payload._id,
+    })
+    return this.dbModel
+      .findByIdAndUpdate(payload._id, payload, { new: true })
+      .exec()
+  }
+
+  async delete(_id: Types.ObjectId) {
+    await this.checkPermissons({ action: Action.Delete, resourceId: _id })
+    return this.dbModel.findByIdAndDelete(_id).exec()
   }
 }

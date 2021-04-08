@@ -36,7 +36,7 @@ export class Calendar extends Utils.BaseModel {
   subject: mongoose.Types.ObjectId | Subject
 
   @GQL.Field(() => [CalendarEvent])
-  @DB.Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'CalendarEvent' })
+  @Utils.OneToMany()
   calendarEvents: mongoose.Types.ObjectId[] | CalendarEvent[]
 }
 

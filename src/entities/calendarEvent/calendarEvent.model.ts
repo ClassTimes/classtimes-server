@@ -1,6 +1,7 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
+
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../../utils/Model'
@@ -12,6 +13,11 @@ import { Calendar } from '../calendar/calendar.model'
   // autoIndex: true
 })
 export class CalendarEvent extends Utils.BaseModel {
+  constructor(calendar: Calendar) {
+    super()
+    this.calendar = calendar
+  }
+
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
@@ -58,7 +64,11 @@ export class CalendarEvent extends Utils.BaseModel {
 
   // Relations
   @GQL.Field(() => Calendar, { nullable: false })
-  @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Calendar',
+    autopopulate: true,
+  })
   calendar: mongoose.Types.ObjectId | Calendar
 }
 
