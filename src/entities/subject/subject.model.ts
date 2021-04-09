@@ -15,7 +15,7 @@ import { User } from '../user/user.model'
   // autoIndex: true
 })
 export class Subject extends Utils.BaseModel {
-  constructor(school: School) {
+  constructor(school?: School) {
     super()
     this.school = school
   }

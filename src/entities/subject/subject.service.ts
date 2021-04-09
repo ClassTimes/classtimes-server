@@ -39,17 +39,14 @@ export class SubjectService extends BaseService {
   }
 
   async create(payload: CreateSubjectInput) {
-    const school = plainToClass(
-      School,
-      (await this.schoolModel.findById(payload.school).exec()).toObject(),
-    )
+    const doc = await this.schoolModel.findById(payload.school).exec()
+    const model = plainToClass(School, doc.toObject())
+    const record = new Subject(model)
     await this.checkPermissons({
       action: Action.Create,
-      record: new Subject(school),
+      record,
     })
-    const model = new this.dbModel(payload)
-    await model.save()
-    return model
+    return await this.dbModel.create(payload)
   }
 
   // getById(_id: Types.ObjectId) {

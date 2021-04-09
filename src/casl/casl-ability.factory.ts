@@ -73,10 +73,10 @@ export class CaslAbilityFactory {
       can(Action.Manage, Auth)
 
       // School abilities -----------------------------------------
-      can([Action.Update, Action.Delete], School, {
+      can([Action.Update], School, {
         'createdBy._id': user._id,
       } as any) // Obsolete
-      can([Action.GrantPermisson], School, {
+      can([Action.Update, Action.GrantPermisson], School, {
         'roles.admin.userId': user._id,
       } as any)
 
