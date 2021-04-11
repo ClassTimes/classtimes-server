@@ -49,6 +49,12 @@ input CreateEventInput {
   usersJoining: [ID!]
 }
 
+input CreateFollowingInput {
+  resourceId: ID!
+  resourceName: String!
+  userId: ID!
+}
+
 input CreateSchoolInput {
   name: String!
 }
@@ -77,6 +83,13 @@ type Event {
   calendarEvent(populate: Boolean!): CalendarEvent!
   content: String!
   usersJoining(populate: Boolean!): [User!]
+}
+
+type Following {
+  _id: ID!
+  resourceId: ID!
+  resourceName: String!
+  userId: User!
 }
 
 input ListCalendarEventInput {
@@ -122,6 +135,7 @@ type Mutation {
   createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createEvent(payload: CreateEventInput!): Event!
+  createFollowing(payload: CreateFollowingInput!): Following!
   createSchool(payload: CreateSchoolInput!): School!
   createSubject(payload: CreateSubjectInput!): Subject!
   createUser(payload: CreateUserInput!): User!
