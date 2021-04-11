@@ -5,14 +5,14 @@ import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../../utils/Model'
-import { School } from '../school/school.model'
-import { Subject } from '../subject/subject.model'
+// import { School } from '../school/school.model'
+// import { Subject } from '../subject/subject.model'
 import { User } from '../user/user.model'
 
-/*const Resource = GQL.createUnionType({
-  name: 'Resource',
-  types: () => [School, Subject],
-})*/
+// const Resource = GQL.createUnionType({
+//   name: 'Resource',
+//   types: () => [School, Subject],
+// })
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -23,7 +23,7 @@ export class Following extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @GQL.Field(() => GQL.ID) //Resource)
+  @GQL.Field(() => GQL.ID)
   @DB.Prop()
   resourceId: mongoose.Types.ObjectId
 

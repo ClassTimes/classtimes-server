@@ -27,6 +27,10 @@ type CalendarEvent {
   title: String!
 }
 
+type Count {
+  value: Float!
+}
+
 input CreateCalendarEventInput {
   calendar: ID!
   description: String
@@ -49,9 +53,8 @@ input CreateEventInput {
   usersJoining: [ID!]
 }
 
-input CreateFollowingInput {
+input CreateFollowInput {
   resourceId: ID!
-  resourceName: String!
   userId: ID!
 }
 
@@ -78,6 +81,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteFollowInput {
+  resourceId: ID!
+  userId: ID!
+}
+
 type Event {
   _id: ID!
   calendarEvent(populate: Boolean!): CalendarEvent!
@@ -85,7 +93,7 @@ type Event {
   usersJoining(populate: Boolean!): [User!]
 }
 
-type Following {
+type Follow {
   _id: ID!
   resourceId: ID!
   resourceName: String!
@@ -135,7 +143,6 @@ type Mutation {
   createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createEvent(payload: CreateEventInput!): Event!
-  createFollowing(payload: CreateFollowingInput!): Following!
   createSchool(payload: CreateSchoolInput!): School!
   createSubject(payload: CreateSubjectInput!): Subject!
   createUser(payload: CreateUserInput!): User!
@@ -145,8 +152,11 @@ type Mutation {
   deleteSchool(_id: ID!): School!
   deleteSubject(_id: ID!): Subject!
   deleteUser(_id: ID!): User
-  followSchool(schoolId: ID!): User
+  followCalendar(payload: CreateFollowInput!): Follow!
+  followSchool(payload: CreateFollowInput!): Follow!
+  followSubject(payload: CreateFollowInput!): Follow!
   loginUser(payload: LoginInput!): Auth!
+  unfollowResource(payload: DeleteFollowInput!): Follow!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
@@ -168,6 +178,7 @@ type Query {
   calendarEvent(_id: ID!): CalendarEvent!
   calendarEvents(filters: ListCalendarEventInput): [CalendarEvent!]!
   calendars(filters: ListCalendarInput): [Calendar!]!
+  countFollowing(resourceId: ID!): Count!
   event(_id: ID!): Event!
   events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!

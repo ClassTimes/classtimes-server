@@ -27,7 +27,7 @@ import { SchoolModule } from './entities/school/school.module'
 import { SubjectModule } from './entities/subject/subject.module'
 import { UserModule } from './entities/user/user.module'
 import { PermissonModule } from './entities/permisson/permisson.module'
-import { FollowingModule } from './entities/following/following.module'
+import { FollowModule } from './entities/follow/follow.module'
 import { AuthModule } from './auth/auth.module'
 import { CaslModule } from './casl/casl.module'
 
@@ -89,7 +89,7 @@ import { CaslModule } from './casl/casl.module'
     EventModule,
     UserModule,
     PermissonModule,
-    FollowingModule,
+    FollowModule,
   ],
   controllers: [AppController],
   providers: [

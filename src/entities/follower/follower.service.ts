@@ -6,21 +6,16 @@ import { Model, Types } from 'mongoose'
 // Auth
 // import { Action } from '../../casl/casl-ability.factory'
 
-// Following
-import { Following, FollowingDocument } from './following.model'
-// import {
-//   CreateSchoolInput,
-//   ListSchoolInput,
-//   UpdateSchoolInput,
-// } from './school.inputs'
+// Follower
+import { Follower, FollowerDocument } from './follower.model'
 
 @Injectable()
-export class FollowingService {
-  dbModel: Model<FollowingDocument>
+export class FollowerService {
+  dbModel: Model<FollowerDocument>
 
   constructor(
-    @InjectModel(Following.name)
-    dbModel: Model<FollowingDocument>,
+    @InjectModel(Follower.name)
+    dbModel: Model<FollowerDocument>,
     // @Inject(CONTEXT) context,
   ) {
     // super()
@@ -33,11 +28,6 @@ export class FollowingService {
   }
 
   async delete(resourceId: Types.ObjectId, userId: Types.ObjectId) {
-    return this.dbModel.findOneAndDelete({ resourceId, userId })
-  }
-
-  async countFollowing(resourceId: Types.ObjectId) {
-    const value = await this.dbModel.countDocuments({ resourceId })
-    return { value }
+    return this.dbModel.findOneAndDelete({ userId, resourceId })
   }
 }

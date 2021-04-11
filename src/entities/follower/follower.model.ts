@@ -5,8 +5,14 @@ import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../../utils/Model'
-//import { Subject } from '../subject/subject.model'
+// import { School } from '../school/school.model'
+// import { Subject } from '../subject/subject.model'
 import { User } from '../user/user.model'
+
+// const Resource = GQL.createUnionType({
+//   name: 'Resource',
+//   types: () => [School, Subject],
+// })
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -32,5 +38,5 @@ export class Follower extends Utils.BaseModel {
 
 export type FollowerDocument = Follower & mongoose.Document
 export const FollowerSchema = Follower.schema
-FollowerSchema.index({ userId: 1, resourceId: 1 })
+FollowerSchema.index({ userId: 1, resourceId: 1 }, { unique: true })
 FollowerSchema.plugin(autopopulate)
