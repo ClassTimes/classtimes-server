@@ -27,7 +27,7 @@ export class FollowerService {
     return this.dbModel.create(payload)
   }
 
-  async delete(resourceId: Types.ObjectId, userId: Types.ObjectId) {
+  async delete(resourceId: Types.ObjectId, userId: Types.ObjectId | string) {
     return this.dbModel.findOneAndDelete({ userId, resourceId })
   }
 }

@@ -38,6 +38,10 @@ export class Calendar extends Utils.BaseModel {
   @GQL.Field(() => [CalendarEvent])
   @Utils.OneToMany()
   calendarEvents: mongoose.Types.ObjectId[] | CalendarEvent[]
+
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
 }
 
 export type CalendarDocument = Calendar & mongoose.Document

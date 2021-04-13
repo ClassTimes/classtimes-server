@@ -12,9 +12,9 @@ export class CreateFollowInput {
 
 @InputType()
 export class DeleteFollowInput {
-  @Field(() => ID, { nullable: false })
+  @Field(() => ID, { nullable: true })
   resourceId: Types.ObjectId
 
-  @Field(() => ID, { nullable: false })
+  @Field(() => ID, { nullable: true })
   userId: Types.ObjectId
 }

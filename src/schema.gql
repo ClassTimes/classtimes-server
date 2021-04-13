@@ -10,6 +10,7 @@ type Auth {
 type Calendar {
   _id: ID!
   calendarEvents: [CalendarEvent!]!
+  followingCounter: Float!
   name: String!
   subject: Subject!
 }
@@ -25,10 +26,6 @@ type CalendarEvent {
   rrule: String
   startDateUtc: DateTime!
   title: String!
-}
-
-type Count {
-  value: Float!
 }
 
 input CreateCalendarEventInput {
@@ -53,11 +50,6 @@ input CreateEventInput {
   usersJoining: [ID!]
 }
 
-input CreateFollowInput {
-  resourceId: ID!
-  userId: ID!
-}
-
 input CreateSchoolInput {
   name: String!
 }
@@ -80,11 +72,6 @@ input CreateUserInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-input DeleteFollowInput {
-  resourceId: ID!
-  userId: ID!
-}
 
 type Event {
   _id: ID!
@@ -152,11 +139,11 @@ type Mutation {
   deleteSchool(_id: ID!): School!
   deleteSubject(_id: ID!): Subject!
   deleteUser(_id: ID!): User
-  followCalendar(payload: CreateFollowInput!): Follow!
-  followSchool(payload: CreateFollowInput!): Follow!
-  followSubject(payload: CreateFollowInput!): Follow!
+  followCalendar(calendarId: ID!): Follow!
+  followSchool(schoolId: ID!): Follow!
+  followSubject(subjectId: ID!): Follow!
   loginUser(payload: LoginInput!): Auth!
-  unfollowResource(payload: DeleteFollowInput!): Follow!
+  unfollowResource(resourceId: ID!): Follow!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
@@ -178,7 +165,6 @@ type Query {
   calendarEvent(_id: ID!): CalendarEvent!
   calendarEvents(filters: ListCalendarEventInput): [CalendarEvent!]!
   calendars(filters: ListCalendarInput): [Calendar!]!
-  countFollowing(resourceId: ID!): Count!
   event(_id: ID!): Event!
   events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!
@@ -193,6 +179,7 @@ type Query {
 type School {
   _id: ID!
   createdBy: User!
+  followingCounter: Float!
   name: String!
   subjects: [Subject!]
 }
@@ -200,6 +187,7 @@ type School {
 type Subject {
   _id: ID!
   calendars: [Calendar!]!
+  followingCounter: Float!
   name: String!
   school: School!
 }

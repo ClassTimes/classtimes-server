@@ -1,11 +1,12 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
+import { ModuleRef } from '@nestjs/core'
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../../utils/Model'
-// import { School } from '../school/school.model'
+import { School, SchoolDocument } from '../school/school.model'
 // import { Subject } from '../subject/subject.model'
 import { User } from '../user/user.model'
 

@@ -39,21 +39,9 @@ export class Subject extends Utils.BaseModel {
   })
   school: mongoose.Types.ObjectId | School
 
-  // @GQL.Field(() => [User])
-  // @DB.Prop({
-  //   type: [mongoose.Schema.Types.ObjectId],
-  //   ref: 'User',
-  //   autopopulate: true,
-  // })
-  // professors: mongoose.Types.ObjectId[] | User[]
-
-  // @GQL.Field(() => [User])
-  // @DB.Prop({
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   autopopulate: true,
-  // })
-  // admins: mongoose.Types.ObjectId[] | User[]
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
 }
 
 export type SubjectDocument = Subject & mongoose.Document

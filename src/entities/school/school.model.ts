@@ -33,6 +33,10 @@ export class School extends Utils.BaseModel {
   @GQL.Field(() => [Subject], { nullable: true })
   @Utils.OneToMany()
   subjects: mongoose.Types.ObjectId[] | Subject[]
+
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
 }
 
 export type SchoolDocument = School & mongoose.Document

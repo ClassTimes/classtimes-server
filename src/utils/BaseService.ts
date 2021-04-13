@@ -63,4 +63,16 @@ export abstract class BaseService {
     await this.checkPermissons({ action: Action.Delete, resourceId: _id })
     return this.dbModel.findByIdAndDelete(_id).exec()
   }
+
+  async increaseFollowingCount(_id: Types.ObjectId) {
+    return this.dbModel
+      .findByIdAndUpdate({ _id }, { $inc: { followingCounter: 1 } })
+      .exec()
+  }
+
+  async decreaseFollowingCount(_id: Types.ObjectId) {
+    return this.dbModel
+      .findByIdAndUpdate({ _id }, { $inc: { followingCounter: -1 } })
+      .exec()
+  }
 }
