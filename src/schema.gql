@@ -21,10 +21,12 @@ type CalendarEvent {
   description: String
   durationHours: Float!
   endDateUtc: DateTime!
+  events: [Event!]!
   exceptionsDatesUtc: [DateTime!]
   isAllDay: Boolean
   rrule: String
   startDateUtc: DateTime!
+  tags: [String!]!
   title: String!
 }
 
@@ -52,6 +54,7 @@ input CreateEventInput {
 
 input CreateSchoolInput {
   name: String!
+  parentSchool: ID!
 }
 
 input CreateSubjectInput {
@@ -178,9 +181,12 @@ type Query {
 
 type School {
   _id: ID!
+  childrenSchools: [School!]
   createdBy: User!
   followingCounter: Float!
   name: String!
+  parentSchool: School
+  shortName: String!
   subjects: [Subject!]
 }
 
@@ -190,6 +196,8 @@ type Subject {
   followingCounter: Float!
   name: String!
   school: School!
+  shortName: String!
+  tags: [String!]!
 }
 
 input UpdateCalendarEventInput {
@@ -241,7 +249,6 @@ input UpdateUserInput {
 type User {
   _id: ID!
   email: String
-  followedSchools: [School!]!
   fullName: String
   mobile: String
   username: String!

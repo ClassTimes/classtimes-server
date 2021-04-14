@@ -27,6 +27,15 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop()
   name: string
 
+  @GQL.Field(() => String)
+  @DB.Prop()
+  shortName: string
+
+  // Add event tags
+  @GQL.Field(() => [String])
+  @DB.Prop({ default: [] })
+  tags: string[]
+
   @GQL.Field(() => [Calendar])
   @Utils.OneToMany()
   calendars: mongoose.Types.ObjectId[] | Calendar[]

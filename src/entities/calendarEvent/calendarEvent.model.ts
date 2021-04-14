@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 import * as Utils from '../../utils/Model'
+import { Event } from '../event/event.model'
 import { Calendar } from '../calendar/calendar.model'
 
 @GQL.ObjectType()
@@ -28,6 +29,11 @@ export class CalendarEvent extends Utils.BaseModel {
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false })
   description: string
+
+  // Add event tags
+  @GQL.Field(() => [String])
+  @DB.Prop({ default: [] })
+  tags: string[]
 
   @GQL.Field(() => Date, { nullable: false })
   @DB.Prop({ required: true })
@@ -70,6 +76,10 @@ export class CalendarEvent extends Utils.BaseModel {
     autopopulate: true,
   })
   calendar: mongoose.Types.ObjectId | Calendar
+
+  @GQL.Field(() => [Event])
+  @Utils.OneToMany()
+  events: mongoose.Types.ObjectId[] | Event[]
 }
 
 export type CalendarEventDocument = CalendarEvent & mongoose.Document

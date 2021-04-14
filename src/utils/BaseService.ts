@@ -46,7 +46,10 @@ export abstract class BaseService {
   }
 
   async getById(_id: Types.ObjectId) {
-    return this.checkPermissons({ action: Action.Read, resourceId: _id })
+    return this.checkPermissons({
+      action: Action.Read,
+      resourceId: _id,
+    })
   }
 
   async update(payload) {

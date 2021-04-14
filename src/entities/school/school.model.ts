@@ -22,6 +22,10 @@ export class School extends Utils.BaseModel {
   @DB.Prop()
   name: string
 
+  @GQL.Field(() => String)
+  @DB.Prop()
+  shortName: string
+
   @GQL.Field(() => User, { nullable: false })
   @DB.Prop({
     type: mongoose.Schema.Types.ObjectId,
@@ -30,13 +34,27 @@ export class School extends Utils.BaseModel {
   })
   createdBy: mongoose.Types.ObjectId | User
 
-  @GQL.Field(() => [Subject], { nullable: true })
-  @Utils.OneToMany()
-  subjects: mongoose.Types.ObjectId[] | Subject[]
+  // Relations
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
   followingCounter: number
+
+  @GQL.Field(() => School, { nullable: true })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'School',
+    autopopulate: true,
+  })
+  parentSchool: mongoose.Types.ObjectId | School
+
+  @GQL.Field(() => [Subject], { nullable: true })
+  @Utils.OneToMany()
+  subjects: mongoose.Types.ObjectId[] | Subject[]
+
+  @GQL.Field(() => [School], { nullable: true })
+  @Utils.OneToMany({ ref: 'School' })
+  childrenSchools: mongoose.Types.ObjectId[] | School[]
 }
 
 export type SchoolDocument = School & mongoose.Document

@@ -5,6 +5,10 @@ import { Types } from 'mongoose'
 export class CreateSchoolInput {
   @Field(() => String)
   name: string
+
+  // Relations
+  @Field(() => ID)
+  parentSchool?: Types.ObjectId
 }
 
 @InputType()

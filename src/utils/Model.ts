@@ -112,6 +112,7 @@ Object.defineProperty(BaseModel, 'schema', {
           ref,
           localField,
           foreignField,
+          autopopulate: true,
         })
         model?.schema.set('toObject', { virtuals: true })
         model?.schema.set('toJSON', { virtuals: true })

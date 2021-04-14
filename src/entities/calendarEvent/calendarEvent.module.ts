@@ -5,10 +5,15 @@ import { CalendarEventService } from './calendarEvent.service'
 import { CalendarEvent, CalendarEventSchema } from './calendarEvent.model'
 import { CalendarEventResolver } from './calendarEvent.resolver'
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
+import { Event, EventSchema } from '../event/event.model'
 
 @Module({
   imports: [
     MongooseModule.forFeature([
+      {
+        name: Event.name,
+        schema: EventSchema,
+      },
       {
         name: CalendarEvent.name,
         schema: CalendarEventSchema,
@@ -22,4 +27,4 @@ import { Calendar, CalendarSchema } from '../calendar/calendar.model'
   //  controllers: [CalendarsController],
   providers: [CalendarEventService, CalendarEventResolver],
 })
-export class CalendarEventModule { }
+export class CalendarEventModule {}

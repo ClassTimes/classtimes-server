@@ -43,14 +43,6 @@ export class User extends Utils.BaseModel {
   @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
 
-  @GQL.Field(() => [School])
-  @DB.Prop({
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'School',
-    autopopulate: true,
-  })
-  followedSchools: mongoose.Types.ObjectId | School[]
-
   // @GQL.Field(() => Boolean, { nullable: true })
   // @DB.Prop({ required: false })
   // isSuperAdmin: boolean

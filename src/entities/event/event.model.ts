@@ -12,6 +12,11 @@ import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
   autoIndex: true,
 })
 export class Event extends Utils.BaseModel {
+  constructor(calendarEvent: CalendarEvent) {
+    super()
+    this.calendarEvent = calendarEvent
+  }
+
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
