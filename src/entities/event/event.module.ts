@@ -4,10 +4,10 @@ import { MongooseModule, getModelToken } from '@nestjs/mongoose'
 import { EventService } from './event.service'
 import { Event, EventSchema } from './event.model'
 import { EventResolver } from './event.resolver'
-// import {
-//   CalendarEvent,
-//   CalendarEventSchema,
-// } from '../calendarEvent/calendarEvent.model'
+import {
+  CalendarEvent,
+  CalendarEventSchema,
+} from '../calendarEvent/calendarEvent.model'
 // import { User, UserSchema } from '../user/user.model'
 
 @Module({
@@ -17,10 +17,10 @@ import { EventResolver } from './event.resolver'
         name: Event.name,
         schema: EventSchema,
       },
-      // {
-      //   name: CalendarEvent.name,
-      //   schema: CalendarEventSchema,
-      // },
+      {
+        name: CalendarEvent.name,
+        schema: CalendarEventSchema,
+      },
       // {
       //   name: User.name,
       //   schema: UserSchema,
@@ -37,4 +37,4 @@ import { EventResolver } from './event.resolver'
     // },
   ],
 })
-export class EventModule { }
+export class EventModule {}

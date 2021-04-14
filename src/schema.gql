@@ -23,6 +23,7 @@ type CalendarEvent {
   endDateUtc: DateTime!
   events: [Event!]!
   exceptionsDatesUtc: [DateTime!]
+  followingCounter: Float!
   isAllDay: Boolean
   rrule: String
   startDateUtc: DateTime!
@@ -80,6 +81,7 @@ type Event {
   _id: ID!
   calendarEvent(populate: Boolean!): CalendarEvent!
   content: String!
+  followingCounter: Float!
   usersJoining(populate: Boolean!): [User!]
 }
 
@@ -145,8 +147,12 @@ type Mutation {
   followCalendar(calendarId: ID!): Follow!
   followSchool(schoolId: ID!): Follow!
   followSubject(subjectId: ID!): Follow!
+  followUser(followeeId: ID!): Follow!
+  joinEvent(eventId: ID!): Follow!
   loginUser(payload: LoginInput!): Auth!
+  suscribeToCalendarEvent(calendarEventId: ID!): Follow!
   unfollowResource(resourceId: ID!): Follow!
+  unfollowUser(followeeId: ID!): Follow!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
@@ -249,6 +255,8 @@ input UpdateUserInput {
 type User {
   _id: ID!
   email: String
+  followerCounter: Float!
+  followingCounter: Float!
   fullName: String
   mobile: String
   username: String!

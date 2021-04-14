@@ -33,7 +33,7 @@ export class Follower extends Utils.BaseModel {
 
   @GQL.Field(() => User)
   @DB.Prop({ required: true })
-  userId: mongoose.Types.ObjectId | User
+  userId: mongoose.Types.ObjectId
 }
 
 export type FollowerDocument = Follower & mongoose.Document

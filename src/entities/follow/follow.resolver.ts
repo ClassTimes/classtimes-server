@@ -136,7 +136,7 @@ export class FollowResolver {
 
   // Users
   @Mutation(() => Follow)
-  async createFollowForUsers(
+  async followUser(
     @Args('followeeId', { type: () => ID }) followeeId: Types.ObjectId,
     @CurrentUser() user: User,
   ) {
@@ -152,7 +152,7 @@ export class FollowResolver {
     const payload = {
       resourceName: 'User',
       resourceId: followeeId, // resourceId represents the followee
-      userId: user._id.toString(), // userId represents the follower
+      userId: user._id, // userId represents the follower
     }
 
     await this.followerService.create(payload)
@@ -210,11 +210,8 @@ export class FollowResolver {
     @Args('followeeId', { type: () => ID }) followeeId: Types.ObjectId,
     @CurrentUser() user: User,
   ) {
-    await this.followerService.delete(followeeId, user._id.toString())
-    const following = await this.followingService.delete(
-      followeeId,
-      user._id.toString(),
-    )
+    await this.followerService.delete(followeeId, user._id)
+    const following = await this.followingService.delete(followeeId, user._id)
 
     this.userService.decreaseFollowerCount(followeeId)
     this.userService.decreaseFollowingCount(user._id)
