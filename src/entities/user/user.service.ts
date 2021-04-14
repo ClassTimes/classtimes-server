@@ -105,15 +105,30 @@ export class UserService {
       return
     }
 
-    // if (model) {
-    //   const updateResult = await this.calendar.findByIdAndUpdate(
-    //     model.school,
-    //     { $pull: { users: _id } },
-    //     // { new: true, useFindAndModify: false },
-    //   )
-    //   console.log('delete updateResult', { updateResult })
-    // }
-
     return model
+  }
+
+  async increaseFollowingCount(_id: mongoose.Types.ObjectId) {
+    return this.model
+      .findByIdAndUpdate({ _id }, { $inc: { followingCounter: 1 } })
+      .exec()
+  }
+
+  async increaseFollowerCount(_id: mongoose.Types.ObjectId) {
+    return this.model
+      .findByIdAndUpdate({ _id }, { $inc: { followerCounter: 1 } })
+      .exec()
+  }
+
+  async decreaseFollowingCount(_id: mongoose.Types.ObjectId) {
+    return this.model
+      .findByIdAndUpdate({ _id }, { $inc: { followingCounter: -1 } })
+      .exec()
+  }
+
+  async decreaseFollowerCount(_id: mongoose.Types.ObjectId) {
+    return this.model
+      .findByIdAndUpdate({ _id }, { $inc: { followerCounter: -1 } })
+      .exec()
   }
 }

@@ -24,19 +24,19 @@ export class Follower extends Utils.BaseModel {
   _id: mongoose.Types.ObjectId
 
   @GQL.Field(() => GQL.ID)
-  @DB.Prop()
+  @DB.Prop({ required: true })
   resourceId: mongoose.Types.ObjectId
 
   @GQL.Field(() => String)
-  @DB.Prop()
+  @DB.Prop({ required: true })
   resourceName: string
 
   @GQL.Field(() => User)
-  @DB.Prop()
-  userId: mongoose.Types.ObjectId
+  @DB.Prop({ required: true })
+  userId: mongoose.Types.ObjectId | User
 }
 
 export type FollowerDocument = Follower & mongoose.Document
 export const FollowerSchema = Follower.schema
-FollowerSchema.index({ userId: 1, resourceId: 1 }, { unique: true })
+FollowerSchema.index({ resourceId: 1, userId: 1 }, { unique: true })
 FollowerSchema.plugin(autopopulate)

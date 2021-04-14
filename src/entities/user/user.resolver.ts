@@ -72,23 +72,4 @@ export class UserResolver {
     console.log('[User]', { user })
     return user //this.service.getById(user._id)
   }
-
-  /**
-   * Interactions
-   */
-
-  @GQL.Mutation(() => User, { nullable: true })
-  followSchool(
-    @GQL.Args('schoolId', { type: () => GQL.ID })
-    schoolId: mongoose.Types.ObjectId,
-    @CurrentUser() user: User,
-  ) {
-    console.log('[School to follow]', schoolId)
-    // Steps:
-    // 1) Check if school exists. If not, break?
-    // 2) Save school to currentUser if logged in ( if(user) )
-    // 3) Return something. Wtf do I return?
-    return user
-    // return school
-  }
 }

@@ -27,6 +27,10 @@ export class Event extends Utils.BaseModel {
   @V.MinLength(10)
   content: string
 
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
+
   // Relations
   @GQL.Field(() => CalendarEvent, { nullable: false })
   @DB.Prop({

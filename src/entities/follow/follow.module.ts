@@ -19,6 +19,19 @@ import { SubjectService } from '../subject/subject.service'
 
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
 import { CalendarService } from '../calendar/calendar.service'
+
+import {
+  CalendarEvent,
+  CalendarEventSchema,
+} from '../calendarEvent/calendarEvent.model'
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+
+import { Event, EventSchema } from '../event/event.model'
+import { EventService } from '../event/event.service'
+
+import { User, UserSchema } from '../user/user.model'
+import { UserService } from '../user/user.service'
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -42,6 +55,18 @@ import { CalendarService } from '../calendar/calendar.service'
         name: Calendar.name,
         schema: CalendarSchema,
       },
+      {
+        name: CalendarEvent.name,
+        schema: CalendarEventSchema,
+      },
+      {
+        name: Event.name,
+        schema: EventSchema,
+      },
+      {
+        name: User.name,
+        schema: UserSchema,
+      },
     ]),
   ],
   providers: [
@@ -51,6 +76,9 @@ import { CalendarService } from '../calendar/calendar.service'
     SchoolService,
     SubjectService,
     CalendarService,
+    CalendarEventService,
+    EventService,
+    UserService,
   ],
 })
 export class FollowModule {}

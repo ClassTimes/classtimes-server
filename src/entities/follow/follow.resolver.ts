@@ -18,16 +18,18 @@ import { Follow } from './follow.model'
 // Follower
 import { FollowerService } from '../follower/follower.service'
 
-import { CreateFollowInput, DeleteFollowInput } from './follow.input'
-
 // Following
 import { FollowingService } from '../following/following.service'
 
+// Resource services
 import { SchoolService } from '../school/school.service'
 import { SubjectService } from '../subject/subject.service'
 import { CalendarService } from '../calendar/calendar.service'
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+import { EventService } from '../event/event.service'
+import { UserService } from '../user/user.service'
 
-@Resolver(() => Follow) // Follow?
+@Resolver(() => Follow)
 export class FollowResolver {
   constructor(
     private followerService: FollowerService,
@@ -35,6 +37,9 @@ export class FollowResolver {
     private schoolService: SchoolService,
     private subjectService: SubjectService,
     private calendarService: CalendarService,
+    private calendarEventService: CalendarEventService,
+    private eventService: EventService,
+    private userService: UserService,
   ) {}
 
   async createFollowForResource(resourceName, resourceId, userId) {
@@ -59,12 +64,23 @@ export class FollowResolver {
         // update calendar followingCount
         this.calendarService.increaseFollowingCount(resourceId)
         break
+      case 'CalendarEvent':
+        // update calendarEvent followingCount
+        this.calendarEventService.increaseFollowingCount(resourceId)
+        break
+      case 'Event':
+        // update event followingCount
+        this.eventService.increaseFollowingCount(resourceId)
+        break
     }
 
     return following
   }
 
-  @Mutation(() => Follow) // Follow?
+  // ------------------------------------------------------------------------------
+  // Follow / Join / Suscribe -----------------------------------------------------
+
+  @Mutation(() => Follow)
   async followSchool(
     @Args('schoolId', { type: () => ID }) schoolId: Types.ObjectId,
     @CurrentUser() user: User,
@@ -72,7 +88,7 @@ export class FollowResolver {
     return this.createFollowForResource('School', schoolId, user._id.toString())
   }
 
-  @Mutation(() => Follow) // Follow?
+  @Mutation(() => Follow)
   async followSubject(
     @Args('subjectId', { type: () => ID }) subjectId: Types.ObjectId,
     @CurrentUser() user: User,
@@ -84,7 +100,7 @@ export class FollowResolver {
     )
   }
 
-  @Mutation(() => Follow) // Follow?
+  @Mutation(() => Follow)
   async followCalendar(
     @Args('calendarId', { type: () => ID }) calendarId: Types.ObjectId,
     @CurrentUser() user: User,
@@ -96,7 +112,62 @@ export class FollowResolver {
     )
   }
 
-  @Mutation(() => Follow) // Follow?
+  @Mutation(() => Follow)
+  async suscribeToCalendarEvent(
+    @Args('calendarEventId', { type: () => ID })
+    calendarEventId: Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    return this.createFollowForResource(
+      'CalendarEvent',
+      calendarEventId,
+      user._id.toString(),
+    )
+  }
+
+  @Mutation(() => Follow)
+  async joinEvent(
+    @Args('eventId', { type: () => ID })
+    eventId: Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    return this.createFollowForResource('Event', eventId, user._id.toString())
+  }
+
+  // Users
+  @Mutation(() => Follow)
+  async createFollowForUsers(
+    @Args('followeeId', { type: () => ID }) followeeId: Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    // The followee will receive a *new follower*, and in turn,
+    // the follower will be *following* a new followee.
+
+    // -following- is indexed by userId *first*, to query
+    // which resources (in this case, users) the currentUser is a follower of.
+
+    // -follower- is indexed by resourceId *first*, to query
+    // which users are followers of the currentResource (in this case, user)
+
+    const payload = {
+      resourceName: 'User',
+      resourceId: followeeId, // resourceId represents the followee
+      userId: user._id.toString(), // userId represents the follower
+    }
+
+    await this.followerService.create(payload)
+    const following = await this.followingService.create(payload)
+
+    this.userService.increaseFollowerCount(followeeId)
+    this.userService.increaseFollowingCount(user._id)
+
+    return following
+  }
+
+  // ------------------------------------------------------------------------------
+  // Unfollow / Join / unsuscribe -------------------------------------------------
+
+  @Mutation(() => Follow)
   async unfollowResource(
     @Args('resourceId', { type: () => ID }) resourceId: Types.ObjectId,
     @CurrentUser() user: User,
@@ -120,7 +191,33 @@ export class FollowResolver {
         // update calendar followingCount
         this.calendarService.decreaseFollowingCount(resourceId)
         break
+      case 'CalendarEvent':
+        // update calendarEvent followingCount
+        this.calendarEventService.decreaseFollowingCount(resourceId)
+        break
+      case 'Event':
+        // update event followingCount
+        this.eventService.decreaseFollowingCount(resourceId)
+        break
     }
+
+    return following
+  }
+
+  // Users
+  @Mutation(() => Follow)
+  async unfollowUser(
+    @Args('followeeId', { type: () => ID }) followeeId: Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    await this.followerService.delete(followeeId, user._id.toString())
+    const following = await this.followingService.delete(
+      followeeId,
+      user._id.toString(),
+    )
+
+    this.userService.decreaseFollowerCount(followeeId)
+    this.userService.decreaseFollowingCount(user._id)
 
     return following
   }

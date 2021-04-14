@@ -7,10 +7,6 @@ import { plainToClass } from 'class-transformer'
 import { Subject, SubjectDocument } from '../subject/subject.model'
 import { Calendar, CalendarDocument } from './calendar.model'
 import {
-  CalendarEvent,
-  CalendarEventDocument,
-} from '../calendarEvent/calendarEvent.model'
-import {
   CreateCalendarInput,
   ListCalendarInput,
   UpdateCalendarInput,
@@ -36,8 +32,6 @@ export class CalendarService extends BaseService {
     @InjectModel(Subject.name)
     private subjectModel: Model<SubjectDocument>,
     @Inject(CONTEXT) context,
-
-    // private calendarEventService: CalendarEventService,
   ) {
     super()
     this.dbModel = dbModel
@@ -55,47 +49,7 @@ export class CalendarService extends BaseService {
     return await this.dbModel.create(payload)
   }
 
-  // getById(_id: Types.ObjectId) {
-  //   return this.checkPermissons({ action: Action.Read, resourceId: _id })
-  // }
-
   list(filters: ListCalendarInput) {
     //  return this.model.find({ ...filters }).exec()
   }
-
-  //update(payload: UpdateCalendarInput) {
-  // return this.model
-  //   .findByIdAndUpdate(payload._id, payload, { new: true })
-  //   .exec()
-  //}
-
-  // async delete(_id: Types.ObjectId) {
-  // let model
-  // try {
-  //   model = await this.model.findByIdAndDelete(_id).exec()
-  // } catch (error) {
-  //   console.error(error)
-  //   return
-  // }
-  // if (model) {
-  //   const updateResult = await this.subject.findByIdAndUpdate(
-  //     model.subject,
-  //     { $pull: { calendars: _id } },
-  //     // { new: true, useFindAndModify: false },
-  //   )
-  //   const deleteCalendarEvents = await this.calendarEventService.deleteMany(
-  //     model.calendarEvents,
-  //   )
-  //   //console.log('delete updateResult', { updateResult })
-  // }
-  // return model
-  // }
-
-  // async deleteMany(_ids: Types.ObjectId[]) {
-  //   let model
-  //   for (let _id of _ids) {
-  //     model = await this.delete(_id)
-  //   }
-  //   return model
-  // }
 }

@@ -59,6 +59,10 @@ export class CalendarEvent extends Utils.BaseModel {
   @DB.Prop({ required: false })
   exceptionsDatesUtc: Date[]
 
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
+
   // @DB.Prop({
   //   type: String,
   //   required: true,

@@ -43,6 +43,16 @@ export class User extends Utils.BaseModel {
   @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
 
+  // Counter caches
+
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followerCounter: number
+
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
+
   // @GQL.Field(() => Boolean, { nullable: true })
   // @DB.Prop({ required: false })
   // isSuperAdmin: boolean
