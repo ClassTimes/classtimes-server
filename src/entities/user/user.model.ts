@@ -52,15 +52,6 @@ export class User extends Utils.BaseModel {
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
   followingCounter: number
-
-  // @GQL.Field(() => Boolean, { nullable: true })
-  // @DB.Prop({ required: false })
-  // isSuperAdmin: boolean
-
-  // Relations
-  // @GQL.Field(() => Calendar, { nullable: false })
-  // @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
-  // calendar: mongoose.Types.ObjectId | Calendar
 }
 
 export type UserDocument = User & mongoose.Document

@@ -61,7 +61,7 @@ export class CalendarEvent extends Utils.BaseModel {
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
-  followingCounter: number
+  followerCounter: number
 
   // @DB.Prop({
   //   type: String,

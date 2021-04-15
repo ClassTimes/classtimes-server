@@ -69,13 +69,13 @@ export abstract class BaseService {
 
   async increaseFollowingCount(_id: Types.ObjectId) {
     return this.dbModel
-      .findByIdAndUpdate({ _id }, { $inc: { followingCounter: 1 } })
+      .findByIdAndUpdate({ _id }, { $inc: { followerCounter: 1 } })
       .exec()
   }
 
   async decreaseFollowingCount(_id: Types.ObjectId) {
     return this.dbModel
-      .findByIdAndUpdate({ _id }, { $inc: { followingCounter: -1 } })
+      .findByIdAndUpdate({ _id }, { $inc: { followerCounter: -1 } })
       .exec()
   }
 }

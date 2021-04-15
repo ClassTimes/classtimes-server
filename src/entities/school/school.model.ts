@@ -38,7 +38,7 @@ export class School extends Utils.BaseModel {
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
-  followingCounter: number
+  followerCounter: number
 
   @GQL.Field(() => School, { nullable: true })
   @DB.Prop({

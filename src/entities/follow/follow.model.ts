@@ -11,10 +11,15 @@ import { User } from '../user/user.model'
 // })
 
 @GQL.ObjectType()
-export class Follow extends Utils.BaseModel {
+abstract class FollowBase extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
+}
 
+//
+
+@GQL.ObjectType()
+export class Follow extends FollowBase {
   @GQL.Field(() => GQL.ID)
   resourceId: mongoose.Types.ObjectId
 
@@ -22,5 +27,14 @@ export class Follow extends Utils.BaseModel {
   resourceName: string
 
   @GQL.Field(() => User)
-  userId: mongoose.Types.ObjectId
+  follower: mongoose.Types.ObjectId | User
+}
+
+@GQL.ObjectType()
+export class UserFollow extends FollowBase {
+  @GQL.Field(() => User)
+  followeeId: mongoose.Types.ObjectId
+
+  @GQL.Field(() => User, { description: 'Current User' })
+  followerId: mongoose.Types.ObjectId
 }

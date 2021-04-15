@@ -6,8 +6,11 @@ export class CreateSchoolInput {
   @Field(() => String)
   name: string
 
+  @Field(() => String, { nullable: true })
+  shortName?: string
+
   // Relations
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   parentSchool?: Types.ObjectId
 }
 
@@ -27,4 +30,7 @@ export class UpdateSchoolInput {
 
   @Field(() => String, { nullable: true })
   name?: string
+
+  @Field(() => String, { nullable: true })
+  shortName?: string
 }

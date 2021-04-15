@@ -50,7 +50,7 @@ export class Subject extends Utils.BaseModel {
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
-  followingCounter: number
+  followerCounter: number
 }
 
 export type SubjectDocument = Subject & mongoose.Document

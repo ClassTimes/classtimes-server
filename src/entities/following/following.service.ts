@@ -32,9 +32,19 @@ export class FollowingService {
     return this.dbModel.create(payload)
   }
 
-  async delete(resourceId: Types.ObjectId, userId: Types.ObjectId | string) {
-    console.log({ resourceId, userId })
-    return this.dbModel.findOneAndDelete({ resourceId, userId })
+  async delete(
+    resourceId: Types.ObjectId,
+    followerId: Types.ObjectId | string,
+  ) {
+    return this.dbModel
+      .findOneAndDelete({
+        resourceId,
+        followerId,
+      })
+      .populate('resource')
+      .populate('follower')
+
+    // TODO: Check why autopopulate doesn't work on delete/remove
   }
 
   async countFollowing(resourceId: Types.ObjectId) {

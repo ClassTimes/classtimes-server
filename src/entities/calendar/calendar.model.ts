@@ -41,7 +41,7 @@ export class Calendar extends Utils.BaseModel {
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
-  followingCounter: number
+  followerCounter: number
 }
 
 export type CalendarDocument = Calendar & mongoose.Document

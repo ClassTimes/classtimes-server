@@ -13,6 +13,7 @@ import { School } from '../entities/school/school.model'
 import { Subject } from '../entities/subject/subject.model'
 import { Calendar } from '../entities/calendar/calendar.model'
 import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
+import { Event } from '../entities/event/event.model'
 import { Auth } from '../auth/auth.model'
 
 type Subjects =
@@ -22,6 +23,7 @@ type Subjects =
       | typeof Subject
       | typeof Calendar
       | typeof CalendarEvent
+      | typeof Event
       | typeof Auth
     >
   | 'all'
@@ -79,6 +81,9 @@ export class CaslAbilityFactory {
       can([Action.Update, Action.GrantPermisson], School, {
         'roles.admin.userId': user._id,
       } as any)
+      can([Action.Update, Action.GrantPermisson], School, {
+        'parentSchool.roles.admin.userId': user._id,
+      } as any)
 
       // Subject abilities -----------------------------------------
       can([Action.Update], Subject, {
@@ -108,6 +113,14 @@ export class CaslAbilityFactory {
       } as any)
       can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
         'calendar.subject.roles.professor.userId': user._id,
+      } as any)
+
+      // Event abilities -----------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], Event, {
+        'calendarEvent.calendar.subject.roles.admin.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Update, Action.Delete], Event, {
+        'calendarEvent.calendar.subject.roles.professor.userId': user._id,
       } as any)
     }
 

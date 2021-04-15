@@ -29,7 +29,7 @@ export class Event extends Utils.BaseModel {
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
-  followingCounter: number
+  followerCounter: number
 
   // Relations
   @GQL.Field(() => CalendarEvent, { nullable: false })
