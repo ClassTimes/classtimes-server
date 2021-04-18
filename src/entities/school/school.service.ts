@@ -3,9 +3,6 @@ import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
-// Pagination
-import { toCursorHash, fromCursorHash } from '../../utils/Pagination'
-
 // Service
 import { BaseService } from '../../utils/BaseService'
 
@@ -58,42 +55,43 @@ export class SchoolService extends BaseService {
   //   return { nodes: Object.values(docs), totalCount: length }
   // }
 
-  async list(first?: number, after?: string, before?: string) {
-    const filters = {}
-    const options = {}
+  // async list(first?: number, after?: string, before?: string) {
+  //   const filters = {}
+  //   const options = {}
 
-    if (first) {
-      options['limit'] = first + 1 // In order to check if there is a next page
-    }
+  //   if (first) {
+  //     options['limit'] = first + 1 // In order to check if there is a next page
+  //   }
 
-    // 'before' and 'after' are mutually exclusive. Because of this:
-    if (after) {
-      const afterDate = new Date(fromCursorHash(after))
-      filters['createdAt'] = { $gte: afterDate }
-    } else if (before) {
-      const beforeDate = new Date(fromCursorHash(before))
-      filters['createdAt'] = { $lte: beforeDate }
-    }
+  //   // 'before' and 'after' are mutually exclusive. Because of this:
+  //   if (after) {
+  //     const afterDate = new Date(fromCursorHash(after))
+  //     filters['createdAt'] = { $gt: afterDate }
+  //   } else if (before) {
+  //     const beforeDate = new Date(fromCursorHash(before))
+  //     filters['createdAt'] = { $lt: beforeDate }
+  //   }
 
-    const result = await this.dbModel.find(filters, null, options).exec()
-    const hasNextPage = result?.length === first + 1
+  //   const result = await this.dbModel.find(filters, null, options).exec()
+  //   const hasNextPage = result?.length === first + 1
 
-    // Build PaginatedSchool
-    if (hasNextPage) {
-      result.pop()
-    }
-    return {
-      edges: result.map((doc) => {
-        return {
-          node: doc,
-          cursor: doc.cursor,
-        }
-      }),
-      totalCount: result?.length,
-      pageInfo: {
-        endCursor: result[result.length - 1]?.cursor,
-        hasNextPage,
-      },
-    }
-  }
+  //   // Build PaginatedSchool
+  //   if (hasNextPage) {
+  //     result.pop()
+  //   }
+  //   return {
+  //     edges: result.map((doc) => {
+  //       return {
+  //         node: doc,
+  //         cursor: doc.cursor,
+  //       }
+  //     }),
+  //     totalCount: result?.length,
+  //     pageInfo: {
+  //       endCursor: result[result.length - 1]?.cursor,
+
+  //       hasNextPage,
+  //     },
+  //   }
+  // }
 }

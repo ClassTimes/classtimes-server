@@ -32,12 +32,12 @@ export class CalendarResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => [Calendar])
-  async calendars(
-    @Args('filters', { nullable: true }) filters?: ListCalendarInput,
-  ) {
-    return this.service.list(filters)
-  }
+  // @Query(() => [Calendar])
+  // async calendars(
+  //   @Args('filters', { nullable: true }) filters?: ListCalendarInput,
+  // ) {
+  //   return this.service.list(filters)
+  // }
 
   @Mutation(() => Calendar)
   async createCalendar(@Args('payload') payload: CreateCalendarInput) {

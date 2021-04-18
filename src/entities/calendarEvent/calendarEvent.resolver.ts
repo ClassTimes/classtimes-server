@@ -30,12 +30,12 @@ export class CalendarEventResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => [CalendarEvent])
-  async calendarEvents(
-    @Args('filters', { nullable: true }) filters?: ListCalendarEventInput,
-  ) {
-    return this.service.list(filters)
-  }
+  // @Query(() => [CalendarEvent])
+  // async calendarEvents(
+  //   @Args('filters', { nullable: true }) filters?: ListCalendarEventInput,
+  // ) {
+  //   return this.service.list(filters)
+  // }
 
   @Mutation(() => CalendarEvent)
   async createCalendarEvent(

@@ -49,7 +49,7 @@ export class CalendarService extends BaseService {
     return await this.dbModel.create(payload)
   }
 
-  list(filters: ListCalendarInput) {
-    //  return this.model.find({ ...filters }).exec()
-  }
+  // list(filters: ListCalendarInput) {
+  //   //  return this.model.find({ ...filters }).exec()
+  // }
 }

@@ -57,7 +57,7 @@ export class EventService extends BaseService {
     return await this.dbModel.create(payload)
   }
 
-  list(filters: ListEventInput) {
-    //  return this.model.find({ ...filters }).exec()
-  }
+  // list(filters: ListEventInput) {
+  //   //  return this.model.find({ ...filters }).exec()
+  // }
 }

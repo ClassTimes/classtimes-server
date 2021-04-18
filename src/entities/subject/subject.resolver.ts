@@ -34,12 +34,12 @@ export class SubjectResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => [Subject])
-  async subjects(
-    @Args('filters', { nullable: true }) filters?: ListSubjectInput,
-  ) {
-    return this.service.list(filters)
-  }
+  // @Query(() => [Subject])
+  // async subjects(
+  //   @Args('filters', { nullable: true }) filters?: ListSubjectInput,
+  // ) {
+  //   return this.service.list(filters)
+  // }
 
   @Mutation(() => Subject)
   async createSubject(@Args('payload') payload: CreateSubjectInput) {

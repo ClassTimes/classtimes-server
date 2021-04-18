@@ -57,9 +57,9 @@ export class CalendarEventService extends BaseService {
   //   return this.model.findById(_id).exec()
   // }
 
-  list(filters: ListCalendarEventInput) {
-    return this.dbModel.find({ ...filters }).exec()
-  }
+  // list(filters: ListCalendarEventInput) {
+  //   return this.dbModel.find({ ...filters }).exec()
+  // }
 
   // update(payload: UpdateCalendarEventInput) {
   //   return this.model

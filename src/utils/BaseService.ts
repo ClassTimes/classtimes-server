@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common'
 import { plainToClass } from 'class-transformer'
 import { Model, Types, Document } from 'mongoose'
 
+// Pagination
+import { toCursorHash, fromCursorHash } from '../utils/Pagination'
+
 // Auth
 import { ForbiddenError } from '@casl/ability'
 import { Action } from '../casl/casl-ability.factory'
@@ -68,6 +71,8 @@ export abstract class BaseService {
     return this.dbModel.findByIdAndDelete(_id).exec()
   }
 
+  // Follower cache counter ----------
+
   async increaseFollowingCount(_id: Types.ObjectId): Promise<Model<Document>> {
     return this.dbModel
       .findByIdAndUpdate({ _id }, { $inc: { followerCounter: 1 } })
@@ -78,5 +83,47 @@ export abstract class BaseService {
     return this.dbModel
       .findByIdAndUpdate({ _id }, { $inc: { followerCounter: -1 } })
       .exec()
+  }
+
+  // Pagination
+
+  async list(first?: number, after?: string, before?: string) {
+    const filters = {}
+    const options = {}
+
+    if (first) {
+      options['limit'] = first + 1 // In order to check if there is a next page
+    }
+
+    // 'before' and 'after' are mutually exclusive. Because of this:
+    if (after) {
+      const afterDate = new Date(fromCursorHash(after))
+      filters['createdAt'] = { $gt: afterDate }
+    } else if (before) {
+      const beforeDate = new Date(fromCursorHash(before))
+      filters['createdAt'] = { $lt: beforeDate }
+    }
+
+    const result = await this.dbModel.find(filters, null, options).exec()
+    const hasNextPage = result?.length === first + 1
+
+    // Build PaginatedSchool
+    if (hasNextPage) {
+      result.pop()
+    }
+    return {
+      edges: result.map((doc) => {
+        return {
+          node: doc,
+          cursor: doc.cursor,
+        }
+      }),
+      totalCount: result?.length,
+      pageInfo: {
+        endCursor: result[result.length - 1]?.cursor,
+
+        hasNextPage,
+      },
+    }
   }
 }

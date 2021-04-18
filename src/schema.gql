@@ -97,30 +97,6 @@ type Following {
   resourceName: String!
 }
 
-input ListCalendarEventInput {
-  _id: ID
-  calendar: ID
-  title: String
-}
-
-input ListCalendarInput {
-  _id: ID
-  name: String
-  subject: ID
-}
-
-input ListEventInput {
-  _id: ID
-  calendarEvent: ID!
-  content: String!
-  usersJoining: [ID!]
-}
-
-input ListSubjectInput {
-  _id: ID
-  name: String
-}
-
 input ListUserInput {
   _id: ID
   fullName: String
@@ -178,14 +154,10 @@ type Permisson {
 type Query {
   calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
-  calendarEvents(filters: ListCalendarEventInput): [CalendarEvent!]!
-  calendars(filters: ListCalendarInput): [Calendar!]!
   event(_id: ID!): Event!
-  events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!
   schoolsConnection(after: String, before: String, first: Float): PaginatedSchools!
   subject(_id: ID!): Subject!
-  subjects(filters: ListSubjectInput): [Subject!]!
   user(_id: ID!): User!
   users(filters: ListUserInput): [User!]!
   whoAmI: User!

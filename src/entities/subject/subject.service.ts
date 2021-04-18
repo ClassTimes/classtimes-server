@@ -54,9 +54,9 @@ export class SubjectService extends BaseService {
   // }
 
   // TODO: Change to SEARCH
-  list(filters: ListSubjectInput) {
-    return this.dbModel.find({ ...filters }).exec()
-  }
+  // list(filters: ListSubjectInput) {
+  //   return this.dbModel.find({ ...filters }).exec()
+  // }
 
   // async update(payload: UpdateSubjectInput) {
   //   await this.checkPermissons({
