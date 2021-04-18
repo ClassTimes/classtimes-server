@@ -50,6 +50,7 @@
     "git-last-commit": "^1.0.0",
     "graphql": "^15.5.0",
     "graphql-tools": "^7.0.4",
+    "js-base64": "^3.6.0",
     "mongoose": "^5.12.3",
     "mongoose-autopopulate": "^0.12.3",
     "passport": "^0.4.1",

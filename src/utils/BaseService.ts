@@ -9,6 +9,7 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory'
 
 // User
 import { User } from '../entities/user/user.model'
+import { School } from '../entities/school/school.model'
 @Injectable()
 export abstract class BaseService {
   abstract dbModel: any // mongoose.Model<mongoose.Document>
@@ -45,14 +46,14 @@ export abstract class BaseService {
     }
   }
 
-  async getById(_id: Types.ObjectId) {
+  async getById(_id: Types.ObjectId): Promise<Model<Document>> {
     return this.checkPermissons({
       action: Action.Read,
       resourceId: _id,
     })
   }
 
-  async update(payload) {
+  async update(payload): Promise<Model<Document>> {
     await this.checkPermissons({
       action: Action.Update,
       resourceId: payload._id,
@@ -62,18 +63,18 @@ export abstract class BaseService {
       .exec()
   }
 
-  async delete(_id: Types.ObjectId) {
+  async delete(_id: Types.ObjectId): Promise<Model<Document>> {
     await this.checkPermissons({ action: Action.Delete, resourceId: _id })
     return this.dbModel.findByIdAndDelete(_id).exec()
   }
 
-  async increaseFollowingCount(_id: Types.ObjectId) {
+  async increaseFollowingCount(_id: Types.ObjectId): Promise<Model<Document>> {
     return this.dbModel
       .findByIdAndUpdate({ _id }, { $inc: { followerCounter: 1 } })
       .exec()
   }
 
-  async decreaseFollowingCount(_id: Types.ObjectId) {
+  async decreaseFollowingCount(_id: Types.ObjectId): Promise<Model<Document>> {
     return this.dbModel
       .findByIdAndUpdate({ _id }, { $inc: { followerCounter: -1 } })
       .exec()

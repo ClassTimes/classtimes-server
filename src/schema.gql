@@ -116,11 +116,6 @@ input ListEventInput {
   usersJoining: [ID!]
 }
 
-input ListSchoolInput {
-  _id: ID
-  name: String
-}
-
 input ListSubjectInput {
   _id: ID
   name: String
@@ -167,6 +162,12 @@ type Mutation {
   writePermisson(payload: WritePermissonsInput!): Permisson!
 }
 
+type PaginatedSchools {
+  edges: [SchoolEdge!]
+  pageInfo: pageInfo!
+  totalCount: Int!
+}
+
 type Permisson {
   resourceId: ID!
   resourceName: String!
@@ -182,7 +183,7 @@ type Query {
   event(_id: ID!): Event!
   events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!
-  schools(filters: ListSchoolInput): [School!]!
+  schoolsConnection(after: String, before: String, first: Float): PaginatedSchools!
   subject(_id: ID!): Subject!
   subjects(filters: ListSubjectInput): [Subject!]!
   user(_id: ID!): User!
@@ -196,11 +197,17 @@ type School {
   _id: ID!
   childrenSchools: [School!]
   createdBy: User!
+  cursor: String!
   followerCounter: Float!
   name: String!
   parentSchool: School
   shortName: String!
   subjects: [Subject!]
+}
+
+type SchoolEdge {
+  cursor: String!
+  node: School!
 }
 
 type Subject {
@@ -275,4 +282,9 @@ input WritePermissonsInput {
   resourceName: String!
   role: String!
   subjectId: ID!
+}
+
+type pageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
 }

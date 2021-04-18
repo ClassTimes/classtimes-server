@@ -133,30 +133,21 @@ Object.defineProperty(BaseModel, 'schema', {
           propertyKey,
           foreignField: _foreignField,
           ref: _ref,
-          refPath,
+          refPath: _refPath,
           localField: _localField,
         } = assoc
         const model = target.constructor as typeof BaseModel
         const foreignField = _foreignField ?? model.name.toLowerCase()
         const localField = _localField ?? '_id'
+        const refPath = _refPath ?? undefined
         const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))
-        if (refPath) {
-          model?.schema.virtual(propertyKey, {
-            refPath,
-            localField,
-            foreignField,
-            autopopulate: true,
-            justOne: true,
-          })
-        } else {
-          model?.schema.virtual(propertyKey, {
-            ref,
-            localField,
-            foreignField,
-            autopopulate: true,
-            justOne: true,
-          })
-        }
+        model?.schema.virtual(propertyKey, {
+          ref,
+          refPath,
+          localField,
+          foreignField,
+          autopopulate: true,
+        })
         model?.schema.set('toObject', { virtuals: true })
         model?.schema.set('toJSON', { virtuals: true })
       }

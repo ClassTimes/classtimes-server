@@ -7,23 +7,21 @@ import {
   Parent,
   ID,
 } from '@nestjs/graphql'
-import { Types } from 'mongoose'
+import { Model, Types } from 'mongoose'
 
 // School
-import { School, SchoolDocument } from './school.model'
+import {
+  School,
+  SchoolDocument,
+  PaginatedSchools,
+  OffsetPaginatedSchools,
+} from './school.model'
 import { SchoolService } from './school.service'
 import {
   CreateSchoolInput,
   ListSchoolInput,
   UpdateSchoolInput,
 } from './school.inputs'
-
-// Subject
-import { Subject } from '../subject/subject.model'
-
-// User
-import { User } from '../user/user.model'
-
 @Resolver(() => School)
 export class SchoolResolver {
   constructor(private service: SchoolService) {}
@@ -33,11 +31,25 @@ export class SchoolResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => [School])
-  async schools(
-    @Args('filters', { nullable: true }) filters?: ListSchoolInput,
+  // @Query(() => OffsetPaginatedSchools)
+  // async schools(
+  //   @Args('filters', { nullable: true }) filters?: ListSchoolInput,
+  //   @Args('first', { nullable: true }) first?: number,
+  //   @Args('offset', { nullable: true }) offset?: number,
+  // ) {
+  //   const schools = await this.service.list(filters, first, offset)
+  //   return schools
+  // }
+
+  @Query(() => PaginatedSchools)
+  async schoolsConnection(
+    // @Args('filters', { nullable: true }) filters?: ListSchoolInput,
+    @Args('first', { nullable: true }) first?: number,
+    @Args('after', { nullable: true }) after?: string,
+    @Args('before', { nullable: true }) before?: string,
   ) {
-    return this.service.list(filters)
+    const schools = await this.service.list(first, after, before)
+    return schools
   }
 
   @Mutation(() => School)
