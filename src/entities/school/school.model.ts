@@ -3,15 +3,11 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
-import {
-  toCursorHash,
-  Paginated,
-  OffsetPaginated,
-} from '../../utils/Pagination'
+import { toCursorHash, Paginated } from '../../utils/Pagination'
 
-import { Subject } from '../subject/subject.model'
+// import { Subject } from '../subject/subject.model'
+import { Subject, PaginatedSubjects } from '../subject/subject.model'
 import { User } from '../user/user.model'
-import { ObjectType } from '@nestjs/graphql'
 
 //@Utils.HasMany({ field: 'subjects', ref: 'Subject' })
 @GQL.ObjectType()
@@ -61,6 +57,10 @@ export class School extends Utils.BaseModel {
   @Utils.OneToMany()
   subjects: mongoose.Types.ObjectId[] | Subject[]
 
+  // Pagination tests
+  @GQL.Field(() => PaginatedSubjects, { nullable: true })
+  subjectsConnection: any
+
   @GQL.Field(() => [School], { nullable: true })
   @Utils.OneToMany({
     ref: 'School',
@@ -72,14 +72,12 @@ export class School extends Utils.BaseModel {
 
 export type SchoolDocument = School & mongoose.Document
 export const SchoolSchema = School.schema
+SchoolSchema.index({ createdAt: 1 })
 SchoolSchema.virtual('cursor').get(function () {
-  return toCursorHash(this.createdAt)
+  const date = new Date(this.createdAt)
+  return toCursorHash(date.toISOString())
 })
 SchoolSchema.plugin(autopopulate)
 
-@ObjectType()
+@GQL.ObjectType()
 export class PaginatedSchools extends Paginated(School) {}
-
-// Test
-@ObjectType()
-export class OffsetPaginatedSchools extends OffsetPaginated(School) {}

@@ -138,9 +138,20 @@ type Mutation {
   writePermisson(payload: WritePermissonsInput!): Permisson!
 }
 
+type PageInfoType {
+  endCursor: String!
+  hasNextPage: Boolean!
+}
+
 type PaginatedSchools {
   edges: [SchoolEdge!]
-  pageInfo: pageInfo!
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type PaginatedSubjects {
+  edges: [SubjectEdge!]
+  pageInfo: PageInfoType!
   totalCount: Int!
 }
 
@@ -175,6 +186,7 @@ type School {
   parentSchool: School
   shortName: String!
   subjects: [Subject!]
+  subjectsConnection(after: String, before: String, first: Float): PaginatedSubjects
 }
 
 type SchoolEdge {
@@ -190,6 +202,11 @@ type Subject {
   school: School!
   shortName: String!
   tags: [String!]!
+}
+
+type SubjectEdge {
+  cursor: String!
+  node: Subject!
 }
 
 input UpdateCalendarEventInput {
@@ -254,9 +271,4 @@ input WritePermissonsInput {
   resourceName: String!
   role: String!
   subjectId: ID!
-}
-
-type pageInfo {
-  endCursor: String!
-  hasNextPage: Boolean!
 }

@@ -3,11 +3,11 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
+import { toCursorHash, Paginated } from '../../utils/Pagination'
 
 import * as Utils from '../../utils/Model'
 import { Calendar } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
-import { User } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -55,4 +55,15 @@ export class Subject extends Utils.BaseModel {
 
 export type SubjectDocument = Subject & mongoose.Document
 export const SubjectSchema = Subject.schema
+SubjectSchema.index({ createdAt: 1 })
+SubjectSchema.virtual('cursor').get(function () {
+  if (this.createdAt) {
+    const date = new Date(this.createdAt)
+    return toCursorHash(date.toISOString())
+  }
+  return null
+})
 SubjectSchema.plugin(autopopulate)
+
+@GQL.ObjectType()
+export class PaginatedSubjects extends Paginated(Subject) {}

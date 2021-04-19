@@ -10,13 +10,9 @@ import {
 import { Model, Types } from 'mongoose'
 
 // School
-import {
-  School,
-  SchoolDocument,
-  PaginatedSchools,
-  OffsetPaginatedSchools,
-} from './school.model'
+import { School, SchoolDocument, PaginatedSchools } from './school.model'
 import { SchoolService } from './school.service'
+import { SubjectService } from '../subject/subject.service'
 import {
   CreateSchoolInput,
   ListSchoolInput,
@@ -24,7 +20,10 @@ import {
 } from './school.inputs'
 @Resolver(() => School)
 export class SchoolResolver {
-  constructor(private service: SchoolService) {}
+  constructor(
+    private service: SchoolService,
+    private subjectService: SubjectService,
+  ) {}
 
   @Query(() => School)
   async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -48,7 +47,7 @@ export class SchoolResolver {
     @Args('after', { nullable: true }) after?: string,
     @Args('before', { nullable: true }) before?: string,
   ) {
-    const schools = await this.service.list(first, after, before)
+    const schools = await this.service.list(null, first, after, before)
     return schools
   }
 
@@ -68,23 +67,21 @@ export class SchoolResolver {
   }
 
   //
-  // Field resolvers (deprecated in favor of mongoose-autopopulate)
+  // Field resolvers (for connections)
   //
 
-  /*@ResolveField()
-  async subjects(
+  @ResolveField()
+  async subjectsConnection(
     @Parent() school: SchoolDocument,
-    @Args('populate') populate: boolean,
+    @Args('first', { nullable: true }) first?: number,
+    @Args('after', { nullable: true }) after?: string,
+    @Args('before', { nullable: true }) before?: string,
   ) {
-    if (populate) {
-      await school
-        .populate({ path: 'subjects', model: Subject.name })
-        .execPopulate()
-    }
-
-    return school.subjects
+    const filters = { 'school._id': school._id }
+    return this.subjectService.list(filters, first, after, before) // TODO: Need to add filters field for parent id...
   }
 
+  /*
   @ResolveField('createdBy', () => User)
   async createdBy(
     @Parent() school: SchoolDocument,

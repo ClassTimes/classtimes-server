@@ -87,8 +87,8 @@ export abstract class BaseService {
 
   // Pagination
 
-  async list(first?: number, after?: string, before?: string) {
-    const filters = {}
+  async list(filters?: any, first?: number, after?: string, before?: string) {
+    filters = filters ?? {}
     const options = {}
 
     if (first) {
@@ -98,12 +98,11 @@ export abstract class BaseService {
     // 'before' and 'after' are mutually exclusive. Because of this:
     if (after) {
       const afterDate = new Date(fromCursorHash(after))
-      filters['createdAt'] = { $gt: afterDate }
+      filters['createdAt'] = { $gt: afterDate.toISOString() }
     } else if (before) {
       const beforeDate = new Date(fromCursorHash(before))
-      filters['createdAt'] = { $lt: beforeDate }
+      filters['createdAt'] = { $lt: beforeDate.toISOString() }
     }
-
     const result = await this.dbModel.find(filters, null, options).exec()
     const hasNextPage = result?.length === first + 1
 

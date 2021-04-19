@@ -79,7 +79,7 @@ export class Following extends Utils.BaseModel {
 
 export type FollowingDocument = Following & mongoose.Document
 export const FollowingSchema = Following.schema
-FollowingSchema.index({ userId: 1, resourceId: 1 }, { unique: true })
+FollowingSchema.index({ followerId: 1, resourceId: 1 }, { unique: true })
 
 // FollowingSchema.virtual('resource', {
 //   refPath: 'resourceName', // gets 'ref' as doc.resourceName
