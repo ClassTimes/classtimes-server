@@ -2,11 +2,13 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
-// import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
-import { toCursorHash, Paginated } from '../../utils/Pagination'
-
 import * as Utils from '../../utils/Model'
-import { Calendar } from '../calendar/calendar.model'
+
+// Pagination
+import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+
+// Entities
+import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
 
 @GQL.ObjectType()
@@ -36,9 +38,13 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop({ default: [] })
   tags: string[]
 
-  @GQL.Field(() => [Calendar])
-  @Utils.OneToMany()
-  calendars: mongoose.Types.ObjectId[] | Calendar[]
+  // *
+  // Relations
+  // *
+
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followerCounter: number
 
   @GQL.Field(() => School)
   @DB.Prop({
@@ -48,21 +54,16 @@ export class Subject extends Utils.BaseModel {
   })
   school: mongoose.Types.ObjectId | School
 
-  @GQL.Field(() => Number)
-  @DB.Prop({ type: Number, default: 0 })
-  followerCounter: number
+  // *
+  // Connections
+  // *
+
+  @GQL.Field(() => PaginatedCalendars, { nullable: true })
+  calendarsConnection: PaginatedType<Calendar>
 }
 
 export type SubjectDocument = Subject & mongoose.Document
-export const SubjectSchema = Subject.schema
-SubjectSchema.index({ createdAt: 1 })
-SubjectSchema.virtual('cursor').get(function () {
-  if (this.createdAt) {
-    const date = new Date(this.createdAt)
-    return toCursorHash(date.toISOString())
-  }
-  return null
-})
+export const SubjectSchema = withCursor(Subject.schema)
 SubjectSchema.plugin(autopopulate)
 
 @GQL.ObjectType()

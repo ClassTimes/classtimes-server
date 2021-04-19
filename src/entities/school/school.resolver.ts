@@ -33,25 +33,12 @@ export class SchoolResolver {
     return this.service.getById(_id)
   }
 
-  // @Query(() => OffsetPaginatedSchools)
-  // async schools(
-  //   @Args('filters', { nullable: true }) filters?: ListSchoolInput,
-  //   @Args('first', { nullable: true }) first?: number,
-  //   @Args('offset', { nullable: true }) offset?: number,
-  // ) {
-  //   const schools = await this.service.list(filters, first, offset)
-  //   return schools
-  // }
-
   @Query(() => PaginatedSchools)
-  async schoolsConnection(
-    // @Args('filters', { nullable: true }) filters?: ListSchoolInput,
-    @Args('first', { nullable: true }) first?: number,
-    @Args('after', { nullable: true }) after?: string,
-    @Args('before', { nullable: true }) before?: string,
+  async listSchools(
+    @Args('filters', { nullable: true }) filters?: ListSchoolInput,
+    @Args() paginationArgs?: PaginationArgs,
   ) {
-    const schools = await this.service.list(null, first, after, before)
-    return schools
+    return this.service.list(filters, paginationArgs)
   }
 
   @Mutation(() => School)
@@ -78,8 +65,16 @@ export class SchoolResolver {
     @Parent() school: SchoolDocument,
     @Args() paginationArgs: PaginationArgs,
   ) {
-    const { first, after, before } = paginationArgs
     const filters = { school: school._id }
-    return this.subjectService.list(filters, first, after, before)
+    return this.subjectService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async childrenSchoolsConnection(
+    @Parent() school: SchoolDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { parentSchool: school._id }
+    return this.service.list(filters, paginationArgs)
   }
 }

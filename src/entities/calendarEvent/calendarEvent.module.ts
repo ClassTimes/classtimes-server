@@ -5,6 +5,7 @@ import { CalendarEventService } from './calendarEvent.service'
 import { CalendarEvent, CalendarEventSchema } from './calendarEvent.model'
 import { CalendarEventResolver } from './calendarEvent.resolver'
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
+import { EventService } from '../event/event.service'
 import { Event, EventSchema } from '../event/event.model'
 
 @Module({
@@ -25,6 +26,6 @@ import { Event, EventSchema } from '../event/event.model'
     ]),
   ],
   //  controllers: [CalendarsController],
-  providers: [CalendarEventService, CalendarEventResolver],
+  providers: [CalendarEventService, CalendarEventResolver, EventService],
 })
 export class CalendarEventModule {}

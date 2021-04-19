@@ -2,11 +2,9 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
-
+import autopopulate from 'mongoose-autopopulate'
+import { Paginated, withCursor } from '../../utils/Pagination'
 import * as Utils from '../../utils/Model'
-
-// Models
-import { School } from '../school/school.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -55,7 +53,11 @@ export class User extends Utils.BaseModel {
 }
 
 export type UserDocument = User & mongoose.Document
-export const UserSchema = User.schema
+export const UserSchema = withCursor(User.schema)
+UserSchema.plugin(autopopulate)
+
+@GQL.ObjectType()
+export class PaginatedUsers extends Paginated(User) {}
 
 // UserSchema.index({ field1: 1, field2: 1 }, { unique: true })
 

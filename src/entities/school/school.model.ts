@@ -3,13 +3,14 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
-import { toCursorHash, Paginated } from '../../utils/Pagination'
 
-// import { Subject } from '../subject/subject.model'
+// Pagination
+import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+
+// Entities
 import { Subject, PaginatedSubjects } from '../subject/subject.model'
 import { User } from '../user/user.model'
 
-//@Utils.HasMany({ field: 'subjects', ref: 'Subject' })
 @GQL.ObjectType()
 @DB.Schema({
   timestamps: true,
@@ -35,11 +36,9 @@ export class School extends Utils.BaseModel {
   })
   createdBy: mongoose.Types.ObjectId | User
 
-  // Pagination TODO: Move to Paginated type
-  @GQL.Field(() => String)
-  cursor: string
-
+  // *
   // Relations
+  // *
 
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
@@ -53,31 +52,19 @@ export class School extends Utils.BaseModel {
   })
   parentSchool: mongoose.Types.ObjectId | School
 
-  @GQL.Field(() => [Subject], { nullable: true })
-  @Utils.OneToMany()
-  subjects: mongoose.Types.ObjectId[] | Subject[]
+  // *
+  // Connections
+  // *
 
-  // Pagination tests
   @GQL.Field(() => PaginatedSubjects, { nullable: true })
-  subjectsConnection: any
+  subjectsConnection: PaginatedType<Subject>
 
-  @GQL.Field(() => [School], { nullable: true })
-  @Utils.OneToMany({
-    ref: 'School',
-    localField: '_id',
-    foreignField: 'parentSchool',
-  })
-  childrenSchools: mongoose.Types.ObjectId[] | School[]
+  @GQL.Field(() => PaginatedSchools, { nullable: true })
+  childrenSchoolsConnection: PaginatedType<School>
 }
 
 export type SchoolDocument = School & mongoose.Document
-export const SchoolSchema = School.schema
-SchoolSchema.index({ createdAt: 1 })
-SchoolSchema.virtual('cursor').get(function () {
-  const date = new Date(this.createdAt)
-  return toCursorHash(date.toISOString())
-})
+export const SchoolSchema = withCursor(School.schema)
 SchoolSchema.plugin(autopopulate)
-
 @GQL.ObjectType()
 export class PaginatedSchools extends Paginated(School) {}

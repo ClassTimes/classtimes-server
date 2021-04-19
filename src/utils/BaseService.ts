@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer'
 import { Model, Types, Document } from 'mongoose'
 
 // Pagination
-import { toCursorHash, fromCursorHash } from '../utils/Pagination'
+import { fromCursorHash, PaginationArgs } from '../utils/Pagination'
 
 // Auth
 import { ForbiddenError } from '@casl/ability'
@@ -87,12 +87,15 @@ export abstract class BaseService {
 
   // Pagination
 
-  async list(filters?: any, first?: number, after?: string, before?: string) {
+  async list(filters?: any, paginationArgs?: PaginationArgs) {
+    const { first, after, before } = paginationArgs
+
     filters = filters ?? {}
     const options = {}
 
     if (first) {
-      options['limit'] = first + 1 // In order to check if there is a next page
+      // In order to check if there is a next page, fetch one extra record
+      options['limit'] = first + 1
     }
 
     // 'before' and 'after' are mutually exclusive. Because of this:
