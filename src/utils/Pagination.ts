@@ -1,7 +1,8 @@
-import { Field, ObjectType, Int } from '@nestjs/graphql'
+import { Field, ObjectType, ArgsType, Int } from '@nestjs/graphql'
 import { Type } from '@nestjs/common'
 import { Base64 } from 'js-base64'
 
+// Pagination Types
 @ObjectType()
 class PageInfoType {
   @Field((type) => String)
@@ -34,7 +35,21 @@ export function Paginated<T>(classRef: Type<T>): any {
   return PaginatedType
 }
 
-//
+// Pagination Args
+
+@ArgsType()
+export class PaginationArgs {
+  @Field({ defaultValue: 0 }) // TODO: Actually have this as non-nullable
+  first?: number
+
+  @Field({ nullable: true })
+  after?: string
+
+  @Field({ nullable: true })
+  before?: string
+}
+
+// Cursor base64 encoding
 
 export const toCursorHash = (str: string) => Base64.encode(str)
 export const fromCursorHash = (str: string) => Base64.decode(str)

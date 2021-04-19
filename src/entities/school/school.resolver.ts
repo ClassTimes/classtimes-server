@@ -9,6 +9,9 @@ import {
 } from '@nestjs/graphql'
 import { Model, Types } from 'mongoose'
 
+// Pagination
+import { PaginationArgs } from '../../utils/Pagination'
+
 // School
 import { School, SchoolDocument, PaginatedSchools } from './school.model'
 import { SchoolService } from './school.service'
@@ -73,26 +76,10 @@ export class SchoolResolver {
   @ResolveField()
   async subjectsConnection(
     @Parent() school: SchoolDocument,
-    @Args('first', { nullable: true }) first?: number,
-    @Args('after', { nullable: true }) after?: string,
-    @Args('before', { nullable: true }) before?: string,
+    @Args() paginationArgs: PaginationArgs,
   ) {
-    const filters = { 'school._id': school._id }
-    return this.subjectService.list(filters, first, after, before) // TODO: Need to add filters field for parent id...
+    const { first, after, before } = paginationArgs
+    const filters = { school: school._id }
+    return this.subjectService.list(filters, first, after, before)
   }
-
-  /*
-  @ResolveField('createdBy', () => User)
-  async createdBy(
-    @Parent() school: SchoolDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      console.log(school)
-      await school
-        .populate({ path: 'createdBy', model: User.name })
-        .execPopulate()
-    }
-    return school.createdBy
-  }*/
 }

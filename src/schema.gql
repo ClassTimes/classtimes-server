@@ -186,7 +186,7 @@ type School {
   parentSchool: School
   shortName: String!
   subjects: [Subject!]
-  subjectsConnection(after: String, before: String, first: Float): PaginatedSubjects
+  subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
 }
 
 type SchoolEdge {
