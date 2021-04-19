@@ -6,14 +6,26 @@ import {
   AbilityClass,
   ExtractSubjectType,
 } from '@casl/ability'
+// import { plainToClass } from 'class-transformer'
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
 import { Subject } from '../entities/subject/subject.model'
+import { Calendar } from '../entities/calendar/calendar.model'
+import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
+import { Event } from '../entities/event/event.model'
 import { Auth } from '../auth/auth.model'
 
 type Subjects =
-  | InferSubjects<typeof School | typeof User | typeof Subject | typeof Auth>
+  | InferSubjects<
+      | typeof School
+      | typeof User
+      | typeof Subject
+      | typeof Calendar
+      | typeof CalendarEvent
+      | typeof Event
+      | typeof Auth
+    >
   | 'all'
 
 export enum Action {
@@ -24,11 +36,18 @@ export enum Action {
   Create = 'create',
   Read = 'read',
   List = 'list',
+  GrantPermisson = 'grantPermisson',
   Update = 'update',
   Delete = 'delete',
 }
 
 export type AppAbility = Ability<[Action, Subjects]>
+
+// roles: {
+//   superAdmin: boolean,
+//   professors: User[],
+//   admins: User[]
+// }
 
 export class CaslAbilityFactory {
   static createForUser(user: User | undefined) {
@@ -36,39 +55,78 @@ export class CaslAbilityFactory {
       Ability<[Action, Subjects]>
     >(Ability as AbilityClass<AppAbility>)
 
-    // Super admin
-    // if (user?.roles?.includes('admin')) {
-    //   School
-    //   can(Action.Manage, School)
-    //   Subject
-    //   can(Action.Manage, Subject)
-    //   User
-    //   can(Action.Manage, User)
-    // }
+    // Public Resources
+    // TODO: Filter fields!!!!!!!
+    // TODO: Add search Action to all searchable resources
+    // TODO: Add Action.RemovePermisson
+    can([Action.Read], School)
+    can([Action.Read], Subject)
+    can([Action.Read], Calendar)
+    can([Action.Read], CalendarEvent)
 
-    // Any user (incluing guests) can read, list, and create a school
-    // can(Action.Read, School)
-    // can(Action.List, School)
-    //console.log('CAS AVILITY FACTOR', user)
     if (user) {
+      // Super Admin abilities -----------------------------------------
+      if (user?.roles?.superAdmin) {
+        can(Action.Manage, School)
+        can(Action.Manage, Subject)
+      }
+
       // Any logged in user can...
       can(Action.Manage, Auth)
 
-      // School abilities
-      can(Action.Create, School)
-      can(Action.List, School)
-      can(Action.Read, School, { 'createdBy._id': user._id } as any)
-      can(Action.Update, School, { 'createdBy._id': user._id } as any)
-      can(Action.Delete, School, { 'createdBy._id': user._id } as any)
-      if (user?.roles?.includes('admin')) {
-        can(Action.Read, School)
-      }
+      // School abilities -----------------------------------------
+      can([Action.Update], School, {
+        'createdBy._id': user._id,
+      } as any) // Obsolete
+      can([Action.Update, Action.GrantPermisson], School, {
+        'roles.admin.userId': user._id,
+      } as any)
+      can([Action.Update, Action.GrantPermisson], School, {
+        'parentSchool.roles.admin.userId': user._id,
+      } as any)
+
+      // Subject abilities -----------------------------------------
+      can([Action.Update], Subject, {
+        'roles.admin.userId': user._id,
+      } as any)
+      can([Action.Update], Subject, {
+        'roles.professor.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Delete], Subject, {
+        'school.roles.admin.userId': user._id,
+      } as any)
+      can([Action.GrantPermisson], Subject, {
+        'roles.admin.userId': user._id,
+      } as any)
+      can([Action.GrantPermisson], Subject, {
+        'school.roles.admin.userId': user._id,
+      } as any)
+
+      // Calendar abilities -----------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], Calendar, {
+        'subject.roles.admin.userId': user._id,
+      } as any)
+
+      // CalendarEvent abilities -----------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
+        'calendar.subject.roles.admin.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
+        'calendar.subject.roles.professor.userId': user._id,
+      } as any)
+
+      // Event abilities -----------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], Event, {
+        'calendarEvent.calendar.subject.roles.admin.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Update, Action.Delete], Event, {
+        'calendarEvent.calendar.subject.roles.professor.userId': user._id,
+      } as any)
     }
 
-    // cannot(Action.Read, 'all')
-    // cannot(Action.Read, User)
-    // cannot(Action.Delete, Article, { isPublished: true })
-    // can(Action.Update, Article, { authorId: user.id })
+    // User abilities -----------------------------------------
+    can([Action.Read, Action.Create], User)
+    can([Action.Update], User, ['email', 'username'], { _id: user._id })
 
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details

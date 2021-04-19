@@ -1,5 +1,6 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as V from 'class-validator'
+import mongoose from 'mongoose'
 import { ApolloError } from 'apollo-server-errors'
 import { plainToClass } from 'class-transformer'
 import pluralize from 'pluralize'
@@ -60,14 +61,54 @@ export function OneToMany(options: IOneToManyOptions = {}) {
   }
 }
 
+interface IVirtualOptions {
+  ref?: string
+  refPath?: string
+  foreignField?: string
+  localField?: string
+  propertyKey?: string
+}
+
+export function Virtual(options: IVirtualOptions = {}) {
+  const {
+    ref,
+    foreignField,
+    localField,
+    propertyKey: _propertyKey,
+    refPath,
+  } = options
+  return (target: any, propertyKey: string) => {
+    const model = target.constructor as typeof BaseModel
+    model.__virtuals__ = model.__virtuals__ || []
+    model.__virtuals__.push({
+      target,
+      propertyKey: _propertyKey ?? propertyKey,
+      ref,
+      foreignField,
+      localField,
+      refPath,
+    })
+  }
+}
+
 /**
  * Base Model
  */
 @ValidateSchema()
+@DB.Schema({
+  timestamps: true,
+  // autoIndex: true
+})
 export class BaseModel {
   static __validate__: boolean | undefined
   static __assoc__: Record<string, any> | undefined
+  static __virtuals__: Array<Record<string, any>> | undefined
   static schema?: ReturnType<typeof DB.SchemaFactory.createForClass>
+
+  @DB.Prop({
+    type: mongoose.Schema.Types.Mixed,
+  })
+  roles: Record<string | symbol, unknown> // TODO: Improve model
 }
 
 // Validation
@@ -92,16 +133,51 @@ Object.defineProperty(BaseModel, 'schema', {
           propertyKey,
           foreignField: _foreignField,
           ref: _ref,
+          refPath: _refPath,
           localField: _localField,
         } = assoc
         const model = target.constructor as typeof BaseModel
         const foreignField = _foreignField ?? model.name.toLowerCase()
         const localField = _localField ?? '_id'
+        const refPath = _refPath ?? undefined
         const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))
         model?.schema.virtual(propertyKey, {
           ref,
+          refPath,
           localField,
           foreignField,
+          autopopulate: true,
+        })
+        model?.schema.set('toObject', { virtuals: true })
+        model?.schema.set('toJSON', { virtuals: true })
+      }
+    }
+
+    // Virtuals
+    const virtuals = this?.__virtuals__
+    if (virtuals) {
+      for (const virtual of virtuals) {
+        // TODO Cleanup to a function
+        const {
+          target,
+          propertyKey,
+          foreignField: _foreignField,
+          ref: _ref,
+          refPath: _refPath,
+          localField: _localField,
+        } = virtual
+        const model = target.constructor as typeof BaseModel
+        const foreignField = _foreignField ?? model.name.toLowerCase()
+        const localField = _localField ?? '_id'
+        const refPath = _refPath ?? undefined
+        const ref = _ref ?? titleize(pluralize.singular(`${propertyKey}`))
+        model?.schema.virtual(propertyKey, {
+          ref,
+          refPath,
+          localField,
+          foreignField,
+          autopopulate: true,
+          justOne: true,
         })
         model?.schema.set('toObject', { virtuals: true })
         model?.schema.set('toJSON', { virtuals: true })

@@ -64,6 +64,7 @@ export class UserResolver {
   /**
    * Authenticated
    */
+
   // @UseGuards(GqlAuthGuard)
   @GQL.Query(() => User, { nullable: false })
   @CheckPolicies((a) => a.can(Action.Read, Auth))
@@ -71,23 +72,4 @@ export class UserResolver {
     console.log('[User]', { user })
     return user //this.service.getById(user._id)
   }
-
-  // @ResolveField()
-  // async calendar(
-  //   @Parent() user: UserDocument,
-  //   @GQL.Args('populate') populate: boolean,
-  // ) {
-  //   if (populate) {
-  //     await user
-  //       .populate({ path: 'calendar', model: Calendar.name })
-  //       .execPopulate()
-  //   }
-
-  //   return user.calendar
-  // }
 }
-
-// import { Resolver } from '@nestjs/graphql';
-//
-// @GQL.Resolver()
-// export class UserResolver {}

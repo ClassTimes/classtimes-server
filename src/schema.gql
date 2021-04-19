@@ -9,21 +9,25 @@ type Auth {
 
 type Calendar {
   _id: ID!
-  calendarEvents(populate: Boolean!): [CalendarEvent!]!
+  calendarEvents: [CalendarEvent!]!
+  followerCounter: Float!
   name: String!
-  subject(populate: Boolean!): Subject!
+  subject: Subject!
 }
 
 type CalendarEvent {
   _id: ID!
-  calendar(populate: Boolean!): Calendar!
+  calendar: Calendar!
   description: String
   durationHours: Float!
   endDateUtc: DateTime!
+  events: [Event!]!
   exceptionsDatesUtc: [DateTime!]
+  followerCounter: Float!
   isAllDay: Boolean
   rrule: String
   startDateUtc: DateTime!
+  tags: [String!]!
   title: String!
 }
 
@@ -51,6 +55,8 @@ input CreateEventInput {
 
 input CreateSchoolInput {
   name: String!
+  parentSchool: ID
+  shortName: String
 }
 
 input CreateSubjectInput {
@@ -76,36 +82,19 @@ type Event {
   _id: ID!
   calendarEvent(populate: Boolean!): CalendarEvent!
   content: String!
+  followerCounter: Float!
   usersJoining(populate: Boolean!): [User!]
 }
 
-input ListCalendarEventInput {
-  _id: ID
-  calendar: ID
-  title: String
-}
+type Following {
+  _id: ID!
 
-input ListCalendarInput {
-  _id: ID
-  name: String
-  subject: ID
-}
+  """User that follows (current user, the *follower*)"""
+  follower: User!
 
-input ListEventInput {
-  _id: ID
-  calendarEvent: ID!
-  content: String!
-  usersJoining: [ID!]
-}
-
-input ListSchoolInput {
-  _id: ID
-  name: String
-}
-
-input ListSubjectInput {
-  _id: ID
-  name: String
+  """Resource to be followed (the *followee*)"""
+  resource: Resource!
+  resourceName: String!
 }
 
 input ListUserInput {
@@ -131,43 +120,76 @@ type Mutation {
   deleteSchool(_id: ID!): School!
   deleteSubject(_id: ID!): Subject!
   deleteUser(_id: ID!): User
+  followCalendar(calendarId: ID!): Following!
+  followSchool(schoolId: ID!): Following!
+  followSubject(subjectId: ID!): Following!
+  followUser(followeeId: ID!): Following!
+  joinEvent(eventId: ID!): Following!
   loginUser(payload: LoginInput!): Auth!
+  suscribeToCalendarEvent(calendarEventId: ID!): Following!
+  unfollowResource(resourceId: ID!): Following!
+  unfollowUser(followeeId: ID!): Following!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
   updateSchool(payload: UpdateSchoolInput!): School!
   updateSubject(payload: UpdateSubjectInput!): Subject!
   updateUser(payload: UpdateUserInput!): User
+  writePermisson(payload: WritePermissonsInput!): Permisson!
+}
+
+type PaginatedSchools {
+  edges: [SchoolEdge!]
+  pageInfo: pageInfo!
+  totalCount: Int!
+}
+
+type Permisson {
+  resourceId: ID!
+  resourceName: String!
+  role: String!
+  subjectId: ID!
 }
 
 type Query {
   calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
-  calendarEvents(filters: ListCalendarEventInput): [CalendarEvent!]!
-  calendars(filters: ListCalendarInput): [Calendar!]!
   event(_id: ID!): Event!
-  events(filters: ListEventInput): [Event!]!
   school(_id: ID!): School!
-  schools(filters: ListSchoolInput): [School!]!
+  schoolsConnection(after: String, before: String, first: Float): PaginatedSchools!
   subject(_id: ID!): Subject!
-  subjects(filters: ListSubjectInput): [Subject!]!
   user(_id: ID!): User!
   users(filters: ListUserInput): [User!]!
   whoAmI: User!
 }
 
+union Resource = Calendar | CalendarEvent | Event | School | Subject | User
+
 type School {
   _id: ID!
+  childrenSchools: [School!]
   createdBy: User!
+  cursor: String!
+  followerCounter: Float!
   name: String!
+  parentSchool: School
+  shortName: String!
   subjects: [Subject!]
+}
+
+type SchoolEdge {
+  cursor: String!
+  node: School!
 }
 
 type Subject {
   _id: ID!
-  calendars(populate: Boolean!): [Calendar!]!
+  calendars: [Calendar!]!
+  followerCounter: Float!
   name: String!
-  school(populate: Boolean!): School!
+  school: School!
+  shortName: String!
+  tags: [String!]!
 }
 
 input UpdateCalendarEventInput {
@@ -198,6 +220,7 @@ input UpdateEventInput {
 input UpdateSchoolInput {
   _id: ID!
   name: String
+  shortName: String
 }
 
 input UpdateSubjectInput {
@@ -219,8 +242,21 @@ input UpdateUserInput {
 type User {
   _id: ID!
   email: String
+  followerCounter: Float!
+  followingCounter: Float!
   fullName: String
   mobile: String
-  roles: [String!]
   username: String!
+}
+
+input WritePermissonsInput {
+  resourceId: ID!
+  resourceName: String!
+  role: String!
+  subjectId: ID!
+}
+
+type pageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
 }

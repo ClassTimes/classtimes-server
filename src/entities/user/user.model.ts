@@ -2,9 +2,11 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
-import { accessibleRecordsPlugin } from '@casl/mongoose'
 
 import * as Utils from '../../utils/Model'
+
+// Models
+import { School } from '../school/school.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -41,14 +43,15 @@ export class User extends Utils.BaseModel {
   @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
 
-  @GQL.Field(() => [String], { nullable: true })
-  @DB.Prop({ required: false })
-  roles: string[]
+  // Counter caches
 
-  // Relations
-  // @GQL.Field(() => Calendar, { nullable: false })
-  // @DB.Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' })
-  // calendar: mongoose.Types.ObjectId | Calendar
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followerCounter: number
+
+  @GQL.Field(() => Number)
+  @DB.Prop({ type: Number, default: 0 })
+  followingCounter: number
 }
 
 export type UserDocument = User & mongoose.Document

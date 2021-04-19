@@ -1,6 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Inject } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import { CONTEXT } from '@nestjs/graphql'
 import { Model, Types } from 'mongoose'
+import { plainToClass } from 'class-transformer'
+
+// Auth
+import { Action } from '../../casl/casl-ability.factory'
 
 // Event
 import { Event, EventDocument } from './event.model'
@@ -10,68 +15,49 @@ import {
   UpdateEventInput,
 } from './event.inputs'
 
-// Calendar
-// import { Calendar, CalendarDocument } from '../calendar/calendar.model'
+// Calendar Event
+import {
+  CalendarEvent,
+  CalendarEventDocument,
+} from '../calendarEvent/calendarEvent.model'
 
+// Service methods
+import { BaseService } from '../../utils/BaseService'
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+
+const MODEL_CLASS = Event
 @Injectable()
-export class EventService {
+export class EventService extends BaseService {
+  modelClass = MODEL_CLASS
+  dbModel: Model<EventDocument>
+  context
+
   constructor(
     @InjectModel(Event.name)
-    private model: Model<EventDocument>,
-  ) { }
-  // @InjectModel(Calendar.name)
-  // private calendar: Model<CalendarDocument>,
+    dbModel: Model<EventDocument>,
+    @InjectModel(CalendarEvent.name)
+    private calendarEventModel: Model<CalendarEventDocument>,
+    @Inject(CONTEXT) context,
+  ) {
+    super()
+    this.dbModel = dbModel
+    this.context = context
+  }
 
   async create(payload: CreateEventInput) {
-    const model = new this.model(payload)
-    // console.log('before', { model, payload })
-
-    await model.save()
-
-    // const updateResult = await this.calendar.findByIdAndUpdate(
-    //   model.calendar,
-    //   { $push: { events: model._id } },
-    //   { new: true, useFindAndModify: false },
-    // )
-
-    // console.log('event after', { updateResult })
-
-    return model
-  }
-
-  getById(_id: Types.ObjectId) {
-    return this.model.findById(_id).exec()
-  }
-
-  list(filters: ListEventInput) {
-    return this.model.find({ ...filters }).exec()
-  }
-
-  update(payload: UpdateEventInput) {
-    return this.model
-      .findByIdAndUpdate(payload._id, payload, { new: true })
+    const doc = await this.calendarEventModel
+      .findById(payload.calendarEvent)
       .exec()
+    const model = plainToClass(CalendarEvent, doc.toObject())
+    const record = new Event(model)
+    await this.checkPermissons({
+      action: Action.Create,
+      record,
+    })
+    return await this.dbModel.create(payload)
   }
 
-  async delete(_id: Types.ObjectId) {
-    let model
-    try {
-      model = await this.model.findByIdAndDelete(_id).exec()
-    } catch (error) {
-      console.error(error)
-      return
-    }
-
-    // if (model) {
-    //   const updateResult = await this.calendar.findByIdAndUpdate(
-    //     model.school,
-    //     { $pull: { events: _id } },
-    //     // { new: true, useFindAndModify: false },
-    //   )
-
-    //   console.log('delete updateResult', { updateResult })
-    // }
-
-    return model
-  }
+  // list(filters: ListEventInput) {
+  //   //  return this.model.find({ ...filters }).exec()
+  // }
 }

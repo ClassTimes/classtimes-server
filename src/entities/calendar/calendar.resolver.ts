@@ -25,19 +25,19 @@ import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 
 @Resolver(() => Calendar)
 export class CalendarResolver {
-  constructor(private service: CalendarService) { }
+  constructor(private service: CalendarService) {}
 
   @Query(() => Calendar)
   async calendar(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.getById(_id)
   }
 
-  @Query(() => [Calendar])
-  async calendars(
-    @Args('filters', { nullable: true }) filters?: ListCalendarInput,
-  ) {
-    return this.service.list(filters)
-  }
+  // @Query(() => [Calendar])
+  // async calendars(
+  //   @Args('filters', { nullable: true }) filters?: ListCalendarInput,
+  // ) {
+  //   return this.service.list(filters)
+  // }
 
   @Mutation(() => Calendar)
   async createCalendar(@Args('payload') payload: CreateCalendarInput) {
@@ -53,37 +53,4 @@ export class CalendarResolver {
   async deleteCalendar(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
   }
-
-  @ResolveField()
-  async subject(
-    @Parent() calendar: CalendarDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await calendar
-        .populate({ path: 'subject', model: Subject.name })
-        .execPopulate()
-    }
-
-    return calendar.subject
-  }
-
-  @ResolveField()
-  async calendarEvents(
-    @Parent() calendar: CalendarDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await calendar
-        .populate({ path: 'calendarEvents', model: CalendarEvent.name })
-        .execPopulate()
-    }
-
-    return calendar.calendarEvents
-  }
 }
-
-// import { Resolver } from '@nestjs/graphql';
-//
-// @Resolver()
-// export class CalendarResolver {}

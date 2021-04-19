@@ -5,6 +5,13 @@ import { Types } from 'mongoose'
 export class CreateSchoolInput {
   @Field(() => String)
   name: string
+
+  @Field(() => String, { nullable: true })
+  shortName?: string
+
+  // Relations
+  @Field(() => ID, { nullable: true })
+  parentSchool?: Types.ObjectId
 }
 
 @InputType()
@@ -23,4 +30,7 @@ export class UpdateSchoolInput {
 
   @Field(() => String, { nullable: true })
   name?: string
+
+  @Field(() => String, { nullable: true })
+  shortName?: string
 }
