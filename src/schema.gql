@@ -9,7 +9,6 @@ type Auth {
 
 type Calendar {
   _id: ID!
-  calendarEvents: [CalendarEvent!]!
   calendarEventsConnection(after: String, before: String, first: Float = 0): PaginatedCalendarEvents
   followerCounter: Float!
   name: String!

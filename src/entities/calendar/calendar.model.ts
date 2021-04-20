@@ -50,10 +50,6 @@ export class Calendar extends Utils.BaseModel {
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
-  @GQL.Field(() => [CalendarEvent])
-  @Utils.OneToMany()
-  calendarEvents: mongoose.Types.ObjectId[] | CalendarEvent[]
-
   // *
   // Connections
   // *
