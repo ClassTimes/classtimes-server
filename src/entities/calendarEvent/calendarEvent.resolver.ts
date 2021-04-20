@@ -26,12 +26,14 @@ import {
 // Services
 import { CalendarEventService } from './calendarEvent.service'
 import { EventService } from '../event/event.service'
+import { FollowerService } from '../follower/follower.service'
 
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
   constructor(
     private service: CalendarEventService,
     private eventService: EventService,
+    private followerService: FollowerService,
   ) {}
 
   @Query(() => CalendarEvent)
@@ -94,5 +96,16 @@ export class CalendarEventResolver {
   ) {
     const filters = { calendarEvent: calendarEvent._id }
     return this.eventService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async usersSubscriberConnection(
+    @Parent() calendarEvent: CalendarEventDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { resourceId: calendarEvent._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }

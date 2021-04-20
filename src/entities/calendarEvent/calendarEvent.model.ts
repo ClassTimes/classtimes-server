@@ -11,6 +11,7 @@ import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 // Entities
 import { Calendar } from '../calendar/calendar.model'
 import { Event, PaginatedEvents } from '../event/event.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -85,6 +86,9 @@ export class CalendarEvent extends Utils.BaseModel {
 
   @GQL.Field(() => PaginatedEvents, { nullable: true })
   eventsConnection: PaginatedType<Event>
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersSubscriberConnection: PaginatedType<User>
 
   // @DB.Prop({
   //   type: String,

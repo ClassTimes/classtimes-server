@@ -89,6 +89,7 @@ export abstract class BaseService {
 
   async list(filters?: any, paginationArgs?: PaginationArgs) {
     const { first, after, before } = paginationArgs
+    const limit = first ?? 0
 
     filters = filters ?? {}
     const options = {}
@@ -107,10 +108,13 @@ export abstract class BaseService {
       filters['createdAt'] = { $lt: beforeDate.toISOString() }
     }
     const result = await this.dbModel.find(filters, null, options).exec()
-    const hasNextPage = result?.length === first + 1
+    let hasNextPage = false // Default behavior for empty result
+    if (result?.length > 0) {
+      hasNextPage = result.length === first + 1
+    }
 
     // Build PaginatedSchool
-    if (hasNextPage) {
+    if (hasNextPage && first > 0) {
       result.pop()
     }
     return {

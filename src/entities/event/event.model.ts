@@ -6,11 +6,11 @@ import * as Utils from '../../utils/Model'
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { Paginated, withCursor } from '../../utils/Pagination'
+import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 
 // Entities
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-import { User } from '../user/user.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -48,13 +48,12 @@ export class Event extends Utils.BaseModel {
   })
   calendarEvent: mongoose.Types.ObjectId | CalendarEvent
 
-  // @GQL.Field(() => [User], { nullable: true })
-  // @DB.Prop({
-  //   type: [mongoose.Schema.Types.ObjectId],
-  //   ref: 'User',
-  //   required: false,
-  // })
-  // usersJoining: [mongoose.Types.ObjectId]
+  // *
+  // Connections
+  // *
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersJoiningConnection: PaginatedType<User>
 }
 
 export type EventDocument = Event & mongoose.Document

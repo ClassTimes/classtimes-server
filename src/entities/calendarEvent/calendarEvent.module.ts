@@ -8,6 +8,9 @@ import { Calendar, CalendarSchema } from '../calendar/calendar.model'
 import { EventService } from '../event/event.service'
 import { Event, EventSchema } from '../event/event.model'
 
+import { Follower, FollowerSchema } from '../follower/follower.model'
+import { FollowerService } from '../follower/follower.service'
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -23,9 +26,18 @@ import { Event, EventSchema } from '../event/event.model'
         name: Calendar.name,
         schema: CalendarSchema,
       },
+      {
+        name: Follower.name,
+        schema: FollowerSchema,
+      },
     ]),
   ],
   //  controllers: [CalendarsController],
-  providers: [CalendarEventService, CalendarEventResolver, EventService],
+  providers: [
+    CalendarEventService,
+    CalendarEventResolver,
+    EventService,
+    FollowerService,
+  ],
 })
 export class CalendarEventModule {}

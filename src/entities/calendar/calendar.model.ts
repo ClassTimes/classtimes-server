@@ -14,6 +14,7 @@ import {
   CalendarEvent,
   PaginatedCalendarEvents,
 } from '../calendarEvent/calendarEvent.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -59,6 +60,9 @@ export class Calendar extends Utils.BaseModel {
 
   @GQL.Field(() => PaginatedCalendarEvents, { nullable: true })
   calendarEventsConnection: PaginatedType<CalendarEvent>
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersFollowerConnection: PaginatedType<User>
 }
 
 export type CalendarDocument = Calendar & mongoose.Document

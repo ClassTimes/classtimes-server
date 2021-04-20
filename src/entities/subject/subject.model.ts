@@ -10,6 +10,7 @@ import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 // Entities
 import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -60,6 +61,9 @@ export class Subject extends Utils.BaseModel {
 
   @GQL.Field(() => PaginatedCalendars, { nullable: true })
   calendarsConnection: PaginatedType<Calendar>
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersFollowerConnection: PaginatedType<User>
 }
 
 export type SubjectDocument = Subject & mongoose.Document

@@ -11,6 +11,9 @@ import {
 import { Types } from 'mongoose'
 // import * as dayjs from 'dayjs'
 
+// Pagination
+import { PaginationArgs } from '../../utils/Pagination'
+
 // Event
 import { Event, EventDocument } from './event.model'
 import { EventService } from './event.service'
@@ -21,15 +24,15 @@ import {
   // CreateEventInputsSchema,
 } from './event.inputs'
 
-// CalendarEvent
-import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-
-// User
-import { User } from '../user/user.model'
+// Services
+import { FollowerService } from '../follower/follower.service'
 
 @Resolver(() => Event)
 export class EventResolver {
-  constructor(private service: EventService) {}
+  constructor(
+    private service: EventService,
+    private followerService: FollowerService,
+  ) {}
 
   @Query(() => Event)
   async event(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -76,56 +79,18 @@ export class EventResolver {
   //
   // Relations
 
-  @ResolveField()
-  async calendarEvent(
-    @Parent() event: EventDocument,
-    @Args('populate') populate: boolean,
-  ) {
-    if (populate) {
-      await event
-        .populate({ path: 'calendarEvent', model: CalendarEvent.name })
-        .execPopulate()
-    }
-
-    return event.calendarEvent
-  }
+  //
+  // Field resolvers (for connections)
+  //
 
   @ResolveField()
-  async usersJoining(
+  async usersJoiningConnection(
     @Parent() event: EventDocument,
-    @Args('populate') populate: boolean,
+    @Args() paginationArgs: PaginationArgs,
   ) {
-    if (populate) {
-      await event
-        .populate({ path: 'usersJoining', model: User.name })
-        .execPopulate()
-    }
-
-    return event.usersJoining
+    const filters = { resourceId: event._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }
-
-// import { Resolver } from '@nestjs/graphql';
-//
-// @Resolver()
-// export class EventResolver {}
-
-// const startDateUtc = dayjs(this.startDateUtc).utc()
-// if (!this.rrule) {
-//   const endDateUtc = startDateUtc.add(this.durationHours, 'hours')
-//   return endDateUtc.toDate()
-// }
-// const rule = RRule.fromString(
-//   `DTSTART:${startDateUtc.format('YYYYMMDD[T]HHmmss')}Z\nRRULE:${
-//     this.rrule
-//   }`,
-// )
-//   if(rule.count()) // || rule.options.until
-// rule.options.dtstart = start.toDate()
-// const ruleQuery = rule.between(startDateUtc, endDateUtc, false)
-// for (const ruleDate of ruleQuery) {
-//   if (ruleDate.valueOf() === start.valueOf()) {
-//     // skip same event
-//     continue
-//   }
-// }

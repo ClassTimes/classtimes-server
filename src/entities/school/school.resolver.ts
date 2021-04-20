@@ -16,6 +16,7 @@ import { PaginationArgs } from '../../utils/Pagination'
 import { School, SchoolDocument, PaginatedSchools } from './school.model'
 import { SchoolService } from './school.service'
 import { SubjectService } from '../subject/subject.service'
+import { FollowerService } from '../follower/follower.service'
 import {
   CreateSchoolInput,
   ListSchoolInput,
@@ -26,6 +27,7 @@ export class SchoolResolver {
   constructor(
     private service: SchoolService,
     private subjectService: SubjectService,
+    private followerService: FollowerService,
   ) {}
 
   @Query(() => School)
@@ -76,5 +78,16 @@ export class SchoolResolver {
   ) {
     const filters = { parentSchool: school._id }
     return this.service.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async usersFollowerConnection(
+    @Parent() school: SchoolDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { resourceId: school._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }

@@ -12,14 +12,10 @@ import { User, UserSchema } from '../user/user.model'
 import { UserService } from '../user/user.service'
 import { UserResolver } from '../user/user.resolver'
 
-import { Calendar, CalendarSchema } from '../calendar/calendar.model'
-import { CalendarService } from '../calendar/calendar.service'
-
-import {
-  CalendarEvent,
-  CalendarEventSchema,
-} from '../calendarEvent/calendarEvent.model'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+import { Follower, FollowerSchema } from '../follower/follower.model'
+import { FollowerService } from '../follower/follower.service'
+import { Following, FollowingSchema } from '../following/following.model'
+import { FollowingService } from '../following/following.service'
 
 @Module({
   imports: [
@@ -37,12 +33,12 @@ import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
         schema: UserSchema,
       },
       {
-        name: Calendar.name,
-        schema: CalendarSchema,
+        name: Follower.name,
+        schema: FollowerSchema,
       },
       {
-        name: CalendarEvent.name,
-        schema: CalendarEventSchema,
+        name: Following.name,
+        schema: FollowingSchema,
       },
     ]),
   ],
@@ -51,10 +47,10 @@ import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
     SchoolService,
     SchoolResolver,
     SubjectService,
-    CalendarService,
-    CalendarEventService,
     UserService,
     UserResolver,
+    FollowerService,
+    FollowingService,
   ],
 })
 export class SchoolModule {}

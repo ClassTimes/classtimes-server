@@ -14,6 +14,7 @@ type Calendar {
   followerCounter: Float!
   name: String!
   subject: Subject!
+  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
 type CalendarEdge {
@@ -35,6 +36,7 @@ type CalendarEvent {
   startDateUtc: DateTime!
   tags: [String!]!
   title: String!
+  usersSubscriberConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
 type CalendarEventEdge {
@@ -91,10 +93,10 @@ scalar DateTime
 
 type Event {
   _id: ID!
-  calendarEvent(populate: Boolean!): CalendarEvent!
+  calendarEvent: CalendarEvent!
   content: String!
   followerCounter: Float!
-  usersJoining(populate: Boolean!): [User!]
+  usersJoiningConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
 type EventEdge {
@@ -147,7 +149,7 @@ type Mutation {
   followUser(followeeId: ID!): Following!
   joinEvent(eventId: ID!): Following!
   loginUser(payload: LoginInput!): Auth!
-  suscribeToCalendarEvent(calendarEventId: ID!): Following!
+  subscribeToCalendarEvent(calendarEventId: ID!): Following!
   unfollowResource(resourceId: ID!): Following!
   unfollowUser(followeeId: ID!): Following!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
@@ -160,7 +162,7 @@ type Mutation {
 }
 
 type PageInfoType {
-  endCursor: String!
+  endCursor: String
   hasNextPage: Boolean!
 }
 
@@ -194,6 +196,12 @@ type PaginatedSubjects {
   totalCount: Int!
 }
 
+type PaginatedUsers {
+  edges: [UserEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
 type Permisson {
   resourceId: ID!
   resourceName: String!
@@ -206,10 +214,10 @@ type Query {
   calendarEvent(_id: ID!): CalendarEvent!
   event(_id: ID!): Event!
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): PaginatedSchools!
+  listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): PaginatedUsers!
   school(_id: ID!): School!
   subject(_id: ID!): Subject!
   user(_id: ID!): User!
-  users(filters: ListUserInput): [User!]!
   whoAmI: User!
 }
 
@@ -224,6 +232,7 @@ type School {
   parentSchool: School
   shortName: String!
   subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
+  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
 type SchoolEdge {
@@ -239,6 +248,7 @@ type Subject {
   school: School!
   shortName: String!
   tags: [String!]!
+  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
 type SubjectEdge {
@@ -295,12 +305,20 @@ input UpdateUserInput {
 
 type User {
   _id: ID!
+  calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): PaginatedUsers!
+  calendarsEventsSubscribedConnection: PaginatedCalendarEvents
+  calendarsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedCalendars
   email: String
+  eventsJoiningConnection(after: String, before: String, first: Float = 0): PaginatedEvents
   followerCounter: Float!
   followingCounter: Float!
   fullName: String
   mobile: String
+  schoolsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedSchools
+  subjectsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
   username: String!
+  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  usersFollowingConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
 type UserEdge {

@@ -11,7 +11,7 @@ import { Base64 } from 'js-base64'
 
 @ObjectType()
 class PageInfoType {
-  @Field((type) => String)
+  @Field((type) => String, { nullable: true })
   endCursor: string
 
   @Field((type) => Boolean)
@@ -87,8 +87,11 @@ export const fromCursorHash = (str: string) => Base64.decode(str)
 export const withCursor = function (schema: mongoose.Schema) {
   schema.index({ createdAt: 1 })
   schema.virtual('cursor').get(function () {
-    const date = new Date(this.createdAt)
-    return toCursorHash(date.toISOString())
+    if (this.createdAt) {
+      const date = new Date(this.createdAt)
+      return toCursorHash(date.toISOString())
+    }
+    return null
   })
   return schema
 }

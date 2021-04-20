@@ -9,7 +9,7 @@ import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 
 // Entities
 import { Subject, PaginatedSubjects } from '../subject/subject.model'
-import { User } from '../user/user.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -58,6 +58,9 @@ export class School extends Utils.BaseModel {
 
   @GQL.Field(() => PaginatedSubjects, { nullable: true })
   subjectsConnection: PaginatedType<Subject>
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersFollowerConnection: PaginatedType<User>
 
   @GQL.Field(() => PaginatedSchools, { nullable: true })
   childrenSchoolsConnection: PaginatedType<School>

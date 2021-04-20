@@ -23,12 +23,14 @@ import {
 // Services
 import { SubjectService } from './subject.service'
 import { CalendarService } from '../calendar/calendar.service'
+import { FollowerService } from '../follower/follower.service'
 
 @Resolver(() => Subject)
 export class SubjectResolver {
   constructor(
     private service: SubjectService,
     private calendarService: CalendarService,
+    private followerService: FollowerService,
   ) {}
 
   @Query(() => Subject)
@@ -69,5 +71,16 @@ export class SubjectResolver {
   ) {
     const filters = { subject: subject._id }
     return this.calendarService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async usersFollowerConnection(
+    @Parent() subject: SubjectDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { resourceId: subject._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }

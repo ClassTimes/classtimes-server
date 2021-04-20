@@ -5,6 +5,9 @@ import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
+// Pagination
+import { withCursor } from '../../utils/Pagination'
+
 import * as Utils from '../../utils/Model'
 import { School, SchoolSchema } from '../school/school.model'
 import { Subject } from '../subject/subject.model'
@@ -56,7 +59,14 @@ export class Following extends Utils.BaseModel {
     localField: 'resourceId',
     foreignField: '_id',
   })
-  resource: mongoose.Types.ObjectId
+  resource:
+    | mongoose.Types.ObjectId
+    | User
+    | School
+    | Subject
+    | Calendar
+    | CalendarEvent
+    | Event
 
   @GQL.Field(() => String)
   @DB.Prop({ required: true })
@@ -78,7 +88,7 @@ export class Following extends Utils.BaseModel {
 }
 
 export type FollowingDocument = Following & mongoose.Document
-export const FollowingSchema = Following.schema
+export const FollowingSchema = withCursor(Following.schema)
 FollowingSchema.index({ followerId: 1, resourceId: 1 }, { unique: true })
 
 // FollowingSchema.virtual('resource', {
