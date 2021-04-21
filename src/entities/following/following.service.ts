@@ -62,7 +62,7 @@ export class FollowingService {
     })
 
     const paginatedResult = {
-      edges: result.map((doc) => {
+      edges: result?.map((doc) => {
         return {
           node: doc.resource, // Tengo que hacer algun tipo de type assertion aca...
           cursor: (doc as any).cursor,
