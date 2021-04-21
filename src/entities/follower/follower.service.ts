@@ -60,7 +60,7 @@ export class FollowerService {
     })
 
     const paginatedResult = {
-      edges: result.map((doc) => {
+      edges: result?.map((doc) => {
         return {
           node: doc.follower,
           cursor: (doc as any).cursor,
