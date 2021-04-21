@@ -21,7 +21,7 @@ import {
 
 const MODEL_CLASS = Subject
 @Injectable()
-export class SubjectService extends BaseService {
+export class SubjectService extends BaseService<Subject> {
   modelClass = MODEL_CLASS
   dbModel: Model<SubjectDocument>
   context

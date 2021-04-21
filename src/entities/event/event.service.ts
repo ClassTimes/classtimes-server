@@ -27,7 +27,7 @@ import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 
 const MODEL_CLASS = Event
 @Injectable()
-export class EventService extends BaseService {
+export class EventService extends BaseService<Event> {
   modelClass = MODEL_CLASS
   dbModel: Model<EventDocument>
   context

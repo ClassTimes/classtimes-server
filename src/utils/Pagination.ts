@@ -41,16 +41,96 @@ export function Paginated<T>(classRef: Type<T>): any {
   return PaginatedType
 }
 
+// *
+// *
+// Pagination object
+// *
+// *
 export interface PaginatedType<T> {
   edges: {
     cursor?: string
     node: T
-  }
+  }[]
   pageInfo?: {
     endCursor?: string
     hasNextPage?: boolean
   }
   totalCount?: number
+}
+
+export interface PaginatedResult<T> {
+  result: T[]
+  hasNextPage: boolean
+}
+
+interface PaginationOptions {
+  dbModel: any // Mejorar esto
+  filters?: any
+  first?: number
+  after?: string
+  before?: string
+}
+
+export async function getConnection<T>(
+  options: PaginationOptions,
+): Promise<PaginatedType<T>> {
+  const { result, hasNextPage } = await getPaginatedResults<T>(options)
+  return buildConnection(result, hasNextPage)
+}
+
+export async function getPaginatedResults<T>(
+  options: PaginationOptions,
+): Promise<PaginatedResult<T>> {
+  const { dbModel, filters, first, after, before } = options
+
+  const limit = first ?? 0
+  const queryFilters = filters ?? {}
+  const queryOptions = {}
+
+  if (limit > 0) {
+    // In order to check if there is a next page, fetch one extra record
+    queryOptions['limit'] = limit + 1
+  }
+
+  // 'before' and 'after' are mutually exclusive. Because of this:
+  if (after) {
+    const afterDate = new Date(fromCursorHash(after))
+    queryFilters['createdAt'] = { $gt: afterDate.toISOString() }
+  } else if (before) {
+    const beforeDate = new Date(fromCursorHash(before))
+    queryFilters['createdAt'] = { $lt: beforeDate.toISOString() }
+  }
+  const result = await dbModel.find(queryFilters, null, queryOptions).exec()
+
+  let hasNextPage = false // Default behavior for empty result
+  if (result?.length > 0) {
+    hasNextPage = result.length === first + 1
+  }
+
+  if (hasNextPage && limit > 0) {
+    result.pop()
+  }
+
+  return { result, hasNextPage }
+}
+
+export function buildConnection<T>(
+  documents: Array<T>,
+  hasNextPage: boolean,
+): PaginatedType<T> {
+  return {
+    edges: documents.map((doc) => {
+      return {
+        node: doc,
+        cursor: (doc as any).cursor, // TODO: Remove this 'any' in favor of the correct type
+      }
+    }),
+    totalCount: documents?.length,
+    pageInfo: {
+      endCursor: (documents[documents.length - 1] as any)?.cursor,
+      hasNextPage,
+    },
+  }
 }
 
 // *
