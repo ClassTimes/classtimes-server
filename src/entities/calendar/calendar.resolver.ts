@@ -9,6 +9,9 @@ import {
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
+// Pagination
+import { PaginationArgs } from '../../utils/Pagination'
+
 // Calendar
 import { Calendar, CalendarDocument } from './calendar.model'
 import { CalendarService } from './calendar.service'
@@ -20,12 +23,16 @@ import {
 } from './calendar.inputs'
 
 // Model
-import { Subject } from '../subject/subject.model'
-import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+import { FollowerService } from '../follower/follower.service'
 
 @Resolver(() => Calendar)
 export class CalendarResolver {
-  constructor(private service: CalendarService) {}
+  constructor(
+    private service: CalendarService,
+    private calendarEventService: CalendarEventService,
+    private followerService: FollowerService,
+  ) {}
 
   @Query(() => Calendar)
   async calendar(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -52,5 +59,29 @@ export class CalendarResolver {
   @Mutation(() => Calendar, { nullable: true })
   async deleteCalendar(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
+  }
+
+  //
+  // Field resolvers (for connections)
+  //
+
+  @ResolveField()
+  async calendarEventsConnection(
+    @Parent() calendar: CalendarDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { calendar: calendar._id }
+    return this.calendarEventService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async usersFollowerConnection(
+    @Parent() calendar: CalendarDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { resourceId: calendar._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }

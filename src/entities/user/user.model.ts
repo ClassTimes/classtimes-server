@@ -2,11 +2,19 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
-
+import autopopulate from 'mongoose-autopopulate'
+import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 import * as Utils from '../../utils/Model'
 
-// Models
-import { School } from '../school/school.model'
+// Entities
+import { School, PaginatedSchools } from '../school/school.model'
+import { Subject, PaginatedSubjects } from '../subject/subject.model'
+import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
+import {
+  CalendarEvent,
+  PaginatedCalendarEvents,
+} from '../calendarEvent/calendarEvent.model'
+import { Event, PaginatedEvents } from '../event/event.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -52,10 +60,39 @@ export class User extends Utils.BaseModel {
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
   followingCounter: number
+
+  // *
+  // Connections
+  // *
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersFollowerConnection: PaginatedType<User>
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersFollowingConnection: PaginatedType<User>
+
+  @GQL.Field(() => PaginatedSchools, { nullable: true })
+  schoolsFollowingConnection: PaginatedType<School>
+
+  @GQL.Field(() => PaginatedSubjects, { nullable: true })
+  subjectsFollowingConnection: PaginatedType<Subject>
+
+  @GQL.Field(() => PaginatedCalendars, { nullable: true })
+  calendarsFollowingConnection: PaginatedType<Calendar>
+
+  @GQL.Field(() => PaginatedCalendarEvents, { nullable: true })
+  calendarsEventsSubscribedConnection: PaginatedType<CalendarEvent>
+
+  @GQL.Field(() => PaginatedEvents, { nullable: true })
+  eventsJoiningConnection: PaginatedType<Event>
 }
 
 export type UserDocument = User & mongoose.Document
-export const UserSchema = User.schema
+export const UserSchema = withCursor(User.schema)
+UserSchema.plugin(autopopulate)
+
+@GQL.ObjectType()
+export class PaginatedUsers extends Paginated(User) {}
 
 // UserSchema.index({ field1: 1, field2: 1 }, { unique: true })
 

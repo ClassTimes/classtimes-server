@@ -11,9 +11,11 @@ import {
 import { Types } from 'mongoose'
 import dayjs from 'dayjs'
 
+// Pagination
+import { PaginationArgs } from '../../utils/Pagination'
+
 // CalendarEvent
 import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
-import { CalendarEventService } from './calendarEvent.service'
 import {
   CreateCalendarEventInput,
   ListCalendarEventInput,
@@ -21,9 +23,18 @@ import {
   // CreateCalendarEventInputsSchema,
 } from './calendarEvent.inputs'
 
+// Services
+import { CalendarEventService } from './calendarEvent.service'
+import { EventService } from '../event/event.service'
+import { FollowerService } from '../follower/follower.service'
+
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
-  constructor(private service: CalendarEventService) {}
+  constructor(
+    private service: CalendarEventService,
+    private eventService: EventService,
+    private followerService: FollowerService,
+  ) {}
 
   @Query(() => CalendarEvent)
   async calendarEvent(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -73,5 +84,28 @@ export class CalendarEventResolver {
     })
 
     return _endDateUtc.toDate()
+  }
+
+  //
+  // Connection resolvers
+  //
+  @ResolveField()
+  async eventsConnection(
+    @Parent() calendarEvent: CalendarEventDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { calendarEvent: calendarEvent._id }
+    return this.eventService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async usersSubscriberConnection(
+    @Parent() calendarEvent: CalendarEventDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { resourceId: calendarEvent._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }

@@ -1,11 +1,16 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
+import autopopulate from 'mongoose-autopopulate'
+import * as Utils from '../../utils/Model'
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
-import * as Utils from '../../utils/Model'
-import { User } from '../user/user.model'
+// Pagination
+import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+
+// Entities
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -27,11 +32,14 @@ export class Event extends Utils.BaseModel {
   @V.MinLength(10)
   content: string
 
+  //
+  // Relations
+  //
+
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
-  // Relations
   @GQL.Field(() => CalendarEvent, { nullable: false })
   @DB.Prop({
     type: mongoose.Schema.Types.ObjectId,
@@ -40,14 +48,17 @@ export class Event extends Utils.BaseModel {
   })
   calendarEvent: mongoose.Types.ObjectId | CalendarEvent
 
-  @GQL.Field(() => [User], { nullable: true })
-  @DB.Prop({
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
-    required: false,
-  })
-  usersJoining: [mongoose.Types.ObjectId]
+  // *
+  // Connections
+  // *
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersJoiningConnection: PaginatedType<User>
 }
 
 export type EventDocument = Event & mongoose.Document
-export const EventSchema = Event.schema
+export const EventSchema = withCursor(Event.schema)
+EventSchema.plugin(autopopulate)
+
+@GQL.ObjectType()
+export class PaginatedEvents extends Paginated(Event) {}

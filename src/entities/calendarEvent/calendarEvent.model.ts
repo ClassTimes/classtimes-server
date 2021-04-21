@@ -1,12 +1,17 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
-
+import autopopulate from 'mongoose-autopopulate'
+import * as Utils from '../../utils/Model'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
-import * as Utils from '../../utils/Model'
-import { Event } from '../event/event.model'
+// Pagination
+import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+
+// Entities
 import { Calendar } from '../calendar/calendar.model'
+import { Event, PaginatedEvents } from '../event/event.model'
+import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -59,9 +64,31 @@ export class CalendarEvent extends Utils.BaseModel {
   @DB.Prop({ required: false })
   exceptionsDatesUtc: Date[]
 
+  // *
+  // Relations
+  // *
+
   @GQL.Field(() => Number)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
+
+  @GQL.Field(() => Calendar, { nullable: false })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Calendar',
+    autopopulate: true,
+  })
+  calendar: mongoose.Types.ObjectId | Calendar
+
+  // *
+  // Connections
+  // *
+
+  @GQL.Field(() => PaginatedEvents, { nullable: true })
+  eventsConnection: PaginatedType<Event>
+
+  @GQL.Field(() => PaginatedUsers, { nullable: true })
+  usersSubscriberConnection: PaginatedType<User>
 
   // @DB.Prop({
   //   type: String,
@@ -71,23 +98,14 @@ export class CalendarEvent extends Utils.BaseModel {
   // kind: string
 
   // TODO Person(studend) is Attending a class / not attending? (make friends! and chat)
-
-  // Relations
-  @GQL.Field(() => Calendar, { nullable: false })
-  @DB.Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Calendar',
-    autopopulate: true,
-  })
-  calendar: mongoose.Types.ObjectId | Calendar
-
-  @GQL.Field(() => [Event])
-  @Utils.OneToMany()
-  events: mongoose.Types.ObjectId[] | Event[]
 }
 
 export type CalendarEventDocument = CalendarEvent & mongoose.Document
-export const CalendarEventSchema = CalendarEvent.schema
+export const CalendarEventSchema = withCursor(CalendarEvent.schema)
+CalendarEventSchema.plugin(autopopulate)
+
+@GQL.ObjectType()
+export class PaginatedCalendarEvents extends Paginated(CalendarEvent) {}
 
 //
 // # Reference Link

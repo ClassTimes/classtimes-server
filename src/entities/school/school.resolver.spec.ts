@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { SchoolResolver } from './entities/school.resolver'
+import { SchoolResolver } from './school.resolver'
 
 describe('SchoolResolver', () => {
   let resolver: SchoolResolver

@@ -10,6 +10,9 @@ import {
 } from '../calendarEvent/calendarEvent.model'
 // import { User, UserSchema } from '../user/user.model'
 
+import { Follower, FollowerSchema } from '../follower/follower.model'
+import { FollowerService } from '../follower/follower.service'
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -21,16 +24,16 @@ import {
         name: CalendarEvent.name,
         schema: CalendarEventSchema,
       },
-      // {
-      //   name: User.name,
-      //   schema: UserSchema,
-      // },
+      {
+        name: Follower.name,
+        schema: FollowerSchema,
+      },
     ]),
   ],
-  //  controllers: [EventController],
   providers: [
     EventService,
     EventResolver,
+    FollowerService,
     // {
     //   provide: getModelToken(Event.name),
     //   useValue: eventModel,

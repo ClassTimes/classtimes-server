@@ -6,9 +6,13 @@ import { CurrentUser } from '../../auth/currentUser'
 import mongoose from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
 import * as bcrypt from 'bcrypt'
+import { BaseService } from '../../utils/BaseService'
+
+// Pagination
+import { fromCursorHash, PaginationArgs } from '../../utils/Pagination'
 
 // User
-import { User, UserSchema, UserDocument } from './user.model'
+import { User, UserDocument } from './user.model'
 import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
 // Calendar
@@ -67,7 +71,7 @@ export class UserService {
     return model
   }
 
-  findByEmailOrUsername(
+  async findByEmailOrUsername(
     emailOrUsername: string, //Types.ObjectId |
   ): Promise<User | undefined> {
     const conditions = []
@@ -82,15 +86,57 @@ export class UserService {
     return this.model.findOne().or(conditions).exec()
   }
 
-  getById(_id: mongoose.Types.ObjectId) {
+  async getById(_id: mongoose.Types.ObjectId) {
     return this.model.findById(_id).exec()
   }
 
-  list(filters: ListUserInput) {
-    return this.model.find({ ...filters }).exec()
+  async list(filters?: ListUserInput, paginationArgs?: PaginationArgs) {
+    const { first, after, before } = paginationArgs
+    const limit = first ?? 0
+
+    filters = filters ?? {}
+    const options = {}
+
+    if (first) {
+      // In order to check if there is a next page, fetch one extra record
+      options['limit'] = first + 1
+    }
+
+    // 'before' and 'after' are mutually exclusive. Because of this:
+    if (after) {
+      const afterDate = new Date(fromCursorHash(after))
+      filters['createdAt'] = { $gt: afterDate.toISOString() }
+    } else if (before) {
+      const beforeDate = new Date(fromCursorHash(before))
+      filters['createdAt'] = { $lt: beforeDate.toISOString() }
+    }
+    const result = await this.model.find(filters, null, options).exec()
+    let hasNextPage = false // Default behavior for empty result
+    if (result?.length > 0) {
+      hasNextPage = result.length === first + 1
+    }
+
+    // Build PaginatedSchool
+    if (hasNextPage && limit > 0) {
+      result.pop()
+    }
+    return {
+      edges: result.map((doc) => {
+        return {
+          node: doc,
+          cursor: (doc as any).cursor, // TODO: Remove this 'any' in favor of the correct type
+        }
+      }),
+      totalCount: result?.length,
+      pageInfo: {
+        endCursor: (result[result.length - 1] as any)?.cursor,
+
+        hasNextPage,
+      },
+    }
   }
 
-  update(payload: UpdateUserInput) {
+  async update(payload: UpdateUserInput) {
     return this.model
       .findByIdAndUpdate(payload._id, payload, { new: true })
       .exec()

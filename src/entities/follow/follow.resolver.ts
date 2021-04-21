@@ -106,7 +106,7 @@ export class FollowResolver {
   }
 
   @Mutation(() => Following)
-  async suscribeToCalendarEvent(
+  async subscribeToCalendarEvent(
     @Args('calendarEventId', { type: () => ID })
     calendarEventId: Types.ObjectId,
     @CurrentUser() user: User,

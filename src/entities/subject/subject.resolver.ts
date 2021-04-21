@@ -9,25 +9,29 @@ import {
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
-import { CheckPolicies } from '../../casl/policy.guard'
-import { AppAbility, Action } from '../../casl/casl-ability.factory'
+// Pagination
+import { PaginationArgs } from '../../utils/Pagination'
 
-// School
+// Subject
 import { Subject, SubjectDocument } from './subject.model'
-import { SubjectService } from './subject.service'
 import {
   CreateSubjectInput,
   ListSubjectInput,
   UpdateSubjectInput,
 } from './subject.inputs'
 
-// Relations models
-import { Calendar } from '../calendar/calendar.model'
-import { School } from '../school/school.model'
+// Services
+import { SubjectService } from './subject.service'
+import { CalendarService } from '../calendar/calendar.service'
+import { FollowerService } from '../follower/follower.service'
 
 @Resolver(() => Subject)
 export class SubjectResolver {
-  constructor(private service: SubjectService) {}
+  constructor(
+    private service: SubjectService,
+    private calendarService: CalendarService,
+    private followerService: FollowerService,
+  ) {}
 
   @Query(() => Subject)
   async subject(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
@@ -54,5 +58,29 @@ export class SubjectResolver {
   @Mutation(() => Subject)
   async deleteSubject(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.delete(_id)
+  }
+
+  //
+  // Field resolvers (for connections)
+  //
+
+  @ResolveField()
+  async calendarsConnection(
+    @Parent() subject: SubjectDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { subject: subject._id }
+    return this.calendarService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async usersFollowerConnection(
+    @Parent() subject: SubjectDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { resourceId: subject._id.toString() }
+    const result = this.followerService.list(filters, paginationArgs)
+    // TODO: Is it necessary to filter by resourceName as well?
+    return result
   }
 }
