@@ -18,7 +18,7 @@ import { User, UserDocument } from '../user/user.model'
 import { WritePermissonsInput } from './permisson.inputs'
 
 @Injectable()
-export class PermissonService extends BaseService {
+export class PermissonService extends BaseService<any> {
   modelClass: any
   dbModel: any // Not using it
   context

@@ -19,7 +19,7 @@ import {
 
 const MODEL_CLASS = School
 @Injectable()
-export class SchoolService extends BaseService {
+export class SchoolService extends BaseService<School> {
   modelClass = MODEL_CLASS
   dbModel: Model<SchoolDocument>
   context

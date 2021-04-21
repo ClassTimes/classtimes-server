@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer'
 import { Model, Types, Document } from 'mongoose'
 
 // Pagination
-import { fromCursorHash, PaginationArgs } from '../utils/Pagination'
+import { PaginationArgs, getConnection } from '../utils/Pagination'
 
 // Auth
 import { ForbiddenError } from '@casl/ability'
@@ -12,9 +12,8 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory'
 
 // User
 import { User } from '../entities/user/user.model'
-import { School } from '../entities/school/school.model'
 @Injectable()
-export abstract class BaseService {
+export abstract class BaseService<ResourceModel> {
   abstract dbModel: any // mongoose.Model<mongoose.Document>
   abstract modelClass: any //{ new (): any }
   abstract context: any //{ new (): any }
@@ -89,47 +88,15 @@ export abstract class BaseService {
 
   async list(filters?: any, paginationArgs?: PaginationArgs) {
     const { first, after, before } = paginationArgs
-    const limit = first ?? 0
 
-    filters = filters ?? {}
-    const options = {}
+    const connection = await getConnection<ResourceModel>({
+      dbModel: this.dbModel,
+      filters,
+      first,
+      after,
+      before,
+    })
 
-    if (first) {
-      // In order to check if there is a next page, fetch one extra record
-      options['limit'] = first + 1
-    }
-
-    // 'before' and 'after' are mutually exclusive. Because of this:
-    if (after) {
-      const afterDate = new Date(fromCursorHash(after))
-      filters['createdAt'] = { $gt: afterDate.toISOString() }
-    } else if (before) {
-      const beforeDate = new Date(fromCursorHash(before))
-      filters['createdAt'] = { $lt: beforeDate.toISOString() }
-    }
-    const result = await this.dbModel.find(filters, null, options).exec()
-    let hasNextPage = false // Default behavior for empty result
-    if (result?.length > 0) {
-      hasNextPage = result.length === first + 1
-    }
-
-    // Build PaginatedSchool
-    if (hasNextPage && first > 0) {
-      result.pop()
-    }
-    return {
-      edges: result.map((doc) => {
-        return {
-          node: doc,
-          cursor: doc.cursor,
-        }
-      }),
-      totalCount: result?.length,
-      pageInfo: {
-        endCursor: result[result.length - 1]?.cursor,
-
-        hasNextPage,
-      },
-    }
+    return connection
   }
 }

@@ -8,7 +8,7 @@ import { plainToClass } from 'class-transformer'
 // import { Action } from '../../casl/casl-ability.factory'
 
 // Pagination
-import { fromCursorHash, PaginationArgs } from '../../utils/Pagination'
+import { PaginationArgs, getPaginatedResults } from '../../utils/Pagination'
 
 // Entities
 import { User } from '../user/user.model'
@@ -52,38 +52,17 @@ export class FollowingService {
 
   async list(filters?: any, paginationArgs?: PaginationArgs) {
     const { first, after, before } = paginationArgs
-    const limit = first ?? 0
 
-    filters = filters ?? {}
-    const options = {}
-
-    if (first) {
-      // In order to check if there is a next page, fetch one extra record
-      options['limit'] = first + 1
-    }
-
-    // 'before' and 'after' are mutually exclusive. Because of this:
-    if (after) {
-      const afterDate = new Date(fromCursorHash(after))
-      filters['createdAt'] = { $gt: afterDate.toISOString() }
-    } else if (before) {
-      const beforeDate = new Date(fromCursorHash(before))
-      filters['createdAt'] = { $lt: beforeDate.toISOString() }
-    }
-    const result = await this.dbModel.find(filters, null, options).exec()
-    let hasNextPage = false // Default behavior for empty result
-    if (result?.length > 0) {
-      hasNextPage = result.length === limit + 1
-    }
-
-    // Build PaginatedSchool
-    if (hasNextPage && limit > 0) {
-      result.pop()
-    }
+    const { result, hasNextPage } = await getPaginatedResults<Following>({
+      dbModel: this.dbModel,
+      filters,
+      first,
+      after,
+      before,
+    })
 
     const paginatedResult = {
-      edges: result.map((doc) => {
-        console.log(doc.resourceName)
+      edges: result?.map((doc) => {
         return {
           node: doc.resource, // Tengo que hacer algun tipo de type assertion aca...
           cursor: (doc as any).cursor,
