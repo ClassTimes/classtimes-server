@@ -9,6 +9,7 @@ import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 
 // Entities
 import { Subject, PaginatedSubjects } from '../subject/subject.model'
+import { Institute, PaginatedInstitutes } from '../institute/institute.model'
 import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
@@ -36,11 +37,11 @@ export class School extends Utils.BaseModel {
   })
   createdBy: mongoose.Types.ObjectId | User
 
-  // *
-  // Relations
-  // *
+  /*
+   *  Relations
+   */
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
@@ -52,12 +53,15 @@ export class School extends Utils.BaseModel {
   })
   parentSchool: mongoose.Types.ObjectId | School
 
-  // *
-  // Connections
-  // *
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedSubjects, { nullable: true })
   subjectsConnection: PaginatedType<Subject>
+
+  @GQL.Field(() => PaginatedInstitutes, { nullable: true })
+  institutesConnection: PaginatedType<Institute>
 
   @GQL.Field(() => PaginatedUsers, { nullable: true })
   usersFollowerConnection: PaginatedType<User>

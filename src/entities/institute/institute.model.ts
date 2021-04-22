@@ -3,17 +3,13 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
-// import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
 import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 
 // Entities
-import { Subject } from '../subject/subject.model'
-import {
-  CalendarEvent,
-  PaginatedCalendarEvents,
-} from '../calendarEvent/calendarEvent.model'
+import { School } from '../school/school.model'
+import { Subject, PaginatedSubjects } from '../subject/subject.model'
 import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
@@ -21,10 +17,10 @@ import { User, PaginatedUsers } from '../user/user.model'
   timestamps: true,
   // autoIndex: true
 })
-export class Calendar extends Utils.BaseModel {
-  constructor(subject: Subject) {
+export class Institute extends Utils.BaseModel {
+  constructor(school?: School) {
     super()
-    this.subject = subject
+    this.school = school
   }
 
   @GQL.Field(() => GQL.ID)
@@ -34,36 +30,47 @@ export class Calendar extends Utils.BaseModel {
   @DB.Prop()
   name: string
 
+  @GQL.Field(() => String)
+  @DB.Prop()
+  shortName: string
+
+  @GQL.Field(() => User, { nullable: false })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    autopopulate: true,
+  })
+  createdBy: mongoose.Types.ObjectId | User
+
   /*
    *  Relations
    */
-
-  @GQL.Field(() => Subject)
-  @DB.Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Subject',
-    autopopulate: true,
-  })
-  subject: mongoose.Types.ObjectId | Subject
 
   @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
+  @GQL.Field(() => School, { nullable: true })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'School',
+    autopopulate: true,
+  })
+  school: mongoose.Types.ObjectId | School
+
   /*
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedCalendarEvents, { nullable: true })
-  calendarEventsConnection: PaginatedType<CalendarEvent>
+  @GQL.Field(() => PaginatedSubjects, { nullable: true })
+  subjectsConnection: PaginatedType<Subject>
 
   @GQL.Field(() => PaginatedUsers, { nullable: true })
   usersFollowerConnection: PaginatedType<User>
 }
 
-export type CalendarDocument = Calendar & mongoose.Document
-export const CalendarSchema = withCursor(Calendar.schema)
-CalendarSchema.plugin(autopopulate)
-
+export type InstituteDocument = Institute & mongoose.Document
+export const InstituteSchema = withCursor(Institute.schema)
+InstituteSchema.plugin(autopopulate)
 @GQL.ObjectType()
-export class PaginatedCalendars extends Paginated(Calendar) {}
+export class PaginatedInstitutes extends Paginated(Institute) {}

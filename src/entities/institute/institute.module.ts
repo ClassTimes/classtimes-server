@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { SchoolService } from './school.service'
-import { School, SchoolSchema } from './school.model'
-import { SchoolResolver } from './school.resolver'
+import { InstituteService } from './institute.service'
+import { Institute, InstituteSchema } from './institute.model'
+import { InstituteResolver } from './institute.resolver'
+
+import { SchoolService } from '../school/school.service'
+import { School, SchoolSchema } from '../school/school.model'
+import { SchoolResolver } from '../school/school.resolver'
 
 import { Subject, SubjectSchema } from '../subject/subject.model'
 import { SubjectService } from '../subject/subject.service'
-
-import { Institute, InstituteSchema } from '../institute/institute.model'
-import { InstituteService } from '../institute/institute.service'
 
 import { User, UserSchema } from '../user/user.model'
 import { UserService } from '../user/user.service'
@@ -24,16 +25,16 @@ import { FollowingService } from '../following/following.service'
   imports: [
     MongooseModule.forFeature([
       {
+        name: Institute.name,
+        schema: InstituteSchema,
+      },
+      {
         name: School.name,
         schema: SchoolSchema,
       },
       {
         name: Subject.name,
         schema: SubjectSchema,
-      },
-      {
-        name: Institute.name,
-        schema: InstituteSchema,
       },
       {
         name: User.name,
@@ -51,14 +52,14 @@ import { FollowingService } from '../following/following.service'
   ],
   //   controllers: [SchoolsController],
   providers: [
-    SchoolService,
-    SchoolResolver,
-    SubjectService,
     InstituteService,
+    InstituteResolver,
+    SchoolService,
+    SubjectService,
     UserService,
     UserResolver,
     FollowerService,
     FollowingService,
   ],
 })
-export class SchoolModule {}
+export class InstituteModule {}

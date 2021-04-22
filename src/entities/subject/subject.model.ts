@@ -10,6 +10,7 @@ import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 // Entities
 import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
+import { Institute } from '../institute/institute.model'
 import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
@@ -18,9 +19,10 @@ import { User, PaginatedUsers } from '../user/user.model'
   // autoIndex: true
 })
 export class Subject extends Utils.BaseModel {
-  constructor(school?: School) {
+  constructor(school?: School, institute?: Institute) {
     super()
     this.school = school
+    this.institute = institute
   }
 
   @GQL.Field(() => GQL.ID)
@@ -39,11 +41,11 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop({ default: [] })
   tags: string[]
 
-  // *
-  // Relations
-  // *
+  /*
+   * Relations
+   */
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
@@ -55,9 +57,17 @@ export class Subject extends Utils.BaseModel {
   })
   school: mongoose.Types.ObjectId | School
 
-  // *
-  // Connections
-  // *
+  @GQL.Field(() => Institute)
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Institute',
+    autopopulate: true,
+  })
+  institute: mongoose.Types.ObjectId | Institute
+
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedCalendars, { nullable: true })
   calendarsConnection: PaginatedType<Calendar>

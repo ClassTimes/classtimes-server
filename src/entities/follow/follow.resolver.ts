@@ -25,6 +25,7 @@ import { FollowingService } from '../following/following.service'
 // Resource services
 import { SchoolService } from '../school/school.service'
 import { SubjectService } from '../subject/subject.service'
+import { InstituteService } from '../institute/institute.service'
 import { CalendarService } from '../calendar/calendar.service'
 import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 import { EventService } from '../event/event.service'
@@ -37,6 +38,7 @@ export class FollowResolver {
     private followingService: FollowingService,
     private schoolService: SchoolService,
     private subjectService: SubjectService,
+    private instituteService: InstituteService,
     private calendarService: CalendarService,
     private calendarEventService: CalendarEventService,
     private eventService: EventService,
@@ -60,6 +62,10 @@ export class FollowResolver {
       case 'School':
         // update subject followingCount
         this.subjectService.increaseFollowingCount(resourceId)
+        break
+      case 'Institute':
+        // update subject followingCount
+        this.instituteService.increaseFollowingCount(resourceId)
         break
       case 'Calendar':
         // update calendar followingCount
@@ -95,6 +101,14 @@ export class FollowResolver {
     @CurrentUser() user: User,
   ) {
     return this.createFollowForResource('Subject', subjectId, user._id)
+  }
+
+  @Mutation(() => Following)
+  async followInstitute(
+    @Args('instituteId', { type: () => ID }) instituteId: Types.ObjectId,
+    @CurrentUser() user: User,
+  ) {
+    return this.createFollowForResource('Institute', instituteId, user._id)
   }
 
   @Mutation(() => Following)
@@ -176,6 +190,10 @@ export class FollowResolver {
       case 'Subject':
         // update subject followingCount
         this.subjectService.decreaseFollowingCount(resourceId)
+        break
+      case 'Institute':
+        // update subject followingCount
+        this.instituteService.decreaseFollowingCount(resourceId)
         break
       case 'Calendar':
         // update calendar followingCount

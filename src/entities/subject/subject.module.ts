@@ -9,6 +9,7 @@ import { CalendarService } from '../calendar/calendar.service'
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
 
 import { School, SchoolSchema } from '../school/school.model'
+import { Institute, InstituteSchema } from '../institute/institute.model'
 
 import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 import {
@@ -23,12 +24,16 @@ import { FollowerService } from '../follower/follower.service'
   imports: [
     MongooseModule.forFeature([
       {
+        name: School.name,
+        schema: SchoolSchema,
+      },
+      {
         name: Subject.name,
         schema: SubjectSchema,
       },
       {
-        name: School.name,
-        schema: SchoolSchema,
+        name: Institute.name,
+        schema: InstituteSchema,
       },
       {
         name: Calendar.name,

@@ -9,8 +9,9 @@ import autopopulate from 'mongoose-autopopulate'
 import { withCursor } from '../../utils/Pagination'
 
 import * as Utils from '../../utils/Model'
-import { School, SchoolSchema } from '../school/school.model'
+import { School } from '../school/school.model'
 import { Subject } from '../subject/subject.model'
+import { Institute } from '../institute/institute.model'
 import { Calendar } from '../calendar/calendar.model'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 import { Event } from '../event/event.model'
@@ -18,13 +19,23 @@ import { User } from '../user/user.model'
 
 const Resource = GQL.createUnionType({
   name: 'Resource',
-  types: () => [School, Subject, Calendar, CalendarEvent, Event, User],
+  types: () => [
+    School,
+    Subject,
+    Institute,
+    Calendar,
+    CalendarEvent,
+    Event,
+    User,
+  ],
   resolveType(value) {
     switch (value.collection.collectionName) {
       case 'schools':
         return School
       case 'subjects':
         return Subject
+      case 'institutes':
+        return Institute
       case 'calendars':
         return Calendar
       case 'calendarEventss':
@@ -64,6 +75,7 @@ export class Following extends Utils.BaseModel {
     | User
     | School
     | Subject
+    | Institute
     | Calendar
     | CalendarEvent
     | Event
@@ -90,23 +102,4 @@ export class Following extends Utils.BaseModel {
 export type FollowingDocument = Following & mongoose.Document
 export const FollowingSchema = withCursor(Following.schema)
 FollowingSchema.index({ followerId: 1, resourceId: 1 }, { unique: true })
-
-// FollowingSchema.virtual('resource', {
-//   refPath: 'resourceName', // gets 'ref' as doc.resourceName
-//   localField: 'resourceId',
-//   foreignField: '_id',
-//   autopopulate: true,
-//   justOne: true,
-// })
-
-// FollowingSchema.virtual('follower', {
-//   ref: 'User',
-//   localField: 'followerId',
-//   foreignField: '_id',
-//   autopopulate: true,
-//   justOne: true,
-// })
-// FollowingSchema.set('toObject', { virtuals: true })
-// FollowingSchema.set('toJSON', { virtuals: true })
-
 FollowingSchema.plugin(autopopulate)

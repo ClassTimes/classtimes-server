@@ -43,57 +43,15 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
   }
 
   async create(payload: CreateCalendarEventInput) {
-    const doc = await this.calendarModel.findById(payload.calendar).exec()
-    const model = plainToClass(Calendar, doc.toObject())
-    const record = new CalendarEvent(model)
+    const doc: CalendarDocument = await this.calendarModel
+      .findById(payload.calendar)
+      .exec()
+    const model: Calendar = plainToClass(Calendar, doc.toObject())
+    const record: CalendarEvent = new CalendarEvent(model)
     await this.checkPermissons({
       action: Action.Create,
       record,
     })
     return await this.dbModel.create(payload)
   }
-
-  // getById(_id: Types.ObjectId) {
-  //   return this.model.findById(_id).exec()
-  // }
-
-  // list(filters: ListCalendarEventInput) {
-  //   return this.dbModel.find({ ...filters }).exec()
-  // }
-
-  // update(payload: UpdateCalendarEventInput) {
-  //   return this.model
-  //     .findByIdAndUpdate(payload._id, payload, { new: true })
-  //     .exec()
-  // }
-
-  // async delete(_id: Types.ObjectId) {
-  //   let model
-  //   try {
-  //     model = await this.model.findByIdAndDelete(_id).exec()
-  //   } catch (error) {
-  //     console.error(error)
-  //     return
-  //   }
-
-  //   if (model) {
-  //     const updateResult = await this.calendar.findByIdAndUpdate(
-  //       model.school,
-  //       { $pull: { calendarEvents: _id } },
-  //       // { new: true, useFindAndModify: false },
-  //     )
-
-  //     console.log('delete updateResult', { updateResult })
-  //   }
-
-  //   return model
-  // }
-
-  // async deleteMany(_ids: Types.ObjectId[]) {
-  //   let model
-  //   for (let _id of _ids) {
-  //     model = await this.delete(_id)
-  //   }
-  //   return model
-  // }
 }

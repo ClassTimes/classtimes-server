@@ -25,6 +25,7 @@ import { CalendarModule } from './entities/calendar/calendar.module'
 import { EventModule } from './entities/event/event.module'
 import { SchoolModule } from './entities/school/school.module'
 import { SubjectModule } from './entities/subject/subject.module'
+import { InstituteModule } from './entities/institute/institute.module'
 import { UserModule } from './entities/user/user.module'
 import { PermissonModule } from './entities/permisson/permisson.module'
 import { FollowModule } from './entities/follow/follow.module'
@@ -84,6 +85,7 @@ import { CaslModule } from './casl/casl.module'
     CaslModule,
     SchoolModule,
     SubjectModule,
+    InstituteModule,
     CalendarModule,
     CalendarEventModule,
     EventModule,

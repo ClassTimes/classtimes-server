@@ -45,11 +45,11 @@ export class EventService extends BaseService<Event> {
   }
 
   async create(payload: CreateEventInput) {
-    const doc = await this.calendarEventModel
+    const doc: CalendarEventDocument = await this.calendarEventModel
       .findById(payload.calendarEvent)
       .exec()
-    const model = plainToClass(CalendarEvent, doc.toObject())
-    const record = new Event(model)
+    const model: CalendarEvent = plainToClass(CalendarEvent, doc.toObject())
+    const record: Event = new Event(model)
     await this.checkPermissons({
       action: Action.Create,
       record,
