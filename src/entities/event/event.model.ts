@@ -32,11 +32,11 @@ export class Event extends Utils.BaseModel {
   @V.MinLength(10)
   content: string
 
-  //
-  // Relations
-  //
+  /*
+   *  Relations
+   */
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
@@ -48,9 +48,9 @@ export class Event extends Utils.BaseModel {
   })
   calendarEvent: mongoose.Types.ObjectId | CalendarEvent
 
-  // *
-  // Connections
-  // *
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedUsers, { nullable: true })
   usersJoiningConnection: PaginatedType<User>

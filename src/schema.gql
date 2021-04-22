@@ -10,7 +10,7 @@ type Auth {
 type Calendar {
   _id: ID!
   calendarEventsConnection(after: String, before: String, first: Float = 0): PaginatedCalendarEvents
-  followerCounter: Float!
+  followerCounter: Int!
   name: String!
   subject: Subject!
   usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
@@ -29,7 +29,7 @@ type CalendarEvent {
   endDateUtc: DateTime!
   eventsConnection(after: String, before: String, first: Float = 0): PaginatedEvents
   exceptionsDatesUtc: [DateTime!]
-  followerCounter: Float!
+  followerCounter: Int!
   isAllDay: Boolean
   rrule: String
   startDateUtc: DateTime!
@@ -101,7 +101,7 @@ type Event {
   _id: ID!
   calendarEvent: CalendarEvent!
   content: String!
-  followerCounter: Float!
+  followerCounter: Int!
   usersJoiningConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
@@ -124,7 +124,7 @@ type Following {
 type Institute {
   _id: ID!
   createdBy: User!
-  followerCounter: Float!
+  followerCounter: Int!
   name: String!
   school: School
   shortName: String!
@@ -266,7 +266,7 @@ type School {
   _id: ID!
   childrenSchoolsConnection(after: String, before: String, first: Float = 0): PaginatedSchools
   createdBy: User!
-  followerCounter: Float!
+  followerCounter: Int!
   institutesConnection(after: String, before: String, first: Float = 0): PaginatedInstitutes
   name: String!
   parentSchool: School
@@ -283,7 +283,7 @@ type SchoolEdge {
 type Subject {
   _id: ID!
   calendarsConnection(after: String, before: String, first: Float = 0): PaginatedCalendars
-  followerCounter: Float!
+  followerCounter: Int!
   institute: Institute!
   name: String!
   school: School!
@@ -357,8 +357,8 @@ type User {
   calendarsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedCalendars
   email: String
   eventsJoiningConnection(after: String, before: String, first: Float = 0): PaginatedEvents
-  followerCounter: Float!
-  followingCounter: Float!
+  followerCounter: Int!
+  followingCounter: Int!
   fullName: String
   institutesFollowingConnection(after: String, before: String, first: Float = 0): PaginatedInstitutes
   mobile: String

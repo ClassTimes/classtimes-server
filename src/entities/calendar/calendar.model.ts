@@ -34,6 +34,10 @@ export class Calendar extends Utils.BaseModel {
   @DB.Prop()
   name: string
 
+  /*
+   *  Relations
+   */
+
   @GQL.Field(() => Subject)
   @DB.Prop({
     type: mongoose.Schema.Types.ObjectId,
@@ -42,17 +46,13 @@ export class Calendar extends Utils.BaseModel {
   })
   subject: mongoose.Types.ObjectId | Subject
 
-  // *
-  // Relations
-  // *
-
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
-  // *
-  // Connections
-  // *
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedCalendarEvents, { nullable: true })
   calendarEventsConnection: PaginatedType<CalendarEvent>

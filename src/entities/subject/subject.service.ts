@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
-import mongoose from 'mongoose'
 import { Model, Types } from 'mongoose'
 import { plainToClass } from 'class-transformer'
 

@@ -64,11 +64,11 @@ export class CalendarEvent extends Utils.BaseModel {
   @DB.Prop({ required: false })
   exceptionsDatesUtc: Date[]
 
-  // *
-  // Relations
-  // *
+  /*
+   *  Relations
+   */
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
@@ -80,9 +80,9 @@ export class CalendarEvent extends Utils.BaseModel {
   })
   calendar: mongoose.Types.ObjectId | Calendar
 
-  // *
-  // Connections
-  // *
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedEvents, { nullable: true })
   eventsConnection: PaginatedType<Event>

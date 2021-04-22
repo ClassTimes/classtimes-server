@@ -1,17 +1,16 @@
 import { Injectable, Inject } from '@nestjs/common'
-import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
+// import { CONTEXT } from '@nestjs/graphql'
 
 // Auth
 // import { Action } from '../../casl/casl-ability.factory'
 
 // Pagination
 import {
-  fromCursorHash,
   PaginationArgs,
   getPaginatedResults,
-  buildConnection,
+  // buildConnection,
 } from '../../utils/Pagination'
 
 // Follower
@@ -39,7 +38,6 @@ export class FollowerService {
     resourceId: Types.ObjectId,
     followerId: Types.ObjectId | string,
   ) {
-    // console.log({ resourceId, followerId })
     return this.dbModel
       .findOneAndDelete({ resourceId, followerId })
       .populate('resource')

@@ -102,23 +102,4 @@ export class Following extends Utils.BaseModel {
 export type FollowingDocument = Following & mongoose.Document
 export const FollowingSchema = withCursor(Following.schema)
 FollowingSchema.index({ followerId: 1, resourceId: 1 }, { unique: true })
-
-// FollowingSchema.virtual('resource', {
-//   refPath: 'resourceName', // gets 'ref' as doc.resourceName
-//   localField: 'resourceId',
-//   foreignField: '_id',
-//   autopopulate: true,
-//   justOne: true,
-// })
-
-// FollowingSchema.virtual('follower', {
-//   ref: 'User',
-//   localField: 'followerId',
-//   foreignField: '_id',
-//   autopopulate: true,
-//   justOne: true,
-// })
-// FollowingSchema.set('toObject', { virtuals: true })
-// FollowingSchema.set('toJSON', { virtuals: true })
-
 FollowingSchema.plugin(autopopulate)

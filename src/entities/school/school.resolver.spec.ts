@@ -1,18 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { SchoolResolver } from './school.resolver'
+import { SchoolService } from './school.service'
 
 describe('SchoolResolver', () => {
-  let resolver: SchoolResolver
+  let schoolResolver: SchoolResolver
+  let schoolService: SchoolService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SchoolResolver],
+      providers: [SchoolResolver, SchoolService],
     }).compile()
 
-    resolver = module.get<SchoolResolver>(SchoolResolver)
+    schoolResolver = module.get<SchoolResolver>(SchoolResolver)
+    schoolService = module.get<SchoolService>(SchoolService)
   })
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined()
-  })
+  // describe('getById', () => {
+  //   it('Should return a School', async () => {
+  //     const result = {
+  //       _id: '1236790412930jdha',
+  //       name: 'Test school',
+  //     }
+  //     jest.spyOn(schoolService, 'getById').mockImplementation(() => result)
+  //   })
+  // })
 })

@@ -41,11 +41,11 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop({ default: [] })
   tags: string[]
 
-  // *
-  // Relations
-  // *
+  /*
+   * Relations
+   */
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
@@ -65,9 +65,9 @@ export class Subject extends Utils.BaseModel {
   })
   institute: mongoose.Types.ObjectId | Institute
 
-  // *
-  // Connections
-  // *
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedCalendars, { nullable: true })
   calendarsConnection: PaginatedType<Calendar>

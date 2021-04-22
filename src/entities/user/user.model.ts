@@ -54,11 +54,11 @@ export class User extends Utils.BaseModel {
 
   // Counter caches
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followingCounter: number
 

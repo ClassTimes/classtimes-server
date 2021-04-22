@@ -42,11 +42,11 @@ export class Institute extends Utils.BaseModel {
   })
   createdBy: mongoose.Types.ObjectId | User
 
-  // *
-  // Relations
-  // *
+  /*
+   *  Relations
+   */
 
-  @GQL.Field(() => Number)
+  @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
@@ -58,9 +58,9 @@ export class Institute extends Utils.BaseModel {
   })
   school: mongoose.Types.ObjectId | School
 
-  // *
-  // Connections
-  // *
+  /*
+   *  Connections
+   */
 
   @GQL.Field(() => PaginatedSubjects, { nullable: true })
   subjectsConnection: PaginatedType<Subject>
