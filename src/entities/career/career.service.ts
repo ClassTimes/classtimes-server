@@ -68,7 +68,7 @@ export class CareerService extends BaseService<Career> {
         School,
         (schoolDocument as any).toObject(),
       )
-      career['approvingSchool'] = school
+      career.approvingSchool = school
       await this.checkPermissons({ action: Action.Update, record: career })
       const updatedCareer = await this.update({
         _id: careerId,
