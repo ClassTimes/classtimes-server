@@ -19,18 +19,19 @@ import { GqlAuthGuard } from './auth/gql-auth.guard'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
-// Models
-import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
+// Modules
+import { AuthModule } from './auth/auth.module'
 import { CalendarModule } from './entities/calendar/calendar.module'
+import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
+import { CareerModule } from './entities/career/career.module'
+import { CaslModule } from './casl/casl.module'
 import { EventModule } from './entities/event/event.module'
+import { FollowModule } from './entities/follow/follow.module'
+import { InstituteModule } from './entities/institute/institute.module'
+import { PermissonModule } from './entities/permisson/permisson.module'
 import { SchoolModule } from './entities/school/school.module'
 import { SubjectModule } from './entities/subject/subject.module'
-import { InstituteModule } from './entities/institute/institute.module'
 import { UserModule } from './entities/user/user.module'
-import { PermissonModule } from './entities/permisson/permisson.module'
-import { FollowModule } from './entities/follow/follow.module'
-import { AuthModule } from './auth/auth.module'
-import { CaslModule } from './casl/casl.module'
 
 // import { ValidationError } from 'class-validator'
 
@@ -82,16 +83,17 @@ import { CaslModule } from './casl/casl.module'
       // }),
     }),
     AuthModule,
-    CaslModule,
-    SchoolModule,
-    SubjectModule,
-    InstituteModule,
     CalendarModule,
     CalendarEventModule,
+    CaslModule,
+    CareerModule,
     EventModule,
-    UserModule,
-    PermissonModule,
     FollowModule,
+    InstituteModule,
+    PermissonModule,
+    SchoolModule,
+    SubjectModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input ApproveCareerInput {
+  careerId: ID!
+  schoolId: ID!
+}
+
 type Auth {
   jwt: String!
   user: User!
@@ -43,6 +48,19 @@ type CalendarEventEdge {
   node: CalendarEvent!
 }
 
+type Career {
+  _id: ID!
+  approvingSchool: School
+  createdBy: User!
+  name: String!
+  subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
+}
+
+type CareerEdge {
+  cursor: String!
+  node: Career!
+}
+
 input CreateCalendarEventInput {
   calendar: ID!
   description: String
@@ -57,6 +75,17 @@ input CreateCalendarEventInput {
 input CreateCalendarInput {
   name: String!
   subject: ID!
+}
+
+input CreateCareerInput {
+  name: String
+}
+
+input CreateCareerSubjectInput {
+  careerId: ID!
+  isMandatory: Boolean
+  semester: Int
+  subjectId: ID!
 }
 
 input CreateEventInput {
@@ -137,6 +166,10 @@ type InstituteEdge {
   node: Institute!
 }
 
+input ListCareerInput {
+  _id: ID
+}
+
 input ListInstituteInput {
   _id: ID
   name: String
@@ -158,8 +191,11 @@ input LoginInput {
 }
 
 type Mutation {
+  addSubjectToCareer(payload: CreateCareerSubjectInput!): Career!
+  approveCareerBySchool(payload: ApproveCareerInput!): Career!
   createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
+  createCareer(payload: CreateCareerInput!): Career!
   createEvent(payload: CreateEventInput!): Event!
   createInstitute(payload: CreateInstituteInput!): Institute!
   createSchool(payload: CreateSchoolInput!): School!
@@ -167,6 +203,7 @@ type Mutation {
   createUser(payload: CreateUserInput!): User!
   deleteCalendar(_id: ID!): Calendar
   deleteCalendarEvent(_id: ID!): CalendarEvent
+  deleteCareer(_id: ID!): Career!
   deleteEvent(_id: ID!): Event
   deleteInstitute(_id: ID!): Institute!
   deleteSchool(_id: ID!): School!
@@ -184,6 +221,7 @@ type Mutation {
   unfollowUser(followeeId: ID!): Following!
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
+  updateCareer(payload: UpdateCareerInput!): Career!
   updateEvent(payload: UpdateEventInput!): Event
   updateInstitute(payload: UpdateInstituteInput!): Institute!
   updateSchool(payload: UpdateSchoolInput!): School!
@@ -205,6 +243,12 @@ type PaginatedCalendarEvents {
 
 type PaginatedCalendars {
   edges: [CalendarEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type PaginatedCareers {
+  edges: [CareerEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
@@ -249,8 +293,10 @@ type Permisson {
 type Query {
   calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
+  career(_id: ID!): Career!
   event(_id: ID!): Event!
   institute(_id: ID!): Institute!
+  listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): PaginatedCareers!
   listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): PaginatedInstitutes!
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): PaginatedSchools!
   listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): PaginatedUsers!
@@ -313,6 +359,10 @@ input UpdateCalendarInput {
   _id: ID!
   name: String
   subject: ID
+}
+
+input UpdateCareerInput {
+  _id: ID!
 }
 
 input UpdateEventInput {
