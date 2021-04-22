@@ -9,6 +9,7 @@ import * as Utils from '../../utils/Model'
 // Entities
 import { School, PaginatedSchools } from '../school/school.model'
 import { Subject, PaginatedSubjects } from '../subject/subject.model'
+import { Institute, PaginatedInstitutes } from '../institute/institute.model'
 import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
 import {
   CalendarEvent,
@@ -73,6 +74,9 @@ export class User extends Utils.BaseModel {
 
   @GQL.Field(() => PaginatedSchools, { nullable: true })
   schoolsFollowingConnection: PaginatedType<School>
+
+  @GQL.Field(() => PaginatedInstitutes, { nullable: true })
+  institutesFollowingConnection: PaginatedType<Institute>
 
   @GQL.Field(() => PaginatedSubjects, { nullable: true })
   subjectsFollowingConnection: PaginatedType<Subject>

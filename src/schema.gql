@@ -360,6 +360,7 @@ type User {
   followerCounter: Float!
   followingCounter: Float!
   fullName: String
+  institutesFollowingConnection(after: String, before: String, first: Float = 0): PaginatedInstitutes
   mobile: String
   schoolsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedSchools
   subjectsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedSubjects

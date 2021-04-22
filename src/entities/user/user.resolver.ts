@@ -23,6 +23,7 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 // Entities
 import { School } from '../school/school.model'
 import { Subject } from '../subject/subject.model'
+import { Institute } from '../institute/institute.model'
 import { Calendar } from '../calendar/calendar.model'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 import { Event } from '../event/event.model'
@@ -135,6 +136,16 @@ export class UserResolver {
     @GQL.Args() paginationArgs: PaginationArgs,
   ) {
     const filters = { followerId: user._id, resourceName: Subject.name }
+    const result = await this.followingService.list(filters, paginationArgs)
+    return result
+  }
+
+  @GQL.ResolveField(() => PaginatedUsers)
+  async institutesFollowingConnection(
+    @GQL.Parent() user: UserDocument,
+    @GQL.Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { followerId: user._id, resourceName: Institute.name }
     const result = await this.followingService.list(filters, paginationArgs)
     return result
   }
