@@ -4,9 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 // import { SchoolService } from './school.service'
 // import { SchoolResolver } from './school.resolver'
 import { School, SchoolSchema } from '../school/school.model'
-
 import { Subject, SubjectSchema } from '../subject/subject.model'
-
+import { Institute, InstituteSchema } from '../institute/institute.model'
 import { User, UserSchema } from '../user/user.model'
 
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
@@ -28,6 +27,10 @@ import { PermissonService } from './permisson.service'
       {
         name: Subject.name,
         schema: SubjectSchema,
+      },
+      {
+        name: Institute.name,
+        schema: InstituteSchema,
       },
       {
         name: User.name,

@@ -65,6 +65,12 @@ input CreateEventInput {
   usersJoining: [ID!]
 }
 
+input CreateInstituteInput {
+  name: String!
+  school: ID!
+  shortName: String
+}
+
 input CreateSchoolInput {
   name: String!
   parentSchool: ID
@@ -72,8 +78,9 @@ input CreateSchoolInput {
 }
 
 input CreateSubjectInput {
+  institute: ID
   name: String!
-  school: ID!
+  school: ID
 }
 
 input CreateUserInput {
@@ -114,6 +121,27 @@ type Following {
   resourceName: String!
 }
 
+type Institute {
+  _id: ID!
+  createdBy: User!
+  followerCounter: Float!
+  name: String!
+  school: School
+  shortName: String!
+  subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
+  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+}
+
+type InstituteEdge {
+  cursor: String!
+  node: Institute!
+}
+
+input ListInstituteInput {
+  _id: ID
+  name: String
+}
+
 input ListSchoolInput {
   _id: ID
   name: String
@@ -133,16 +161,19 @@ type Mutation {
   createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createEvent(payload: CreateEventInput!): Event!
+  createInstitute(payload: CreateInstituteInput!): Institute!
   createSchool(payload: CreateSchoolInput!): School!
   createSubject(payload: CreateSubjectInput!): Subject!
   createUser(payload: CreateUserInput!): User!
   deleteCalendar(_id: ID!): Calendar
   deleteCalendarEvent(_id: ID!): CalendarEvent
   deleteEvent(_id: ID!): Event
+  deleteInstitute(_id: ID!): Institute!
   deleteSchool(_id: ID!): School!
   deleteSubject(_id: ID!): Subject!
   deleteUser(_id: ID!): User
   followCalendar(calendarId: ID!): Following!
+  followInstitute(instituteId: ID!): Following!
   followSchool(schoolId: ID!): Following!
   followSubject(subjectId: ID!): Following!
   followUser(followeeId: ID!): Following!
@@ -154,6 +185,7 @@ type Mutation {
   updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateEvent(payload: UpdateEventInput!): Event
+  updateInstitute(payload: UpdateInstituteInput!): Institute!
   updateSchool(payload: UpdateSchoolInput!): School!
   updateSubject(payload: UpdateSubjectInput!): Subject!
   updateUser(payload: UpdateUserInput!): User
@@ -179,6 +211,12 @@ type PaginatedCalendars {
 
 type PaginatedEvents {
   edges: [EventEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type PaginatedInstitutes {
+  edges: [InstituteEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
@@ -212,6 +250,8 @@ type Query {
   calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
   event(_id: ID!): Event!
+  institute(_id: ID!): Institute!
+  listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): PaginatedInstitutes!
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): PaginatedSchools!
   listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): PaginatedUsers!
   school(_id: ID!): School!
@@ -220,13 +260,14 @@ type Query {
   whoAmI: User!
 }
 
-union Resource = Calendar | CalendarEvent | Event | School | Subject | User
+union Resource = Calendar | CalendarEvent | Event | Institute | School | Subject | User
 
 type School {
   _id: ID!
   childrenSchoolsConnection(after: String, before: String, first: Float = 0): PaginatedSchools
   createdBy: User!
   followerCounter: Float!
+  institutesConnection(after: String, before: String, first: Float = 0): PaginatedInstitutes
   name: String!
   parentSchool: School
   shortName: String!
@@ -243,6 +284,7 @@ type Subject {
   _id: ID!
   calendarsConnection(after: String, before: String, first: Float = 0): PaginatedCalendars
   followerCounter: Float!
+  institute: Institute!
   name: String!
   school: School!
   shortName: String!
@@ -278,6 +320,12 @@ input UpdateEventInput {
   calendarEvent: ID!
   content: String
   usersJoining: [ID!]
+}
+
+input UpdateInstituteInput {
+  _id: ID!
+  name: String
+  shortName: String
 }
 
 input UpdateSchoolInput {

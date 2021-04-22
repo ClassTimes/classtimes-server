@@ -13,6 +13,7 @@ import { Action } from '../../casl/casl-ability.factory'
 // Models
 import { School, SchoolDocument } from '../school/school.model'
 import { Subject, SubjectDocument } from '../subject/subject.model'
+import { Institute, InstituteDocument } from '../institute/institute.model'
 import { User, UserDocument } from '../user/user.model'
 
 import { WritePermissonsInput } from './permisson.inputs'
@@ -30,6 +31,8 @@ export class PermissonService extends BaseService<any> {
     school: Model<SchoolDocument>,
     @InjectModel(Subject.name)
     subject: Model<SubjectDocument>,
+    @InjectModel(Institute.name)
+    institute: Model<InstituteDocument>,
     @InjectModel(User.name)
     user: Model<UserDocument>,
     @Inject(CONTEXT) context,
@@ -39,11 +42,13 @@ export class PermissonService extends BaseService<any> {
     this.dbModels = {
       school,
       subject,
+      institute,
       user,
     }
     this.modelClasses = {
       school: School,
       subject: Subject,
+      institute: Institute,
       user: User,
     }
   }

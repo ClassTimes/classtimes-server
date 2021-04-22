@@ -16,6 +16,7 @@ import { PaginationArgs } from '../../utils/Pagination'
 import { School, SchoolDocument, PaginatedSchools } from './school.model'
 import { SchoolService } from './school.service'
 import { SubjectService } from '../subject/subject.service'
+import { InstituteService } from '../institute/institute.service'
 import { FollowerService } from '../follower/follower.service'
 import {
   CreateSchoolInput,
@@ -27,6 +28,7 @@ export class SchoolResolver {
   constructor(
     private service: SchoolService,
     private subjectService: SubjectService,
+    private instituteService: InstituteService,
     private followerService: FollowerService,
   ) {}
 
@@ -69,6 +71,15 @@ export class SchoolResolver {
   ) {
     const filters = { school: school._id }
     return this.subjectService.list(filters, paginationArgs)
+  }
+
+  @ResolveField()
+  async institutesConnection(
+    @Parent() school: SchoolDocument,
+    @Args() paginationArgs: PaginationArgs,
+  ) {
+    const filters = { school: school._id }
+    return this.instituteService.list(filters, paginationArgs)
   }
 
   @ResolveField()

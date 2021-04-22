@@ -5,17 +5,18 @@ import { FollowResolver } from './follow.resolver'
 
 import { Follower, FollowerSchema } from '../follower/follower.model'
 import { FollowerService } from '../follower/follower.service'
-// import { FollowerResolver } from '../follower/follower.resolver'
 
 import { Following, FollowingSchema } from '../following/following.model'
 import { FollowingService } from '../following/following.service'
-// import { FollowingResolver } from '../following/following.resolver'
 
 import { School, SchoolSchema } from '../school/school.model'
 import { SchoolService } from '../school/school.service'
 
 import { Subject, SubjectSchema } from '../subject/subject.model'
 import { SubjectService } from '../subject/subject.service'
+
+import { Institute, InstituteSchema } from '../institute/institute.model'
+import { InstituteService } from '../institute/institute.service'
 
 import { Calendar, CalendarSchema } from '../calendar/calendar.model'
 import { CalendarService } from '../calendar/calendar.service'
@@ -52,6 +53,10 @@ import { UserService } from '../user/user.service'
         schema: SubjectSchema,
       },
       {
+        name: Institute.name,
+        schema: InstituteSchema,
+      },
+      {
         name: Calendar.name,
         schema: CalendarSchema,
       },
@@ -75,6 +80,7 @@ import { UserService } from '../user/user.service'
     FollowingService,
     SchoolService,
     SubjectService,
+    InstituteService,
     CalendarService,
     CalendarEventService,
     EventService,

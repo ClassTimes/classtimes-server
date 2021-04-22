@@ -1,20 +1,21 @@
 import { Field, ID, InputType } from '@nestjs/graphql'
 import { Types } from 'mongoose'
+
 @InputType()
-export class CreateSubjectInput {
-  @Field(() => String, { nullable: false })
+export class CreateInstituteInput {
+  @Field(() => String)
   name: string
 
-  // Relations
-  @Field(() => ID, { nullable: true })
-  school?: Types.ObjectId
+  @Field(() => String, { nullable: true })
+  shortName?: string
 
-  @Field(() => ID, { nullable: true })
-  institute?: Types.ObjectId
+  // Relations
+  @Field(() => ID)
+  school?: Types.ObjectId
 }
 
 @InputType()
-export class ListSubjectInput {
+export class ListInstituteInput {
   @Field(() => ID, { nullable: true })
   _id?: Types.ObjectId
 
@@ -23,13 +24,13 @@ export class ListSubjectInput {
 }
 
 @InputType()
-export class UpdateSubjectInput {
+export class UpdateInstituteInput {
   @Field(() => ID)
   _id: Types.ObjectId
 
   @Field(() => String, { nullable: true })
   name?: string
 
-  @Field(() => ID)
-  school?: Types.ObjectId
+  @Field(() => String, { nullable: true })
+  shortName?: string
 }

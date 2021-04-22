@@ -10,6 +10,7 @@ import {
 
 import { User } from '../entities/user/user.model'
 import { School } from '../entities/school/school.model'
+import { Institute } from '../entities/institute/institute.model'
 import { Subject } from '../entities/subject/subject.model'
 import { Calendar } from '../entities/calendar/calendar.model'
 import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
@@ -19,11 +20,12 @@ import { Auth } from '../auth/auth.model'
 type Subjects =
   | InferSubjects<
       | typeof School
-      | typeof User
+      | typeof Institute
       | typeof Subject
       | typeof Calendar
       | typeof CalendarEvent
       | typeof Event
+      | typeof User
       | typeof Auth
     >
   | 'all'
@@ -69,6 +71,7 @@ export class CaslAbilityFactory {
       if (user?.roles?.superAdmin) {
         can(Action.Manage, School)
         can(Action.Manage, Subject)
+        can(Action.Manage, Institute)
       }
 
       // Any logged in user can...
@@ -85,6 +88,17 @@ export class CaslAbilityFactory {
         'parentSchool.roles.admin.userId': user._id,
       } as any)
 
+      // Institute abilities ---------------------------------------
+      can([Action.Update], Institute, {
+        'roles.admin.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Delete, Action.GrantPermisson], Institute, {
+        'school.roles.admin.userId': user._id,
+      } as any)
+      can([Action.GrantPermisson], Institute, {
+        'roles.admin.userId': user._id,
+      } as any)
+
       // Subject abilities -----------------------------------------
       can([Action.Update], Subject, {
         'roles.admin.userId': user._id,
@@ -92,14 +106,14 @@ export class CaslAbilityFactory {
       can([Action.Update], Subject, {
         'roles.professor.userId': user._id,
       } as any)
-      can([Action.Create, Action.Delete], Subject, {
+      can([Action.Create, Action.Delete, Action.GrantPermisson], Subject, {
         'school.roles.admin.userId': user._id,
+      } as any)
+      can([Action.Create, Action.Delete, Action.GrantPermisson], Subject, {
+        'institute.roles.admin.userId': user._id,
       } as any)
       can([Action.GrantPermisson], Subject, {
         'roles.admin.userId': user._id,
-      } as any)
-      can([Action.GrantPermisson], Subject, {
-        'school.roles.admin.userId': user._id,
       } as any)
 
       // Calendar abilities -----------------------------------------

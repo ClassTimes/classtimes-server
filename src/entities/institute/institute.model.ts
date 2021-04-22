@@ -8,9 +8,8 @@ import * as Utils from '../../utils/Model'
 import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
 
 // Entities
-import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
-import { Institute } from '../institute/institute.model'
+import { Subject, PaginatedSubjects } from '../subject/subject.model'
 import { User, PaginatedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
@@ -18,11 +17,10 @@ import { User, PaginatedUsers } from '../user/user.model'
   timestamps: true,
   // autoIndex: true
 })
-export class Subject extends Utils.BaseModel {
-  constructor(school?: School, institute?: Institute) {
+export class Institute extends Utils.BaseModel {
+  constructor(school?: School) {
     super()
     this.school = school
-    this.institute = institute
   }
 
   @GQL.Field(() => GQL.ID)
@@ -36,10 +34,13 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop()
   shortName: string
 
-  // Add event tags
-  @GQL.Field(() => [String])
-  @DB.Prop({ default: [] })
-  tags: string[]
+  @GQL.Field(() => User, { nullable: false })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    autopopulate: true,
+  })
+  createdBy: mongoose.Types.ObjectId | User
 
   // *
   // Relations
@@ -49,7 +50,7 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
 
-  @GQL.Field(() => School)
+  @GQL.Field(() => School, { nullable: true })
   @DB.Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'School',
@@ -57,28 +58,19 @@ export class Subject extends Utils.BaseModel {
   })
   school: mongoose.Types.ObjectId | School
 
-  @GQL.Field(() => Institute)
-  @DB.Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Institute',
-    autopopulate: true,
-  })
-  institute: mongoose.Types.ObjectId | Institute
-
   // *
   // Connections
   // *
 
-  @GQL.Field(() => PaginatedCalendars, { nullable: true })
-  calendarsConnection: PaginatedType<Calendar>
+  @GQL.Field(() => PaginatedSubjects, { nullable: true })
+  subjectsConnection: PaginatedType<Subject>
 
   @GQL.Field(() => PaginatedUsers, { nullable: true })
   usersFollowerConnection: PaginatedType<User>
 }
 
-export type SubjectDocument = Subject & mongoose.Document
-export const SubjectSchema = withCursor(Subject.schema)
-SubjectSchema.plugin(autopopulate)
-
+export type InstituteDocument = Institute & mongoose.Document
+export const InstituteSchema = withCursor(Institute.schema)
+InstituteSchema.plugin(autopopulate)
 @GQL.ObjectType()
-export class PaginatedSubjects extends Paginated(Subject) {}
+export class PaginatedInstitutes extends Paginated(Institute) {}
