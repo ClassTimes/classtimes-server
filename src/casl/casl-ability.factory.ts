@@ -8,25 +8,27 @@ import {
 } from '@casl/ability'
 // import { plainToClass } from 'class-transformer'
 
-import { User } from '../entities/user/user.model'
-import { School } from '../entities/school/school.model'
-import { Institute } from '../entities/institute/institute.model'
-import { Subject } from '../entities/subject/subject.model'
+import { Auth } from '../auth/auth.model'
 import { Calendar } from '../entities/calendar/calendar.model'
 import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
+import { Career } from '../entities/career/career.model'
 import { Event } from '../entities/event/event.model'
-import { Auth } from '../auth/auth.model'
+import { Institute } from '../entities/institute/institute.model'
+import { School } from '../entities/school/school.model'
+import { Subject } from '../entities/subject/subject.model'
+import { User } from '../entities/user/user.model'
 
 type Subjects =
   | InferSubjects<
-      | typeof School
-      | typeof Institute
-      | typeof Subject
+      | typeof Auth
       | typeof Calendar
       | typeof CalendarEvent
+      | typeof Career
       | typeof Event
+      | typeof Institute
+      | typeof School
+      | typeof Subject
       | typeof User
-      | typeof Auth
     >
   | 'all'
 
@@ -63,6 +65,7 @@ export class CaslAbilityFactory {
     // TODO: Add Action.RemovePermisson
     can([Action.Read], School)
     can([Action.Read], Subject)
+    can([Action.Read], Career)
     can([Action.Read], Calendar)
     can([Action.Read], CalendarEvent)
 
@@ -76,6 +79,17 @@ export class CaslAbilityFactory {
 
       // Any logged in user can...
       can(Action.Manage, Auth)
+
+      // Career abilities -----------------------------------------
+      can(Action.Manage, Career, {
+        'createdBy._id': user._id,
+      } as any)
+      /*
+       *TODO: Add condition where the creator cannot update the approving school
+       */
+      can(Action.Update, Career, {
+        'school.roles.admin.userId': user._id,
+      } as any)
 
       // School abilities -----------------------------------------
       can([Action.Update], School, {
