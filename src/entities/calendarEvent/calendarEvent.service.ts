@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
+import { RRule } from 'rrule'
 import { plainToClass } from 'class-transformer'
 
 // CalendarEvent
@@ -48,10 +49,37 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
       .exec()
     const model: Calendar = plainToClass(Calendar, doc.toObject())
     const record: CalendarEvent = new CalendarEvent(model)
+
     await this.checkPermissons({
       action: Action.Create,
       record,
     })
+
+    /*
+     *  If able to create calendarEvent, compute endDate from RRULE
+     */
+
+    const rrule = RRule.fromString(payload.rrule)
+    if (rrule.options.until) {
+      /*
+       * Save endDateUtc
+       */
+      payload.endDateUtc = rrule.options.until
+    } else if (rrule.options.count) {
+      /*
+       * Calculate endDateUtc
+       */
+    } else {
+      /*
+       * Save endDateUtc far into the future
+       */
+      payload.endDateUtc = new Date('3000-01-01T00:00:00.000Z')
+    }
+
     return await this.dbModel.create(payload)
+  }
+
+  async listInRange() {
+    return null
   }
 }

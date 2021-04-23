@@ -293,6 +293,7 @@ type Permisson {
 type Query {
   calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
+  calendarEventsInRange(intervalEndDate: DateTime!, intervalStartDate: DateTime!): PaginatedCalendarEvents!
   career(_id: ID!): Career!
   event(_id: ID!): Event!
   institute(_id: ID!): Institute!

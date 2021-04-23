@@ -44,8 +44,8 @@ export class CalendarEvent extends Utils.BaseModel {
   @DB.Prop({ required: true })
   startDateUtc: Date
 
-  // @DB.Prop({ required: true }) // TODO STORE IT AND INDEX IT!
   @GQL.Field(() => Date, { nullable: false })
+  @DB.Prop({ required: true })
   endDateUtc: Date
 
   @GQL.Field(() => Boolean, { nullable: true })

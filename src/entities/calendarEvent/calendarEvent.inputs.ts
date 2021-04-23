@@ -1,4 +1,4 @@
-import { Field, ID, InputType } from '@nestjs/graphql'
+import { Field, ID, InputType, ArgsType } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
 // import { School } from '../school/school.model'
@@ -13,6 +13,8 @@ export class CreateCalendarEventInput {
 
   @Field(() => Date, { nullable: false })
   startDateUtc: Date
+
+  endDateUtc: Date
 
   @Field(() => Boolean, { nullable: true })
   isAllDay: boolean
@@ -57,4 +59,13 @@ export class UpdateCalendarEventInput extends CreateCalendarEventInput {
   // Relations
   @Field(() => ID, { nullable: true })
   calendar: Types.ObjectId
+}
+
+@ArgsType()
+export class IntervalArgs {
+  @Field()
+  intervalStartDate?: Date
+
+  @Field()
+  intervalEndDate?: Date
 }

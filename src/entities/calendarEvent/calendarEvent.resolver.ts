@@ -15,11 +15,16 @@ import dayjs from 'dayjs'
 import { PaginationArgs } from '../../utils/Pagination'
 
 // CalendarEvent
-import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
+import {
+  CalendarEvent,
+  CalendarEventDocument,
+  PaginatedCalendarEvents,
+} from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
   ListCalendarEventInput,
   UpdateCalendarEventInput,
+  IntervalArgs,
   // CreateCalendarEventInputsSchema,
 } from './calendarEvent.inputs'
 
@@ -41,13 +46,16 @@ export class CalendarEventResolver {
     return this.service.getById(_id)
   }
 
+  @Query(() => PaginatedCalendarEvents)
+  async calendarEventsInRange(@Args() intervalArgs: IntervalArgs) {
+    return null
+  }
   // @Query(() => [CalendarEvent])
   // async calendarEvents(
   //   @Args('filters', { nullable: true }) filters?: ListCalendarEventInput,
   // ) {
   //   return this.service.list(filters)
   // }
-
   @Mutation(() => CalendarEvent)
   async createCalendarEvent(
     @Args('payload') payload: CreateCalendarEventInput,
