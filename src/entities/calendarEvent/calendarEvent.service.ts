@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
-import { RRule } from 'rrule'
 import { plainToClass } from 'class-transformer'
 
 // CalendarEvent
@@ -19,8 +18,9 @@ import { Calendar, CalendarDocument } from '../calendar/calendar.model'
 // Auth
 import { Action } from '../../casl/casl-ability.factory'
 
-// Service methods
+// Utils
 import { BaseService } from '../../utils/BaseService'
+import { parseEndDate } from '../../utils/RRuleParsing'
 
 const MODEL_CLASS = CalendarEvent
 @Injectable()
@@ -59,23 +59,8 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
      *  If able to create calendarEvent, compute endDate from RRULE
      */
 
-    const rrule = RRule.fromString(payload.rrule)
-    if (rrule.options.until) {
-      /*
-       * Save endDateUtc
-       */
-      payload.endDateUtc = rrule.options.until
-    } else if (rrule.options.count) {
-      /*
-       * Calculate endDateUtc
-       */
-    } else {
-      /*
-       * Save endDateUtc far into the future
-       */
-      payload.endDateUtc = new Date('3000-01-01T00:00:00.000Z')
-    }
-
+    // const endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
+    payload.endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
     return await this.dbModel.create(payload)
   }
 
