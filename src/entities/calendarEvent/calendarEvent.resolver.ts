@@ -23,8 +23,8 @@ import {
 import {
   CreateCalendarEventInput,
   ListCalendarEventInput,
+  ListCalendarEventsInRangeInput,
   UpdateCalendarEventInput,
-  IntervalArgs,
   // CreateCalendarEventInputsSchema,
 } from './calendarEvent.inputs'
 
@@ -47,15 +47,12 @@ export class CalendarEventResolver {
   }
 
   @Query(() => PaginatedCalendarEvents)
-  async calendarEventsInRange(@Args() intervalArgs: IntervalArgs) {
-    return null
+  async calendarEventsInRange(
+    @Args('payload') payload: ListCalendarEventsInRangeInput,
+  ) {
+    return this.service.listInRange(payload)
   }
-  // @Query(() => [CalendarEvent])
-  // async calendarEvents(
-  //   @Args('filters', { nullable: true }) filters?: ListCalendarEventInput,
-  // ) {
-  //   return this.service.list(filters)
-  // }
+
   @Mutation(() => CalendarEvent)
   async createCalendarEvent(
     @Args('payload') payload: CreateCalendarEventInput,

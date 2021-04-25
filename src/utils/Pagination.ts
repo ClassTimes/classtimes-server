@@ -81,7 +81,7 @@ export async function getConnection<T>(
 export async function getPaginatedResults<T>(
   options: PaginationOptions,
 ): Promise<PaginatedResult<T>> {
-  const { dbModel, filters, first, after, before } = options
+  const { dbModel, filters, first, after, before } = options || {}
 
   const limit = first ?? 0
   const queryFilters = filters ?? {}

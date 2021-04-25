@@ -9,7 +9,7 @@ export class CreateCalendarEventInput {
   title: string
 
   @Field(() => String, { nullable: true })
-  description: string
+  description?: string
 
   @Field(() => Date, { nullable: false })
   startDateUtc: Date
@@ -46,6 +46,18 @@ export class ListCalendarEventInput {
 }
 
 @InputType()
+export class ListCalendarEventsInRangeInput {
+  // @Field({ nullable: true })
+  // filters?: any // TODO: Add filters to this query
+
+  @Field(() => String, { nullable: false })
+  rangeStart: string
+
+  @Field(() => String, { nullable: false })
+  rangeEnd: string
+}
+
+@InputType()
 export class UpdateCalendarEventInput extends CreateCalendarEventInput {
   @Field(() => ID)
   _id: Types.ObjectId
@@ -59,13 +71,4 @@ export class UpdateCalendarEventInput extends CreateCalendarEventInput {
   // Relations
   @Field(() => ID, { nullable: true })
   calendar: Types.ObjectId
-}
-
-@ArgsType()
-export class IntervalArgs {
-  @Field()
-  intervalStartDate?: Date
-
-  @Field()
-  intervalEndDate?: Date
 }

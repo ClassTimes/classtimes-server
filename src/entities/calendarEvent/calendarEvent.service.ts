@@ -9,6 +9,7 @@ import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
   ListCalendarEventInput,
+  ListCalendarEventsInRangeInput,
   UpdateCalendarEventInput,
 } from './calendarEvent.inputs'
 
@@ -59,12 +60,15 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
      *  If able to create calendarEvent, compute endDate from RRULE
      */
 
-    // const endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
     payload.endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
     return await this.dbModel.create(payload)
   }
 
-  async listInRange() {
-    return null
+  async listInRange(payload: ListCalendarEventsInRangeInput) {
+    // const filters = { ...payload.filters }
+    const filters = { $and: [] }
+    filters.$and.push({ startDateUtc: { $lte: payload.rangeEnd } })
+    filters.$and.push({ endDateUtc: { $gte: payload.rangeStart } })
+    return this.list(filters, null) // TODO: Add pagination args if necessary
   }
 }
