@@ -18,7 +18,7 @@ class PageInfoType {
   hasNextPage: boolean
 }
 
-export function Paginated<T>(classRef: Type<T>): any {
+export function Connected<T>(classRef: Type<T>): any {
   @ObjectType(`${classRef.name}Edge`)
   abstract class EdgeType {
     @Field((type) => String)
@@ -28,7 +28,7 @@ export function Paginated<T>(classRef: Type<T>): any {
     node: T
   }
   @ObjectType({ isAbstract: true })
-  abstract class PaginatedType {
+  abstract class ConnectionType {
     @Field((type) => [EdgeType], { nullable: true })
     edges: EdgeType[]
 
@@ -38,15 +38,15 @@ export function Paginated<T>(classRef: Type<T>): any {
     @Field((type) => Int)
     totalCount: number
   }
-  return PaginatedType
+  return ConnectionType
 }
 
 // *
 // *
-// Pagination object
+// Connection object
 // *
 // *
-export interface PaginatedType<T> {
+export interface ConnectionType<T> {
   edges: {
     cursor?: string
     node: T
@@ -58,13 +58,13 @@ export interface PaginatedType<T> {
   totalCount?: number
 }
 
-export interface PaginatedResult<T> {
+export interface ConnectedResult<T> {
   result: T[]
   hasNextPage: boolean
 }
 
-interface PaginationOptions {
-  dbModel: any // Mejorar esto
+interface ConnectionOptions {
+  dbModel: any // TODO: Better typing here
   filters?: any
   first?: number
   after?: string
@@ -72,15 +72,15 @@ interface PaginationOptions {
 }
 
 export async function getConnection<T>(
-  options: PaginationOptions,
-): Promise<PaginatedType<T>> {
-  const { result, hasNextPage } = await getPaginatedResults<T>(options)
+  options: ConnectionOptions,
+): Promise<ConnectionType<T>> {
+  const { result, hasNextPage } = await getConnectionResults<T>(options)
   return buildConnection(result, hasNextPage)
 }
 
-export async function getPaginatedResults<T>(
-  options: PaginationOptions,
-): Promise<PaginatedResult<T>> {
+export async function getConnectionResults<T>(
+  options: ConnectionOptions,
+): Promise<ConnectedResult<T>> {
   const { dbModel, filters, first, after, before } = options || {}
 
   const limit = first ?? 0
@@ -117,7 +117,7 @@ export async function getPaginatedResults<T>(
 export function buildConnection<T>(
   documents: Array<T>,
   hasNextPage: boolean,
-): PaginatedType<T> {
+): ConnectionType<T> {
   return {
     edges: documents.map((doc) => {
       return {
@@ -135,11 +135,11 @@ export function buildConnection<T>(
 
 // *
 // *
-// Pagination Args
+// Connection Args
 // *
 // *
 @ArgsType()
-export class PaginationArgs {
+export class ConnectionArgs {
   @Field({ defaultValue: 0 }) // TODO: Actually have this as non-nullable
   first?: number
 

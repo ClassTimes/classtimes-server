@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import * as V from 'class-validator'
 
 import { connectFakeMongo, disconnectFakeMongo } from '../tests/db-handler'
-import { Model, ValidateSchema } from './Model'
+import { BaseModel, ValidateSchema } from './Model'
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
 
@@ -15,7 +15,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
   // autoIndex: true,
 })
 @ValidateSchema()
-export class UserFake extends Model {
+export class UserFake extends BaseModel {
   @GQL.Field(() => String, { nullable: false })
   @DB.Prop({
     required: true,

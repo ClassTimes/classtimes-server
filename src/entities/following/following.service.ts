@@ -8,7 +8,7 @@ import { Model, Types } from 'mongoose'
 // import { Action } from '../../casl/casl-ability.factory'
 
 // Pagination
-import { PaginationArgs, getPaginatedResults } from '../../utils/Pagination'
+import { ConnectionArgs, getConnectionResults } from '../../utils/Connection'
 
 // Entities
 import { User } from '../user/user.model'
@@ -50,10 +50,10 @@ export class FollowingService {
 
   // Pagination
 
-  async list(filters?: any, paginationArgs?: PaginationArgs) {
-    const { first, after, before } = paginationArgs
+  async list(filters?: any, connectionArgs?: ConnectionArgs) {
+    const { first, after, before } = connectionArgs
 
-    const { result, hasNextPage } = await getPaginatedResults<Following>({
+    const { result, hasNextPage } = await getConnectionResults<Following>({
       dbModel: this.dbModel,
       filters,
       first,

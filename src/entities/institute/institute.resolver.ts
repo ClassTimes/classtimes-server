@@ -10,12 +10,12 @@ import {
 import { Model, Types } from 'mongoose'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 import {
   Institute,
   InstituteDocument,
-  PaginatedInstitutes,
+  ConnectedInstitutes,
 } from '../institute/institute.model'
 import { InstituteService } from './institute.service'
 import { SchoolService } from '../school/school.service'
@@ -40,12 +40,12 @@ export class InstituteResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => PaginatedInstitutes)
+  @Query(() => ConnectedInstitutes)
   async listInstitutes(
     @Args('filters', { nullable: true }) filters?: ListInstituteInput,
-    @Args() paginationArgs?: PaginationArgs,
+    @Args() connectionArgs?: ConnectionArgs,
   ) {
-    return this.service.list(filters, paginationArgs)
+    return this.service.list(filters, connectionArgs)
   }
 
   @Mutation(() => Institute)
@@ -70,19 +70,19 @@ export class InstituteResolver {
   @ResolveField()
   async subjectsConnection(
     @Parent() institute: InstituteDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { institute: institute._id }
-    return this.subjectService.list(filters, paginationArgs)
+    return this.subjectService.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async usersFollowerConnection(
     @Parent() institute: InstituteDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: institute._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     // TODO: Is it necessary to filter by resourceName as well?
     return result
   }

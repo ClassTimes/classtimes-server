@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer'
 import { Model, Types, Document } from 'mongoose'
 
 // Pagination
-import { PaginationArgs, getConnection } from '../utils/Pagination'
+import { ConnectionArgs, getConnection } from '../utils/Connection'
 
 // Auth
 import { ForbiddenError } from '@casl/ability'
@@ -86,7 +86,7 @@ export abstract class BaseService<ResourceModel> {
 
   // Pagination
 
-  async list(filters?: any, connectionArgs?: PaginationArgs) {
+  async list(filters?: any, connectionArgs?: ConnectionArgs) {
     const { first, after, before } = connectionArgs || {}
 
     const connection = await getConnection<ResourceModel>({

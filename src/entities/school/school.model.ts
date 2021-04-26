@@ -5,12 +5,12 @@ import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
-import { Subject, PaginatedSubjects } from '../subject/subject.model'
-import { Institute, PaginatedInstitutes } from '../institute/institute.model'
-import { User, PaginatedUsers } from '../user/user.model'
+import { Subject, ConnectedSubjects } from '../subject/subject.model'
+import { Institute, ConnectedInstitutes } from '../institute/institute.model'
+import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -57,21 +57,21 @@ export class School extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedSubjects, { nullable: true })
-  subjectsConnection: PaginatedType<Subject>
+  @GQL.Field(() => ConnectedSubjects, { nullable: true })
+  subjectsConnection: ConnectionType<Subject>
 
-  @GQL.Field(() => PaginatedInstitutes, { nullable: true })
-  institutesConnection: PaginatedType<Institute>
+  @GQL.Field(() => ConnectedInstitutes, { nullable: true })
+  institutesConnection: ConnectionType<Institute>
 
-  @GQL.Field(() => PaginatedUsers, { nullable: true })
-  usersFollowerConnection: PaginatedType<User>
+  @GQL.Field(() => ConnectedUsers, { nullable: true })
+  usersFollowerConnection: ConnectionType<User>
 
-  @GQL.Field(() => PaginatedSchools, { nullable: true })
-  childrenSchoolsConnection: PaginatedType<School>
+  @GQL.Field(() => ConnectedSchools, { nullable: true })
+  childrenSchoolsConnection: ConnectionType<School>
 }
 
 export type SchoolDocument = School & mongoose.Document
 export const SchoolSchema = withCursor(School.schema)
 SchoolSchema.plugin(autopopulate)
 @GQL.ObjectType()
-export class PaginatedSchools extends Paginated(School) {}
+export class ConnectedSchools extends Connected(School) {}

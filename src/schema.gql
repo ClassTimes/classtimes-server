@@ -14,11 +14,11 @@ type Auth {
 
 type Calendar {
   _id: ID!
-  calendarEventsConnection(after: String, before: String, first: Float = 0): PaginatedCalendarEvents
+  calendarEventsConnection(after: String, before: String, first: Float = 0): ConnectedCalendarEvents
   followerCounter: Int!
   name: String!
   subject: Subject!
-  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type CalendarEdge {
@@ -32,7 +32,7 @@ type CalendarEvent {
   description: String
   durationHours: Float!
   endDateUtc: DateTime!
-  eventsConnection(after: String, before: String, first: Float = 0): PaginatedEvents
+  eventsConnection(after: String, before: String, first: Float = 0): ConnectedEvents
   exceptionsDatesUtc: [DateTime!]
   followerCounter: Int!
   isAllDay: Boolean
@@ -40,7 +40,7 @@ type CalendarEvent {
   startDateUtc: DateTime!
   tags: [String!]!
   title: String!
-  usersSubscriberConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  usersSubscriberConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type CalendarEventEdge {
@@ -53,12 +53,60 @@ type Career {
   approvingSchool: School
   createdBy: User!
   name: String!
-  subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
+  subjectsConnection(after: String, before: String, first: Float = 0): ConnectedSubjects
 }
 
 type CareerEdge {
   cursor: String!
   node: Career!
+}
+
+type ConnectedCalendarEvents {
+  edges: [CalendarEventEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedCalendars {
+  edges: [CalendarEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedCareers {
+  edges: [CareerEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedEvents {
+  edges: [EventEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedInstitutes {
+  edges: [InstituteEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedSchools {
+  edges: [SchoolEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedSubjects {
+  edges: [SubjectEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedUsers {
+  edges: [UserEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
 }
 
 input CreateCalendarEventInput {
@@ -132,7 +180,7 @@ type Event {
   content: String!
   followerCounter: Int!
   startDateUtc: DateTime!
-  usersJoiningConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  usersJoiningConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type EventEdge {
@@ -158,8 +206,8 @@ type Institute {
   name: String!
   school: School
   shortName: String!
-  subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
-  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  subjectsConnection(after: String, before: String, first: Float = 0): ConnectedSubjects
+  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type InstituteEdge {
@@ -242,54 +290,6 @@ type PageInfoType {
   hasNextPage: Boolean!
 }
 
-type PaginatedCalendarEvents {
-  edges: [CalendarEventEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedCalendars {
-  edges: [CalendarEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedCareers {
-  edges: [CareerEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedEvents {
-  edges: [EventEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedInstitutes {
-  edges: [InstituteEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedSchools {
-  edges: [SchoolEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedSubjects {
-  edges: [SubjectEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type PaginatedUsers {
-  edges: [UserEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
 type Permisson {
   resourceId: ID!
   resourceName: String!
@@ -303,11 +303,11 @@ type Query {
   career(_id: ID!): Career!
   event(_id: ID!): Event!
   institute(_id: ID!): Institute!
-  listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput!, first: Float = 0): PaginatedCalendarEvents!
-  listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): PaginatedCareers!
-  listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): PaginatedInstitutes!
-  listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): PaginatedSchools!
-  listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): PaginatedUsers!
+  listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput!, first: Float = 0): ConnectedCalendarEvents!
+  listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): ConnectedCareers!
+  listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): ConnectedInstitutes!
+  listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): ConnectedSchools!
+  listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): ConnectedUsers!
   school(_id: ID!): School!
   subject(_id: ID!): Subject!
   user(_id: ID!): User!
@@ -318,15 +318,15 @@ union Resource = Calendar | CalendarEvent | Event | Institute | School | Subject
 
 type School {
   _id: ID!
-  childrenSchoolsConnection(after: String, before: String, first: Float = 0): PaginatedSchools
+  childrenSchoolsConnection(after: String, before: String, first: Float = 0): ConnectedSchools
   createdBy: User!
   followerCounter: Int!
-  institutesConnection(after: String, before: String, first: Float = 0): PaginatedInstitutes
+  institutesConnection(after: String, before: String, first: Float = 0): ConnectedInstitutes
   name: String!
   parentSchool: School
   shortName: String!
-  subjectsConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
-  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  subjectsConnection(after: String, before: String, first: Float = 0): ConnectedSubjects
+  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type SchoolEdge {
@@ -336,14 +336,14 @@ type SchoolEdge {
 
 type Subject {
   _id: ID!
-  calendarsConnection(after: String, before: String, first: Float = 0): PaginatedCalendars
+  calendarsConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
   followerCounter: Int!
   institute: Institute!
   name: String!
   school: School!
   shortName: String!
   tags: [String!]!
-  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type SubjectEdge {
@@ -410,21 +410,21 @@ input UpdateUserInput {
 
 type User {
   _id: ID!
-  calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): PaginatedUsers!
-  calendarsEventsSubscribedConnection: PaginatedCalendarEvents
-  calendarsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedCalendars
+  calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): ConnectedUsers!
+  calendarsEventsSubscribedConnection: ConnectedCalendarEvents
+  calendarsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
   email: String
-  eventsJoiningConnection(after: String, before: String, first: Float = 0): PaginatedEvents
+  eventsJoiningConnection(after: String, before: String, first: Float = 0): ConnectedEvents
   followerCounter: Int!
   followingCounter: Int!
   fullName: String
-  institutesFollowingConnection(after: String, before: String, first: Float = 0): PaginatedInstitutes
+  institutesFollowingConnection(after: String, before: String, first: Float = 0): ConnectedInstitutes
   mobile: String
-  schoolsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedSchools
-  subjectsFollowingConnection(after: String, before: String, first: Float = 0): PaginatedSubjects
+  schoolsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedSchools
+  subjectsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedSubjects
   username: String!
-  usersFollowerConnection(after: String, before: String, first: Float = 0): PaginatedUsers
-  usersFollowingConnection(after: String, before: String, first: Float = 0): PaginatedUsers
+  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
+  usersFollowingConnection(after: String, before: String, first: Float = 0): ConnectedUsers
 }
 
 type UserEdge {

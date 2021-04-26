@@ -10,10 +10,10 @@ import {
 import { Model, Types } from 'mongoose'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // Career
-import { Career, CareerDocument, PaginatedCareers } from './career.model'
+import { Career, CareerDocument, ConnectedCareers } from './career.model'
 import { CareerService } from './career.service'
 
 import { CreateCareerSubjectInput } from '../careerSubject/careerSubject.inputs'
@@ -42,12 +42,12 @@ export class CareerResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => PaginatedCareers)
+  @Query(() => ConnectedCareers)
   async listCareers(
     @Args('filters', { nullable: true }) filters?: ListCareerInput,
-    @Args() paginationArgs?: PaginationArgs,
+    @Args() connectionArgs?: ConnectionArgs,
   ) {
-    return this.service.list(filters, paginationArgs)
+    return this.service.list(filters, connectionArgs)
   }
 
   @Mutation(() => Career)
@@ -88,9 +88,9 @@ export class CareerResolver {
   @ResolveField()
   async subjectsConnection(
     @Parent() career: CareerDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { careerId: career._id }
-    return this.careerSubjectService.list(filters, paginationArgs)
+    return this.careerSubjectService.list(filters, connectionArgs)
   }
 }

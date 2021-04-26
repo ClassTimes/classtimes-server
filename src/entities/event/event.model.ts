@@ -6,11 +6,11 @@ import * as Utils from '../../utils/Model'
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-import { User, PaginatedUsers } from '../user/user.model'
+import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -56,8 +56,8 @@ export class Event extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedUsers, { nullable: true })
-  usersJoiningConnection: PaginatedType<User>
+  @GQL.Field(() => ConnectedUsers, { nullable: true })
+  usersJoiningConnection: ConnectionType<User>
 }
 
 export type EventDocument = Event & mongoose.Document
@@ -65,4 +65,4 @@ export const EventSchema = withCursor(Event.schema)
 EventSchema.plugin(autopopulate)
 
 @GQL.ObjectType()
-export class PaginatedEvents extends Paginated(Event) {}
+export class ConnectedEvents extends Connected(Event) {}

@@ -11,10 +11,10 @@ import { BaseService } from '../../utils/BaseService'
 // Pagination
 import {
   fromCursorHash,
-  PaginationArgs,
+  ConnectionArgs,
   buildConnection,
-  getPaginatedResults,
-} from '../../utils/Pagination'
+  getConnectionResults,
+} from '../../utils/Connection'
 
 // User
 import { User, UserDocument } from './user.model'
@@ -95,10 +95,10 @@ export class UserService {
     return this.model.findById(_id).exec()
   }
 
-  async list(filters?: ListUserInput, paginationArgs?: PaginationArgs) {
-    const { first, after, before } = paginationArgs
+  async list(filters?: ListUserInput, connectionArgs?: ConnectionArgs) {
+    const { first, after, before } = connectionArgs
 
-    const { result, hasNextPage } = await getPaginatedResults<User>({
+    const { result, hasNextPage } = await getConnectionResults<User>({
       dbModel: this.model,
       filters,
       first,

@@ -10,10 +10,10 @@ import {
 import { Model, Types } from 'mongoose'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // School
-import { School, SchoolDocument, PaginatedSchools } from './school.model'
+import { School, SchoolDocument, ConnectedSchools } from './school.model'
 import { SchoolService } from './school.service'
 import { SubjectService } from '../subject/subject.service'
 import { InstituteService } from '../institute/institute.service'
@@ -37,12 +37,12 @@ export class SchoolResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => PaginatedSchools)
+  @Query(() => ConnectedSchools)
   async listSchools(
     @Args('filters', { nullable: true }) filters?: ListSchoolInput,
-    @Args() paginationArgs?: PaginationArgs,
+    @Args() connectionArgs?: ConnectionArgs,
   ) {
-    return this.service.list(filters, paginationArgs)
+    return this.service.list(filters, connectionArgs)
   }
 
   @Mutation(() => School)
@@ -67,37 +67,37 @@ export class SchoolResolver {
   @ResolveField()
   async subjectsConnection(
     @Parent() school: SchoolDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { school: school._id }
-    return this.subjectService.list(filters, paginationArgs)
+    return this.subjectService.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async institutesConnection(
     @Parent() school: SchoolDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { school: school._id }
-    return this.instituteService.list(filters, paginationArgs)
+    return this.instituteService.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async childrenSchoolsConnection(
     @Parent() school: SchoolDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { parentSchool: school._id }
-    return this.service.list(filters, paginationArgs)
+    return this.service.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async usersFollowerConnection(
     @Parent() school: SchoolDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: school._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     // TODO: Is it necessary to filter by resourceName as well?
     return result
   }

@@ -11,13 +11,13 @@ import {
 import { Types } from 'mongoose'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // CalendarEvent
 import {
   CalendarEvent,
   CalendarEventDocument,
-  PaginatedCalendarEvents,
+  ConnectedCalendarEvents,
 } from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
@@ -43,10 +43,10 @@ export class CalendarEventResolver {
     return this.service.getById(_id)
   }
 
-  @Query(() => PaginatedCalendarEvents)
+  @Query(() => ConnectedCalendarEvents)
   async listCalendarEvents(
     @Args('filters') filters: ListCalendarEventsInput,
-    @Args() connectionArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     return this.service.search(filters, connectionArgs)
   }
@@ -79,19 +79,19 @@ export class CalendarEventResolver {
   @ResolveField()
   async eventsConnection(
     @Parent() calendarEvent: CalendarEventDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { calendarEvent: calendarEvent._id }
-    return this.eventService.list(filters, paginationArgs)
+    return this.eventService.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async usersSubscriberConnection(
     @Parent() calendarEvent: CalendarEventDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: calendarEvent._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     // TODO: Is it necessary to filter by resourceName as well?
     return result
   }

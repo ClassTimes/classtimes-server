@@ -6,12 +6,12 @@ import * as Utils from '../../utils/Model'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
 import { Calendar } from '../calendar/calendar.model'
-import { Event, PaginatedEvents } from '../event/event.model'
-import { User, PaginatedUsers } from '../user/user.model'
+import { Event, ConnectedEvents } from '../event/event.model'
+import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -84,11 +84,11 @@ export class CalendarEvent extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedEvents, { nullable: true })
-  eventsConnection: PaginatedType<Event>
+  @GQL.Field(() => ConnectedEvents, { nullable: true })
+  eventsConnection: ConnectionType<Event>
 
-  @GQL.Field(() => PaginatedUsers, { nullable: true })
-  usersSubscriberConnection: PaginatedType<User>
+  @GQL.Field(() => ConnectedUsers, { nullable: true })
+  usersSubscriberConnection: ConnectionType<User>
 
   // @DB.Prop({
   //   type: String,
@@ -106,7 +106,7 @@ CalendarEventSchema.index({ startDateUtc: 1, endDateUtc: -1 })
 CalendarEventSchema.plugin(autopopulate)
 
 @GQL.ObjectType()
-export class PaginatedCalendarEvents extends Paginated(CalendarEvent) {}
+export class ConnectedCalendarEvents extends Connected(CalendarEvent) {}
 
 //
 // # Reference Link
