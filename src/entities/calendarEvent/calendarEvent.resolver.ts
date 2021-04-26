@@ -32,7 +32,6 @@ import {
 import { CalendarEventService } from './calendarEvent.service'
 import { EventService } from '../event/event.service'
 import { FollowerService } from '../follower/follower.service'
-
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
   constructor(
