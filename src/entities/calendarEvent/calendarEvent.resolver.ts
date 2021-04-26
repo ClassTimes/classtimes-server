@@ -45,7 +45,7 @@ export class CalendarEventResolver {
 
   @Query(() => ConnectedCalendarEvents)
   async listCalendarEvents(
-    @Args('filters') filters: ListCalendarEventsInput,
+    @Args('filters', { nullable: true }) filters: ListCalendarEventsInput,
     @Args() connectionArgs: ConnectionArgs,
   ) {
     return this.service.search(filters, connectionArgs)

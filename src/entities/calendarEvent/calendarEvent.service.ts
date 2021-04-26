@@ -76,13 +76,13 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
   buildListQuery(filters: ListCalendarEventsInput): TListQuery {
     const conditions: TListCondition[] = []
 
-    if (filters.calendar) {
+    if (filters?.calendar) {
       conditions.push({ calendar: filters.calendar })
     }
-    if (filters.rangeStart) {
+    if (filters?.rangeStart) {
       conditions.push({ endDateUtc: { $gte: filters.rangeStart } })
     }
-    if (filters.rangeEnd) {
+    if (filters?.rangeEnd) {
       conditions.push({ startDateUtc: { $lte: filters.rangeEnd } })
     }
 
