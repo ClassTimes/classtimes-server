@@ -86,8 +86,8 @@ export abstract class BaseService<ResourceModel> {
 
   // Pagination
 
-  async list(filters?: any, paginationArgs?: PaginationArgs) {
-    const { first, after, before } = paginationArgs || {}
+  async list(filters?: any, connectionArgs?: PaginationArgs) {
+    const { first, after, before } = connectionArgs || {}
 
     const connection = await getConnection<ResourceModel>({
       dbModel: this.dbModel,

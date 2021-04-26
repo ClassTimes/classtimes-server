@@ -34,27 +34,15 @@ export class CreateCalendarEventInput {
 }
 
 @InputType()
-export class ListCalendarEventInput {
+export class ListCalendarEventsInput {
   @Field(() => ID, { nullable: true })
-  _id?: Types.ObjectId
+  calendar?: Types.ObjectId
 
   @Field(() => String, { nullable: true })
-  title?: string
+  rangeStart?: string
 
-  @Field(() => ID, { nullable: true })
-  calendar: Types.ObjectId
-}
-
-@InputType()
-export class ListCalendarEventsInRangeInput {
-  // @Field({ nullable: true })
-  // filters?: any // TODO: Add filters to this query
-
-  @Field(() => String, { nullable: false })
-  rangeStart: string
-
-  @Field(() => String, { nullable: false })
-  rangeEnd: string
+  @Field(() => String, { nullable: true })
+  rangeEnd?: string
 }
 
 @InputType()

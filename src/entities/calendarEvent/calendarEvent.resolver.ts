@@ -9,7 +9,6 @@ import {
   ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
-import dayjs from 'dayjs'
 
 // Pagination
 import { PaginationArgs } from '../../utils/Pagination'
@@ -22,8 +21,7 @@ import {
 } from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
-  ListCalendarEventInput,
-  ListCalendarEventsInRangeInput,
+  ListCalendarEventsInput,
   UpdateCalendarEventInput,
   // CreateCalendarEventInputsSchema,
 } from './calendarEvent.inputs'
@@ -46,10 +44,11 @@ export class CalendarEventResolver {
   }
 
   @Query(() => PaginatedCalendarEvents)
-  async calendarEventsInRange(
-    @Args('payload') payload: ListCalendarEventsInRangeInput,
+  async listCalendarEvents(
+    @Args('filters') filters: ListCalendarEventsInput,
+    @Args() connectionArgs: PaginationArgs,
   ) {
-    return this.service.listInRange(payload)
+    return this.service.search(filters, connectionArgs)
   }
 
   @Mutation(() => CalendarEvent)
@@ -73,26 +72,10 @@ export class CalendarEventResolver {
     return this.service.delete(_id)
   }
 
-  //
-  // Properties
+  /*
+   * Connection resolvers
+   */
 
-  @ResolveField() // TODO Compute on save not on read so can be indexed
-  async endDateUtc(@Root() calendarEvent: CalendarEvent) {
-    const _endDateUtc = dayjs(calendarEvent.startDateUtc)
-      .utc()
-      .add(calendarEvent.durationHours, 'hours')
-
-    console.log({
-      calendarEvent: calendarEvent.title,
-      _endDateUtc,
-    })
-
-    return _endDateUtc.toDate()
-  }
-
-  //
-  // Connection resolvers
-  //
   @ResolveField()
   async eventsConnection(
     @Parent() calendarEvent: CalendarEventDocument,

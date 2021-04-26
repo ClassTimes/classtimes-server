@@ -2,7 +2,7 @@ import { RRule } from 'rrule'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
-export const MAX_DATE = new Date('3000-01-01T00:00:00.000Z')
+export const MAX_DATE = new Date('9999-01-01T00:00:00.000Z')
 
 dayjs.extend(utc)
 

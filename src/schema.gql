@@ -131,6 +131,7 @@ type Event {
   calendarEvent: CalendarEvent!
   content: String!
   followerCounter: Int!
+  startDateUtc: DateTime!
   usersJoiningConnection(after: String, before: String, first: Float = 0): PaginatedUsers
 }
 
@@ -166,9 +167,10 @@ type InstituteEdge {
   node: Institute!
 }
 
-input ListCalendarEventsInRangeInput {
-  rangeEnd: String!
-  rangeStart: String!
+input ListCalendarEventsInput {
+  calendar: ID
+  rangeEnd: String
+  rangeStart: String
 }
 
 input ListCareerInput {
@@ -298,10 +300,10 @@ type Permisson {
 type Query {
   calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
-  calendarEventsInRange(payload: ListCalendarEventsInRangeInput!): PaginatedCalendarEvents!
   career(_id: ID!): Career!
   event(_id: ID!): Event!
   institute(_id: ID!): Institute!
+  listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput!, first: Float = 0): PaginatedCalendarEvents!
   listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): PaginatedCareers!
   listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): PaginatedInstitutes!
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): PaginatedSchools!

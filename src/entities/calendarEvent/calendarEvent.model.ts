@@ -102,6 +102,7 @@ export class CalendarEvent extends Utils.BaseModel {
 
 export type CalendarEventDocument = CalendarEvent & mongoose.Document
 export const CalendarEventSchema = withCursor(CalendarEvent.schema)
+CalendarEventSchema.index({ startDateUtc: 1, endDateUtc: -1 })
 CalendarEventSchema.plugin(autopopulate)
 
 @GQL.ObjectType()

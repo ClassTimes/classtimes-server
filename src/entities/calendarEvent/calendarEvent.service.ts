@@ -8,8 +8,7 @@ import { plainToClass } from 'class-transformer'
 import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
-  ListCalendarEventInput,
-  ListCalendarEventsInRangeInput,
+  ListCalendarEventsInput,
   UpdateCalendarEventInput,
 } from './calendarEvent.inputs'
 
@@ -64,11 +63,42 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
     return await this.dbModel.create(payload)
   }
 
-  async listInRange(payload: ListCalendarEventsInRangeInput) {
-    // const filters = { ...payload.filters }
-    const filters = { $and: [] }
-    filters.$and.push({ startDateUtc: { $lte: payload.rangeEnd } })
-    filters.$and.push({ endDateUtc: { $gte: payload.rangeStart } })
-    return this.list(filters, null) // TODO: Add pagination args if necessary
+  async search(filters: ListCalendarEventsInput, connectionArgs) {
+    /*
+     * Naming according to MongoDB documentation:
+     * https://docs.mongodb.com/manual/reference/method/db.collection.find/#mongodb-method-db.collection.find
+     *
+     */
+    const query: TListQuery = this.buildListQuery(filters)
+    return this.list(query, connectionArgs)
+  }
+
+  buildListQuery(filters: ListCalendarEventsInput): TListQuery {
+    const conditions: TListCondition[] = []
+
+    if (filters.calendar) {
+      conditions.push({ calendar: filters.calendar })
+    }
+    if (filters.rangeStart) {
+      conditions.push({ endDateUtc: { $gte: filters.rangeStart } })
+    }
+    if (filters.rangeEnd) {
+      conditions.push({ startDateUtc: { $lte: filters.rangeEnd } })
+    }
+
+    /* If no conditions are passed, return null */
+    if (conditions.length > 0) {
+      return { $and: conditions }
+    }
+    return null
   }
 }
+
+type TListCondition =
+  | { calendar: Types.ObjectId }
+  | { startDateUtc: { $lte: string } }
+  | { endDateUtc: { $gte: string } }
+
+type TListQuery = {
+  $and?: TListCondition[]
+} | null

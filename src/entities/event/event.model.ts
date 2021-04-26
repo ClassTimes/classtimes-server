@@ -32,6 +32,10 @@ export class Event extends Utils.BaseModel {
   @V.MinLength(10)
   content: string
 
+  @GQL.Field(() => Date)
+  @DB.Prop({ required: true })
+  startDateUtc: Date
+
   /*
    *  Relations
    */
