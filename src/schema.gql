@@ -217,8 +217,8 @@ type InstituteEdge {
 
 input ListCalendarEventsInput {
   calendar: ID
-  rangeEnd: String
-  rangeStart: String
+  rangeEnd: DateTime
+  rangeStart: DateTime
 }
 
 input ListCareerInput {
@@ -303,7 +303,7 @@ type Query {
   career(_id: ID!): Career!
   event(_id: ID!): Event!
   institute(_id: ID!): Institute!
-  listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput!, first: Float = 0): ConnectedCalendarEvents!
+  listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput, first: Float = 0): ConnectedCalendarEvents!
   listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): ConnectedCareers!
   listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): ConnectedInstitutes!
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): ConnectedSchools!

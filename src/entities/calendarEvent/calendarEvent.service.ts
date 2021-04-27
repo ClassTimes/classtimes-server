@@ -96,8 +96,8 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
 
 type TListCondition =
   | { calendar: Types.ObjectId }
-  | { startDateUtc: { $lte: string } }
-  | { endDateUtc: { $gte: string } }
+  | { startDateUtc: { $lte: Date } }
+  | { endDateUtc: { $gte: Date } }
 
 type TListQuery = {
   $and?: TListCondition[]

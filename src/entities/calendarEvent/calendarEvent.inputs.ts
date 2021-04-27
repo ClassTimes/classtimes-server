@@ -38,11 +38,11 @@ export class ListCalendarEventsInput {
   @Field(() => ID, { nullable: true })
   calendar?: Types.ObjectId
 
-  @Field(() => String, { nullable: true })
-  rangeStart?: string
+  @Field(() => Date, { nullable: true })
+  rangeStart?: Date
 
-  @Field(() => String, { nullable: true })
-  rangeEnd?: string
+  @Field(() => Date, { nullable: true })
+  rangeEnd?: Date
 }
 
 @InputType()
