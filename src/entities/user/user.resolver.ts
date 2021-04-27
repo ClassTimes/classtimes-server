@@ -9,14 +9,14 @@ import { CheckPolicies } from '../../casl/policy.guard'
 import { AppAbility, Action } from '../../casl/casl-ability.factory'
 
 // Pagination
-import { PaginatedType, PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // Auth
 import { SkipAuth } from '../../auth/decorators'
 import { Auth } from '../../auth/auth.model'
 
 // User
-import { User, UserDocument, PaginatedUsers } from './user.model'
+import { User, UserDocument, ConnectedUsers } from './user.model'
 import { UserService } from './user.service'
 import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
@@ -51,16 +51,16 @@ export class UserResolver {
     return this.service.getById(_id)
   }
 
-  @GQL.Query(() => PaginatedUsers)
+  @GQL.Query(() => ConnectedUsers)
   @CheckPolicies((ability: AppAbility) => {
     // console.log('[User] [CheckPolicies]', { ability })
     return ability.can(Action.Read, User)
   })
   async listUsers(
     @GQL.Args('filters', { nullable: true }) filters?: ListUserInput,
-    @GQL.Args() paginationArgs?: PaginationArgs,
+    @GQL.Args() connectionArgs?: ConnectionArgs,
   ) {
-    return this.service.list(filters, paginationArgs) //, currentUser)
+    return this.service.list(filters, connectionArgs) //, currentUser)
   }
 
   @GQL.Mutation(() => User)
@@ -100,83 +100,83 @@ export class UserResolver {
   @GQL.ResolveField()
   async usersFollowerConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: user._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     return result
   }
 
   // TODO: OBVIOUSLY try to make some sort of reusable function for the next resolvers!
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async usersFollowingConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     // It is necessary to filter by resource type, because a user might be following different resources.
     const filters = { followerId: user._id, resourceName: User.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async schoolsFollowingConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: School.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async subjectsFollowingConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: Subject.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async institutesFollowingConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: Institute.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async calendarsFollowingConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: Calendar.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async calendarEventsSubscribedConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: CalendarEvent.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 
-  @GQL.ResolveField(() => PaginatedUsers)
+  @GQL.ResolveField(() => ConnectedUsers)
   async eventsJoiningConnection(
     @GQL.Parent() user: UserDocument,
-    @GQL.Args() paginationArgs: PaginationArgs,
+    @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: Event.name }
-    const result = await this.followingService.list(filters, paginationArgs)
+    const result = await this.followingService.list(filters, connectionArgs)
     return result
   }
 }

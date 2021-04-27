@@ -6,15 +6,15 @@ import * as Utils from '../../utils/Model'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
 import { Subject } from '../subject/subject.model'
 import {
   CalendarEvent,
-  PaginatedCalendarEvents,
+  ConnectedCalendarEvents,
 } from '../calendarEvent/calendarEvent.model'
-import { User, PaginatedUsers } from '../user/user.model'
+import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -54,11 +54,11 @@ export class Calendar extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedCalendarEvents, { nullable: true })
-  calendarEventsConnection: PaginatedType<CalendarEvent>
+  @GQL.Field(() => ConnectedCalendarEvents, { nullable: true })
+  calendarEventsConnection: ConnectionType<CalendarEvent>
 
-  @GQL.Field(() => PaginatedUsers, { nullable: true })
-  usersFollowerConnection: PaginatedType<User>
+  @GQL.Field(() => ConnectedUsers, { nullable: true })
+  usersFollowerConnection: ConnectionType<User>
 }
 
 export type CalendarDocument = Calendar & mongoose.Document
@@ -66,4 +66,4 @@ export const CalendarSchema = withCursor(Calendar.schema)
 CalendarSchema.plugin(autopopulate)
 
 @GQL.ObjectType()
-export class PaginatedCalendars extends Paginated(Calendar) {}
+export class ConnectedCalendars extends Connected(Calendar) {}

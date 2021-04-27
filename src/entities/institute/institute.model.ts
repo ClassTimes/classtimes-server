@@ -5,12 +5,12 @@ import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
 import { School } from '../school/school.model'
-import { Subject, PaginatedSubjects } from '../subject/subject.model'
-import { User, PaginatedUsers } from '../user/user.model'
+import { Subject, ConnectedSubjects } from '../subject/subject.model'
+import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -62,15 +62,15 @@ export class Institute extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedSubjects, { nullable: true })
-  subjectsConnection: PaginatedType<Subject>
+  @GQL.Field(() => ConnectedSubjects, { nullable: true })
+  subjectsConnection: ConnectionType<Subject>
 
-  @GQL.Field(() => PaginatedUsers, { nullable: true })
-  usersFollowerConnection: PaginatedType<User>
+  @GQL.Field(() => ConnectedUsers, { nullable: true })
+  usersFollowerConnection: ConnectionType<User>
 }
 
 export type InstituteDocument = Institute & mongoose.Document
 export const InstituteSchema = withCursor(Institute.schema)
 InstituteSchema.plugin(autopopulate)
 @GQL.ObjectType()
-export class PaginatedInstitutes extends Paginated(Institute) {}
+export class ConnectedInstitutes extends Connected(Institute) {}

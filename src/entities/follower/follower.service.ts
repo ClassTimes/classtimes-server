@@ -8,10 +8,10 @@ import { Model, Types } from 'mongoose'
 
 // Pagination
 import {
-  PaginationArgs,
-  getPaginatedResults,
+  ConnectionArgs,
+  getConnectionResults,
   // buildConnection,
-} from '../../utils/Pagination'
+} from '../../utils/Connection'
 
 // Follower
 import { Follower, FollowerDocument } from './follower.model'
@@ -46,10 +46,10 @@ export class FollowerService {
 
   // Pagination
 
-  async list(filters?: any, paginationArgs?: PaginationArgs) {
-    const { first, after, before } = paginationArgs
+  async list(filters?: any, connectionArgs?: ConnectionArgs) {
+    const { first, after, before } = connectionArgs
 
-    const { result, hasNextPage } = await getPaginatedResults<Follower>({
+    const { result, hasNextPage } = await getConnectionResults<Follower>({
       dbModel: this.dbModel,
       filters,
       first,

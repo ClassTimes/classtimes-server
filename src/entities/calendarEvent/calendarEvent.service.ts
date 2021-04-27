@@ -8,7 +8,7 @@ import { plainToClass } from 'class-transformer'
 import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
-  ListCalendarEventInput,
+  ListCalendarEventsInput,
   UpdateCalendarEventInput,
 } from './calendarEvent.inputs'
 
@@ -18,8 +18,9 @@ import { Calendar, CalendarDocument } from '../calendar/calendar.model'
 // Auth
 import { Action } from '../../casl/casl-ability.factory'
 
-// Service methods
+// Utils
 import { BaseService } from '../../utils/BaseService'
+import { parseEndDate } from '../../utils/RRuleParsing'
 
 const MODEL_CLASS = CalendarEvent
 @Injectable()
@@ -48,10 +49,56 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
       .exec()
     const model: Calendar = plainToClass(Calendar, doc.toObject())
     const record: CalendarEvent = new CalendarEvent(model)
+
     await this.checkPermissons({
       action: Action.Create,
       record,
     })
+
+    /*
+     *  If able to create calendarEvent, compute endDate from RRULE
+     */
+
+    payload.endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
     return await this.dbModel.create(payload)
   }
+
+  async search(filters: ListCalendarEventsInput, connectionArgs) {
+    /*
+     * Naming according to MongoDB documentation:
+     * https://docs.mongodb.com/manual/reference/method/db.collection.find/#mongodb-method-db.collection.find
+     *
+     */
+    const query: TListQuery = this.buildListQuery(filters)
+    return this.list(query, connectionArgs)
+  }
+
+  buildListQuery(filters: ListCalendarEventsInput): TListQuery {
+    const conditions: TListCondition[] = []
+
+    if (filters?.calendar) {
+      conditions.push({ calendar: filters.calendar })
+    }
+    if (filters?.rangeStart) {
+      conditions.push({ endDateUtc: { $gte: filters.rangeStart } })
+    }
+    if (filters?.rangeEnd) {
+      conditions.push({ startDateUtc: { $lte: filters.rangeEnd } })
+    }
+
+    /* If no conditions are passed, return null */
+    if (conditions.length > 0) {
+      return { $and: conditions }
+    }
+    return null
+  }
 }
+
+type TListCondition =
+  | { calendar: Types.ObjectId }
+  | { startDateUtc: { $lte: Date } }
+  | { endDateUtc: { $gte: Date } }
+
+type TListQuery = {
+  $and?: TListCondition[]
+} | null

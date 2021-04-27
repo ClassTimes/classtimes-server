@@ -9,16 +9,19 @@ import {
   ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
-import dayjs from 'dayjs'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // CalendarEvent
-import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
+import {
+  CalendarEvent,
+  CalendarEventDocument,
+  ConnectedCalendarEvents,
+} from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
-  ListCalendarEventInput,
+  ListCalendarEventsInput,
   UpdateCalendarEventInput,
   // CreateCalendarEventInputsSchema,
 } from './calendarEvent.inputs'
@@ -27,7 +30,6 @@ import {
 import { CalendarEventService } from './calendarEvent.service'
 import { EventService } from '../event/event.service'
 import { FollowerService } from '../follower/follower.service'
-
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
   constructor(
@@ -41,12 +43,13 @@ export class CalendarEventResolver {
     return this.service.getById(_id)
   }
 
-  // @Query(() => [CalendarEvent])
-  // async calendarEvents(
-  //   @Args('filters', { nullable: true }) filters?: ListCalendarEventInput,
-  // ) {
-  //   return this.service.list(filters)
-  // }
+  @Query(() => ConnectedCalendarEvents)
+  async listCalendarEvents(
+    @Args('filters', { nullable: true }) filters: ListCalendarEventsInput,
+    @Args() connectionArgs: ConnectionArgs,
+  ) {
+    return this.service.search(filters, connectionArgs)
+  }
 
   @Mutation(() => CalendarEvent)
   async createCalendarEvent(
@@ -69,42 +72,26 @@ export class CalendarEventResolver {
     return this.service.delete(_id)
   }
 
-  //
-  // Properties
+  /*
+   * Connection resolvers
+   */
 
-  @ResolveField() // TODO Compute on save not on read so can be indexed
-  async endDateUtc(@Root() calendarEvent: CalendarEvent) {
-    const _endDateUtc = dayjs(calendarEvent.startDateUtc)
-      .utc()
-      .add(calendarEvent.durationHours, 'hours')
-
-    console.log({
-      calendarEvent: calendarEvent.title,
-      _endDateUtc,
-    })
-
-    return _endDateUtc.toDate()
-  }
-
-  //
-  // Connection resolvers
-  //
   @ResolveField()
   async eventsConnection(
     @Parent() calendarEvent: CalendarEventDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { calendarEvent: calendarEvent._id }
-    return this.eventService.list(filters, paginationArgs)
+    return this.eventService.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async usersSubscriberConnection(
     @Parent() calendarEvent: CalendarEventDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: calendarEvent._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     // TODO: Is it necessary to filter by resourceName as well?
     return result
   }

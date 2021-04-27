@@ -12,7 +12,7 @@ import { Types } from 'mongoose'
 // import * as dayjs from 'dayjs'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // Event
 import { Event, EventDocument } from './event.model'
@@ -86,10 +86,10 @@ export class EventResolver {
   @ResolveField()
   async usersJoiningConnection(
     @Parent() event: EventDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: event._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     // TODO: Is it necessary to filter by resourceName as well?
     return result
   }

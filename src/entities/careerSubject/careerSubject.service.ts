@@ -8,10 +8,10 @@ import { Model, Types } from 'mongoose'
 
 // Pagination
 import {
-  PaginationArgs,
-  getPaginatedResults,
+  ConnectionArgs,
+  getConnectionResults,
   // buildConnection,
-} from '../../utils/Pagination'
+} from '../../utils/Connection'
 
 // CareerSubject
 import { CareerSubject, CareerSubjectDocument } from './careerSubject.model'
@@ -47,10 +47,10 @@ export class CareerSubjectService {
 
   // Pagination
 
-  async list(filters?: any, paginationArgs?: PaginationArgs) {
-    const { first, after, before } = paginationArgs
+  async list(filters?: any, connectionArgs?: ConnectionArgs) {
+    const { first, after, before } = connectionArgs
 
-    const { result, hasNextPage } = await getPaginatedResults<CareerSubject>({
+    const { result, hasNextPage } = await getConnectionResults<CareerSubject>({
       dbModel: this.dbModel,
       filters,
       first,

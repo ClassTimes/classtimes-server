@@ -5,13 +5,13 @@ import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
-import { Calendar, PaginatedCalendars } from '../calendar/calendar.model'
+import { Calendar, ConnectedCalendars } from '../calendar/calendar.model'
 import { School } from '../school/school.model'
 import { Institute } from '../institute/institute.model'
-import { User, PaginatedUsers } from '../user/user.model'
+import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -69,11 +69,11 @@ export class Subject extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedCalendars, { nullable: true })
-  calendarsConnection: PaginatedType<Calendar>
+  @GQL.Field(() => ConnectedCalendars, { nullable: true })
+  calendarsConnection: ConnectionType<Calendar>
 
-  @GQL.Field(() => PaginatedUsers, { nullable: true })
-  usersFollowerConnection: PaginatedType<User>
+  @GQL.Field(() => ConnectedUsers, { nullable: true })
+  usersFollowerConnection: ConnectionType<User>
 }
 
 export type SubjectDocument = Subject & mongoose.Document
@@ -81,4 +81,4 @@ export const SubjectSchema = withCursor(Subject.schema)
 SubjectSchema.plugin(autopopulate)
 
 @GQL.ObjectType()
-export class PaginatedSubjects extends Paginated(Subject) {}
+export class ConnectedSubjects extends Connected(Subject) {}

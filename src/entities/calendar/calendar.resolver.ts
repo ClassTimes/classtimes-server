@@ -10,7 +10,7 @@ import {
 import { Types } from 'mongoose'
 
 // Pagination
-import { PaginationArgs } from '../../utils/Pagination'
+import { ConnectionArgs } from '../../utils/Connection'
 
 // Calendar
 import { Calendar, CalendarDocument } from './calendar.model'
@@ -68,19 +68,19 @@ export class CalendarResolver {
   @ResolveField()
   async calendarEventsConnection(
     @Parent() calendar: CalendarDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { calendar: calendar._id }
-    return this.calendarEventService.list(filters, paginationArgs)
+    return this.calendarEventService.list(filters, connectionArgs)
   }
 
   @ResolveField()
   async usersFollowerConnection(
     @Parent() calendar: CalendarDocument,
-    @Args() paginationArgs: PaginationArgs,
+    @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { resourceId: calendar._id.toString() }
-    const result = this.followerService.list(filters, paginationArgs)
+    const result = this.followerService.list(filters, connectionArgs)
     // TODO: Is it necessary to filter by resourceName as well?
     return result
   }

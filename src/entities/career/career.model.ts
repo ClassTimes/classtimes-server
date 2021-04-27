@@ -6,11 +6,11 @@ import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
 
 // Pagination
-import { Paginated, PaginatedType, withCursor } from '../../utils/Pagination'
+import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
 import { User } from '../user/user.model'
-import { Subject, PaginatedSubjects } from '../subject/subject.model'
+import { Subject, ConnectedSubjects } from '../subject/subject.model'
 import { School } from '../school/school.model'
 
 @GQL.ObjectType()
@@ -50,12 +50,12 @@ export class Career extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => PaginatedSubjects, { nullable: true })
-  subjectsConnection: PaginatedType<Subject>
+  @GQL.Field(() => ConnectedSubjects, { nullable: true })
+  subjectsConnection: ConnectionType<Subject>
 }
 
 export type CareerDocument = Career & mongoose.Document
 export const CareerSchema = withCursor(Career.schema)
 CareerSchema.plugin(autopopulate)
 @GQL.ObjectType()
-export class PaginatedCareers extends Paginated(Career) {}
+export class ConnectedCareers extends Connected(Career) {}
