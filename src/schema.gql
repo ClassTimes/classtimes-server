@@ -28,6 +28,7 @@ type CalendarEdge {
 
 type CalendarEvent {
   _id: ID!
+  basedOnCalendarEvent: ID
   calendar: Calendar!
   description: String
   durationHours: Float!
@@ -36,11 +37,13 @@ type CalendarEvent {
   exceptionsDatesUtc: [DateTime!]
   followerCounter: Int!
   isAllDay: Boolean
+  presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
   tags: [String!]!
   title: String!
   usersSubscriberConnection(after: String, before: String, first: Float = 0): ConnectedUsers
+  virtualLocation: VirtualLocation
 }
 
 type CalendarEventEdge {
@@ -110,14 +113,17 @@ type ConnectedUsers {
 }
 
 input CreateCalendarEventInput {
+  basedOnCalendarEvent: ID
   calendar: ID!
   description: String
   durationHours: Float
   exceptionsDatesUtc: [DateTime!]
   isAllDay: Boolean
+  presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
   title: String!
+  virtualLocation: VirtualLocationInput
 }
 
 input CreateCalendarInput {
@@ -138,8 +144,10 @@ input CreateCareerSubjectInput {
 
 input CreateEventInput {
   calendarEvent: ID!
-  content: String!
+  description: String
+  presentialLocation: String
   usersJoining: [ID!]
+  virtualLocation: VirtualLocationInput
 }
 
 input CreateInstituteInput {
@@ -155,6 +163,7 @@ input CreateSchoolInput {
 }
 
 input CreateSubjectInput {
+  description: String
   institute: ID
   name: String!
   school: ID
@@ -177,10 +186,12 @@ scalar DateTime
 type Event {
   _id: ID!
   calendarEvent: CalendarEvent!
-  content: String!
+  description: String
   followerCounter: Int!
+  presentialLocation: String
   startDateUtc: DateTime!
   usersJoiningConnection(after: String, before: String, first: Float = 0): ConnectedUsers
+  virtualLocation: VirtualLocation
 }
 
 type EventEdge {
@@ -337,6 +348,7 @@ type SchoolEdge {
 type Subject {
   _id: ID!
   calendarsConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
+  description: String!
   followerCounter: Int!
   institute: Institute!
   name: String!
@@ -353,14 +365,17 @@ type SubjectEdge {
 
 input UpdateCalendarEventInput {
   _id: ID!
-  calendar: ID
+  basedOnCalendarEvent: ID
+  calendar: ID!
   description: String
   durationHours: Float
   exceptionsDatesUtc: [DateTime!]
   isAllDay: Boolean
+  presentialLocation: String
   rrule: String
-  startDateUtc: DateTime
-  title: String
+  startDateUtc: DateTime!
+  title: String!
+  virtualLocation: VirtualLocationInput
 }
 
 input UpdateCalendarInput {
@@ -376,8 +391,10 @@ input UpdateCareerInput {
 input UpdateEventInput {
   _id: ID!
   calendarEvent: ID!
-  content: String
+  description: String
+  presentialLocation: String
   usersJoining: [ID!]
+  virtualLocation: VirtualLocationInput
 }
 
 input UpdateInstituteInput {
@@ -394,6 +411,7 @@ input UpdateSchoolInput {
 
 input UpdateSubjectInput {
   _id: ID!
+  description: String
   name: String
   school: ID!
 }
@@ -430,6 +448,18 @@ type User {
 type UserEdge {
   cursor: String!
   node: User!
+}
+
+type VirtualLocation {
+  notes: String!
+  serviceType: String!
+  url: String!
+}
+
+input VirtualLocationInput {
+  notes: String
+  serviceType: String
+  url: String!
 }
 
 input WritePermissonsInput {

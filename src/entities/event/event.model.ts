@@ -12,6 +12,8 @@ import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 import { User, ConnectedUsers } from '../user/user.model'
 
+import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
+
 @GQL.ObjectType()
 @DB.Schema({
   autoIndex: true,
@@ -25,12 +27,16 @@ export class Event extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @GQL.Field(() => String, { nullable: false })
-  @DB.Prop({
-    required: true,
-  })
-  @V.MinLength(10)
-  content: string
+  @GQL.Field(() => String, { nullable: true })
+  description: string
+
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false })
+  presentialLocation: string
+
+  @GQL.Field(() => VirtualLocation, { nullable: true })
+  @DB.Prop({ type: VirtualLocation, required: false })
+  virtualLocation: VirtualLocation
 
   @GQL.Field(() => Date)
   @DB.Prop({ required: true })

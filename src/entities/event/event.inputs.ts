@@ -1,12 +1,20 @@
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 
-// import { School } from '../school/school.model'
+import { VirtualLocationInput } from '../virtualLocation/virtualLocation.inputs'
 
+// import { School } from '../school/school.model'
+// import { VirtualLocation } from '../calendarEvent/calendarEvent.inputs'
 @GQL.InputType()
 export class CreateEventInput {
-  @GQL.Field(() => String, { nullable: false })
-  content: string
+  @GQL.Field(() => String, { nullable: true })
+  description?: string
+
+  @GQL.Field(() => String, { nullable: true })
+  presentialLocation?: string
+
+  @GQL.Field(() => VirtualLocationInput, { nullable: true })
+  virtualLocation?: VirtualLocationInput
 
   // Relations
   @GQL.Field(() => GQL.ID, { nullable: false })
@@ -28,7 +36,7 @@ export class UpdateEventInput extends CreateEventInput {
   _id: mongoose.Types.ObjectId
 
   @GQL.Field(() => String, { nullable: true })
-  content: string
+  description?: string
 }
 
 @GQL.InputType()

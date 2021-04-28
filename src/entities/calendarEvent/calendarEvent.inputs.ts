@@ -1,7 +1,8 @@
 import { Field, ID, InputType, ArgsType } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
-// import { School } from '../school/school.model'
+import { VirtualLocationInput } from '../virtualLocation/virtualLocation.inputs'
+// https://docs.nestjs.com/graphql/scalars
 
 @InputType()
 export class CreateCalendarEventInput {
@@ -11,9 +12,16 @@ export class CreateCalendarEventInput {
   @Field(() => String, { nullable: true })
   description?: string
 
+  @Field(() => String, { nullable: true })
+  presentialLocation?: string
+
+  @Field(() => VirtualLocationInput, { nullable: true })
+  virtualLocation?: VirtualLocationInput
+
   @Field(() => Date, { nullable: false })
   startDateUtc: Date
 
+  /* This needs to be here for create() to work */
   endDateUtc: Date
 
   @Field(() => Boolean, { nullable: true })
@@ -31,6 +39,9 @@ export class CreateCalendarEventInput {
   // Relations
   @Field(() => ID)
   calendar: Types.ObjectId
+
+  @Field(() => ID, { nullable: true })
+  basedOnCalendarEvent: Types.ObjectId
 }
 
 @InputType()
@@ -49,14 +60,4 @@ export class ListCalendarEventsInput {
 export class UpdateCalendarEventInput extends CreateCalendarEventInput {
   @Field(() => ID)
   _id: Types.ObjectId
-
-  @Field(() => String, { nullable: true })
-  title: string
-
-  @Field(() => Date, { nullable: true })
-  startDateUtc: Date
-
-  // Relations
-  @Field(() => ID, { nullable: true })
-  calendar: Types.ObjectId
 }
