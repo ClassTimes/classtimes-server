@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common'
 
 import { ImageKitAuthResolver } from './imageKitAuth.resolver'
 import { ImageKitAuthService } from './imageKitAuth.service'
+import { ImageKitAuthController } from './imageKitAuth.controller'
 
 @Module({
-  imports: [],
-  providers: [ImageKitAuthResolver, ImageKitAuthService],
+  controllers: [ImageKitAuthController],
 })
 export class ImageKitAuthModule {}
