@@ -9,6 +9,9 @@ export class CreateInstituteInput {
   @Field(() => String, { nullable: true })
   shortName?: string
 
+  @Field(() => String, { nullable: true })
+  avatarImage?: string
+
   // Relations
   @Field(() => ID)
   school?: Types.ObjectId

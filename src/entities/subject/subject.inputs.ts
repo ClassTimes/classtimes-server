@@ -14,6 +14,12 @@ export class CreateSubjectInput {
 
   @Field(() => ID, { nullable: true })
   institute?: Types.ObjectId
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Imagekit link to uploaded image',
+  })
+  avatarImage?: string
 }
 
 @InputType()
@@ -33,9 +39,12 @@ export class UpdateSubjectInput {
   @Field(() => String, { nullable: true })
   name?: string
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   school?: Types.ObjectId
 
   @Field(() => String, { nullable: true })
   description?: string
+
+  @Field(() => String, { nullable: true })
+  avatarImage?: string
 }

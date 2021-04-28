@@ -22,6 +22,9 @@ export class CreateUserInput {
   mobile: string
 
   @GQL.Field(() => String, { nullable: true })
+  avatarImage?: string
+
+  @GQL.Field(() => String, { nullable: true })
   role: string
 
   // Realtions
@@ -42,4 +45,7 @@ export class ListUserInput {
 export class UpdateUserInput extends CreateUserInput {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
+
+  @GQL.Field(() => String, { nullable: true })
+  avatarImage?: string
 }

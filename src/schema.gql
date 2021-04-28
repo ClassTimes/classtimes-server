@@ -151,18 +151,22 @@ input CreateEventInput {
 }
 
 input CreateInstituteInput {
+  avatarImage: String
   name: String!
   school: ID!
   shortName: String
 }
 
 input CreateSchoolInput {
+  avatarImage: String
   name: String!
   parentSchool: ID
   shortName: String
 }
 
 input CreateSubjectInput {
+  """Imagekit link to uploaded image"""
+  avatarImage: String
   description: String
   institute: ID
   name: String!
@@ -170,6 +174,7 @@ input CreateSubjectInput {
 }
 
 input CreateUserInput {
+  avatarImage: String
   email: String
   fullName: String
   mobile: String
@@ -414,13 +419,15 @@ input UpdateSchoolInput {
 
 input UpdateSubjectInput {
   _id: ID!
+  avatarImage: String
   description: String
   name: String
-  school: ID!
+  school: ID
 }
 
 input UpdateUserInput {
   _id: ID!
+  avatarImage: String
   email: String
   fullName: String
   mobile: String
