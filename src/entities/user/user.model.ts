@@ -52,6 +52,10 @@ export class User extends Utils.BaseModel {
   @DB.Prop({ required: false, min: 3, max: 60 }) // unique: true,
   mobile: string
 
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false })
+  avatarImage: string
+
   // Counter caches
 
   @GQL.Field(() => GQL.Int)

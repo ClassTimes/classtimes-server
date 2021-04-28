@@ -212,6 +212,7 @@ type Following {
 
 type Institute {
   _id: ID!
+  avatarImage: String
   createdBy: User!
   followerCounter: Int!
   name: String!
@@ -329,6 +330,7 @@ union Resource = Calendar | CalendarEvent | Event | Institute | School | Subject
 
 type School {
   _id: ID!
+  avatarImage: String
   childrenSchoolsConnection(after: String, before: String, first: Float = 0): ConnectedSchools
   createdBy: User!
   followerCounter: Int!
@@ -347,6 +349,7 @@ type SchoolEdge {
 
 type Subject {
   _id: ID!
+  avatarImage: String
   calendarsConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
   description: String!
   followerCounter: Int!
@@ -428,6 +431,7 @@ input UpdateUserInput {
 
 type User {
   _id: ID!
+  avatarImage: String
   calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): ConnectedUsers!
   calendarsEventsSubscribedConnection: ConnectedCalendarEvents
   calendarsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
