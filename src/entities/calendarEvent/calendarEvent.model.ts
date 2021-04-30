@@ -1,5 +1,6 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
-import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
+import * as GQL from '@nestjs/graphql'
+import * as GraphQLJSON from 'graphql-type-json' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
@@ -12,6 +13,8 @@ import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 import { Calendar } from '../calendar/calendar.model'
 import { Event, ConnectedEvents } from '../event/event.model'
 import { User, ConnectedUsers } from '../user/user.model'
+import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
+import { Field, GqlExecutionContext } from '@nestjs/graphql'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -34,6 +37,14 @@ export class CalendarEvent extends Utils.BaseModel {
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false })
   description: string
+
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false })
+  presentialLocation: string
+
+  @GQL.Field(() => VirtualLocation, { nullable: true })
+  @DB.Prop({ type: VirtualLocation, required: false })
+  virtualLocation: VirtualLocation
 
   // Add event tags
   @GQL.Field(() => [String])
@@ -67,10 +78,23 @@ export class CalendarEvent extends Utils.BaseModel {
   /*
    *  Relations
    */
-
   @GQL.Field(() => GQL.Int)
   @DB.Prop({ type: Number, default: 0 })
   followerCounter: number
+
+  @GQL.Field(() => GQL.ID, { nullable: true })
+  @DB.Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CalendarEvent',
+    localField: 'basedOnCalendarEvents',
+    required: false,
+    autopopulate: true,
+  })
+  /*
+   * This field links a CalendarEvent to another CalendarEvent from which
+   * it was created from
+   */
+  basedOnCalendarEvent: mongoose.Types.ObjectId | CalendarEvent
 
   @GQL.Field(() => Calendar, { nullable: false })
   @DB.Prop({
@@ -108,7 +132,6 @@ CalendarEventSchema.plugin(autopopulate)
 @GQL.ObjectType()
 export class ConnectedCalendarEvents extends Connected(CalendarEvent) {}
 
-//
 // # Reference Link
 //
 // https://github.com/bmoeskau/Extensible/blob/master/recurrence-overview.md

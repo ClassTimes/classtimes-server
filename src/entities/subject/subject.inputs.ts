@@ -5,6 +5,9 @@ export class CreateSubjectInput {
   @Field(() => String, { nullable: false })
   name: string
 
+  @Field(() => String, { nullable: true })
+  description?: string
+
   // Relations
   @Field(() => ID, { nullable: true })
   school?: Types.ObjectId
@@ -32,4 +35,7 @@ export class UpdateSubjectInput {
 
   @Field(() => ID)
   school?: Types.ObjectId
+
+  @Field(() => String, { nullable: true })
+  description?: string
 }

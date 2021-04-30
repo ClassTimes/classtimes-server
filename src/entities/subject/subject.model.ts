@@ -36,6 +36,10 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop()
   shortName: string
 
+  @GQL.Field(() => String)
+  @DB.Prop()
+  description: string
+
   // Add event tags
   @GQL.Field(() => [String])
   @DB.Prop({ default: [] })
