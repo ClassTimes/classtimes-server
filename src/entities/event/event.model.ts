@@ -12,6 +12,8 @@ import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 import { User, ConnectedUsers } from '../user/user.model'
 
+// Embedded documents
+import { Comment } from '../comment/comment.model'
 import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
 
 @GQL.ObjectType()
@@ -41,6 +43,10 @@ export class Event extends Utils.BaseModel {
   @GQL.Field(() => Date)
   @DB.Prop({ required: true })
   startDateUtc: Date
+
+  @GQL.Field(() => [Comment], { nullable: true })
+  @DB.Prop({ type: Comment, required: false })
+  comments: Comment[]
 
   /*
    *  Relations

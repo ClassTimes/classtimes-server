@@ -50,6 +50,16 @@ type CareerEdge {
   node: Career!
 }
 
+type Comment {
+  content: String!
+  createdBy: User!
+}
+
+input CommentInput {
+  content: String!
+  createdBy: ID!
+}
+
 type ConnectedCalendarEvents {
   edges: [CalendarEventEdge!]
   pageInfo: PageInfoType!
@@ -58,6 +68,12 @@ type ConnectedCalendarEvents {
 
 type ConnectedCareers {
   edges: [CareerEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedDiscussions {
+  edges: [DiscussionEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
@@ -117,6 +133,12 @@ input CreateCareerSubjectInput {
   subjectId: ID!
 }
 
+input CreateDiscussionInput {
+  content: String!
+  subject: ID!
+  title: String!
+}
+
 input CreateEventInput {
   calendarEvent: ID!
   description: String
@@ -163,9 +185,23 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Discussion {
+  _id: ID!
+  comments: [Comment!]
+  content: String
+  subject: Subject!
+  title: String
+}
+
+type DiscussionEdge {
+  cursor: String!
+  node: Discussion!
+}
+
 type Event {
   _id: ID!
   calendarEvent: CalendarEvent!
+  comments: [Comment!]
   description: String
   followerCounter: Int!
   presentialLocation: String
@@ -244,10 +280,12 @@ input LoginInput {
 }
 
 type Mutation {
+  addCommentToDiscussion(comment: CommentInput!, discussionId: ID!): Discussion
   addSubjectToCareer(payload: CreateCareerSubjectInput!): Career!
   approveCareerBySchool(payload: ApproveCareerInput!): Career!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createCareer(payload: CreateCareerInput!): Career!
+  createDiscussion(payload: CreateDiscussionInput!): Discussion!
   createEvent(payload: CreateEventInput!): Event!
   createInstitute(payload: CreateInstituteInput!): Institute!
   createSchool(payload: CreateSchoolInput!): School!
@@ -255,6 +293,7 @@ type Mutation {
   createUser(payload: CreateUserInput!): User!
   deleteCalendarEvent(_id: ID!): CalendarEvent
   deleteCareer(_id: ID!): Career!
+  deleteDiscussion(_id: ID!): Discussion
   deleteEvent(_id: ID!): Event
   deleteInstitute(_id: ID!): Institute!
   deleteSchool(_id: ID!): School!
@@ -272,6 +311,7 @@ type Mutation {
   unfollowUser(followeeId: ID!): Following!
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateCareer(payload: UpdateCareerInput!): Career!
+  updateDiscussion(payload: UpdateDiscussionInput!): Discussion
   updateEvent(payload: UpdateEventInput!): Event
   updateInstitute(payload: UpdateInstituteInput!): Institute!
   updateSchool(payload: UpdateSchoolInput!): School!
@@ -295,6 +335,7 @@ type Permisson {
 type Query {
   calendarEvent(_id: ID!): CalendarEvent!
   career(_id: ID!): Career!
+  discussion(_id: ID!): Discussion!
   event(_id: ID!): Event!
   getImageKitSignature(publicKey: String!): ImageKitAuth!
   institute(_id: ID!): Institute!
@@ -335,6 +376,7 @@ type Subject {
   avatarImage: String
   calendarEventsConnection(after: String, before: String, first: Float = 0): ConnectedCalendarEvents
   description: String!
+  discussionsConnection(after: String, before: String, first: Float = 0): ConnectedDiscussions
   followerCounter: Int!
   institute: Institute!
   name: String!
@@ -366,6 +408,13 @@ input UpdateCalendarEventInput {
 
 input UpdateCareerInput {
   _id: ID!
+}
+
+input UpdateDiscussionInput {
+  _id: ID!
+  content: String!
+  subject: ID!
+  title: String!
 }
 
 input UpdateEventInput {

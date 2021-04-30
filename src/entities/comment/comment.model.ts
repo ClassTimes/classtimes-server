@@ -1,57 +1,26 @@
-import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
-import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
+import { Schema, Prop } from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
+import { ObjectType, Field } from '@nestjs/graphql'
 import mongoose from 'mongoose'
-import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
-import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
-// Pagination
-import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
-
-// Entities
-import { Event } from '../event/event.model'
-
-@GQL.ObjectType()
-@DB.Schema({
-  autoIndex: true,
+import { User } from '../user/user.model'
+@ObjectType()
+@Schema({
+  timestamps: true,
 })
 export class Comment extends Utils.BaseModel {
-  constructor(resource: Event) {
-    super()
-    this.resource = resource
-  }
-
-  @GQL.Field(() => GQL.ID)
-  _id: mongoose.Types.ObjectId
-
-  @GQL.Field(() => String, { nullable: false })
+  @Field(() => String)
+  @Prop(() => String)
   content: string
 
-  @GQL.Field(() => String, { nullable: false })
-  resourceName: string
-
-  @DB.Prop({ required: true })
-  resourceId: mongoose.Types.ObjectId
-
-  @GQL.Field(() => Event, {
-    description: 'Resource to which the comment belongs to',
+  @Field(() => User, { nullable: false })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    autopopulate: true,
   })
-  @Utils.Virtual({
-    propertyKey: 'resource',
-    refPath: 'resourceName',
-    localField: 'resourceId',
-    foreignField: '_id',
-  })
-  resource: mongoose.Types.ObjectId | Event
-
-  /*
-   *  Relations
-   */
+  createdBy: mongoose.Types.ObjectId | User
 }
 
 export type CommentDocument = Comment & mongoose.Document
-export const CommentSchema = withCursor(Comment.schema)
-CommentSchema.plugin(autopopulate)
-
-@GQL.ObjectType()
-export class ConnectedComments extends Connected(Comment) {}
+export const CommentSchema = Comment.schema

@@ -8,6 +8,9 @@ import { SubjectResolver } from './subject.resolver'
 import { School, SchoolSchema } from '../school/school.model'
 import { Institute, InstituteSchema } from '../institute/institute.model'
 
+import { DiscussionService } from '../discussion/discussion.service'
+import { Discussion, DiscussionSchema } from '../discussion/discussion.model'
+
 import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 import {
   CalendarEvent,
@@ -33,6 +36,10 @@ import { FollowerService } from '../follower/follower.service'
         schema: InstituteSchema,
       },
       {
+        name: Discussion.name,
+        schema: DiscussionSchema,
+      },
+      {
         name: CalendarEvent.name,
         schema: CalendarEventSchema,
       },
@@ -47,6 +54,7 @@ import { FollowerService } from '../follower/follower.service'
     SubjectService,
     SubjectResolver,
     CalendarEventService,
+    DiscussionService,
     FollowerService,
   ],
 })

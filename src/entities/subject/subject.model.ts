@@ -15,6 +15,10 @@ import {
 import { School } from '../school/school.model'
 import { Institute } from '../institute/institute.model'
 import { User, ConnectedUsers } from '../user/user.model'
+import {
+  Discussion,
+  ConnectedDiscussions,
+} from '../discussion/discussion.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -82,6 +86,9 @@ export class Subject extends Utils.BaseModel {
 
   @GQL.Field(() => ConnectedCalendarEvents, { nullable: true })
   calendarEventsConnection: ConnectionType<CalendarEvent>
+
+  @GQL.Field(() => ConnectedDiscussions, { nullable: true })
+  discussionsConnection: ConnectionType<Discussion>
 
   @GQL.Field(() => ConnectedUsers, { nullable: true })
   usersFollowerConnection: ConnectionType<User>

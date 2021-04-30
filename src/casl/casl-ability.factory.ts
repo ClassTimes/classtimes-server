@@ -11,6 +11,7 @@ import {
 import { Auth } from '../auth/auth.model'
 import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
 import { Career } from '../entities/career/career.model'
+import { Discussion } from '../entities/discussion/discussion.model'
 import { Event } from '../entities/event/event.model'
 import { Institute } from '../entities/institute/institute.model'
 import { School } from '../entities/school/school.model'
@@ -22,6 +23,7 @@ type Subjects =
       | typeof Auth
       | typeof CalendarEvent
       | typeof Career
+      | typeof Discussion
       | typeof Event
       | typeof Institute
       | typeof School
@@ -63,8 +65,10 @@ export class CaslAbilityFactory {
     // TODO: Add Action.RemovePermisson
     can([Action.Read], School)
     can([Action.Read], Subject)
+    can([Action.Read], Discussion)
     can([Action.Read], Career)
     can([Action.Read], CalendarEvent)
+    can([Action.Read], Event)
 
     if (user) {
       // Super Admin abilities -----------------------------------------
@@ -127,7 +131,12 @@ export class CaslAbilityFactory {
         'roles.admin.userId': user._id,
       } as any)
 
-      // CalendarEvent abilities -----------------------------------------
+      // Discussion abilities ------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], Discussion, {
+        'subject.roles.admin.userId': user._id,
+      } as any)
+
+      // CalendarEvent abilities ---------------------------------
       can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
         'subject.roles.admin.userId': user._id,
       } as any)

@@ -107,8 +107,9 @@ export class BaseModel {
 
   @DB.Prop({
     type: mongoose.Schema.Types.Mixed,
+    required: false,
   })
-  roles: Record<string | symbol, unknown> // TODO: Improve model
+  roles?: Record<string | symbol, unknown> // TODO: Improve model
 }
 
 // Validation
