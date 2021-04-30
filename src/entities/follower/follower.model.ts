@@ -11,22 +11,13 @@ import * as Utils from '../../utils/Model'
 import { School } from '../school/school.model'
 import { Subject } from '../subject/subject.model'
 import { Institute } from '../institute/institute.model'
-import { Calendar } from '../calendar/calendar.model'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 import { Event } from '../event/event.model'
 import { User } from '../user/user.model'
 
 const Resource = GQL.createUnionType({
   name: 'Resource',
-  types: () => [
-    School,
-    Subject,
-    Institute,
-    Calendar,
-    CalendarEvent,
-    Event,
-    User,
-  ],
+  types: () => [School, Subject, Institute, CalendarEvent, Event, User],
   resolveType(value) {
     switch (value.collection.collectionName) {
       case 'schools':
@@ -35,8 +26,6 @@ const Resource = GQL.createUnionType({
         return Subject
       case 'institutes':
         return Institute
-      case 'calendars':
-        return Calendar
       case 'calendarEventss':
         return CalendarEvent
       case 'events':
@@ -76,7 +65,6 @@ export class Follower extends Utils.BaseModel {
     | School
     | Subject
     | Institute
-    | Calendar
     | CalendarEvent
     | Event
 

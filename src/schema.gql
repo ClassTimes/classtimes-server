@@ -12,24 +12,9 @@ type Auth {
   user: User!
 }
 
-type Calendar {
-  _id: ID!
-  calendarEventsConnection(after: String, before: String, first: Float = 0): ConnectedCalendarEvents
-  followerCounter: Int!
-  name: String!
-  subject: Subject!
-  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
-}
-
-type CalendarEdge {
-  cursor: String!
-  node: Calendar!
-}
-
 type CalendarEvent {
   _id: ID!
   basedOnCalendarEvent: ID
-  calendar: Calendar!
   description: String
   durationHours: Float!
   endDateUtc: DateTime!
@@ -40,6 +25,7 @@ type CalendarEvent {
   presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
+  subject: Subject!
   tags: [String!]!
   title: String!
   usersSubscriberConnection(after: String, before: String, first: Float = 0): ConnectedUsers
@@ -66,12 +52,6 @@ type CareerEdge {
 
 type ConnectedCalendarEvents {
   edges: [CalendarEventEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type ConnectedCalendars {
-  edges: [CalendarEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
@@ -114,7 +94,6 @@ type ConnectedUsers {
 
 input CreateCalendarEventInput {
   basedOnCalendarEvent: ID
-  calendar: ID!
   description: String
   durationHours: Float
   exceptionsDatesUtc: [DateTime!]
@@ -122,13 +101,9 @@ input CreateCalendarEventInput {
   presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
+  subject: ID!
   title: String!
   virtualLocation: VirtualLocationInput
-}
-
-input CreateCalendarInput {
-  name: String!
-  subject: ID!
 }
 
 input CreateCareerInput {
@@ -239,9 +214,9 @@ type InstituteEdge {
 }
 
 input ListCalendarEventsInput {
-  calendar: ID
   rangeEnd: DateTime
   rangeStart: DateTime
+  subject: ID
 }
 
 input ListCareerInput {
@@ -271,7 +246,6 @@ input LoginInput {
 type Mutation {
   addSubjectToCareer(payload: CreateCareerSubjectInput!): Career!
   approveCareerBySchool(payload: ApproveCareerInput!): Career!
-  createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createCareer(payload: CreateCareerInput!): Career!
   createEvent(payload: CreateEventInput!): Event!
@@ -279,7 +253,6 @@ type Mutation {
   createSchool(payload: CreateSchoolInput!): School!
   createSubject(payload: CreateSubjectInput!): Subject!
   createUser(payload: CreateUserInput!): User!
-  deleteCalendar(_id: ID!): Calendar
   deleteCalendarEvent(_id: ID!): CalendarEvent
   deleteCareer(_id: ID!): Career!
   deleteEvent(_id: ID!): Event
@@ -297,7 +270,6 @@ type Mutation {
   subscribeToCalendarEvent(calendarEventId: ID!): Following!
   unfollowResource(resourceId: ID!): Following!
   unfollowUser(followeeId: ID!): Following!
-  updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateCareer(payload: UpdateCareerInput!): Career!
   updateEvent(payload: UpdateEventInput!): Event
@@ -321,7 +293,6 @@ type Permisson {
 }
 
 type Query {
-  calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
   career(_id: ID!): Career!
   event(_id: ID!): Event!
@@ -338,7 +309,7 @@ type Query {
   whoAmI: User!
 }
 
-union Resource = Calendar | CalendarEvent | Event | Institute | School | Subject | User
+union Resource = CalendarEvent | Event | Institute | School | Subject | User
 
 type School {
   _id: ID!
@@ -362,7 +333,7 @@ type SchoolEdge {
 type Subject {
   _id: ID!
   avatarImage: String
-  calendarsConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
+  calendarEventsConnection(after: String, before: String, first: Float = 0): ConnectedCalendarEvents
   description: String!
   followerCounter: Int!
   institute: Institute!
@@ -381,7 +352,6 @@ type SubjectEdge {
 input UpdateCalendarEventInput {
   _id: ID!
   basedOnCalendarEvent: ID
-  calendar: ID!
   description: String
   durationHours: Float
   exceptionsDatesUtc: [DateTime!]
@@ -389,14 +359,9 @@ input UpdateCalendarEventInput {
   presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
+  subject: ID!
   title: String!
   virtualLocation: VirtualLocationInput
-}
-
-input UpdateCalendarInput {
-  _id: ID!
-  name: String
-  subject: ID
 }
 
 input UpdateCareerInput {
@@ -448,7 +413,6 @@ type User {
   avatarImage: String
   calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): ConnectedUsers!
   calendarsEventsSubscribedConnection: ConnectedCalendarEvents
-  calendarsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
   email: String
   eventsJoiningConnection(after: String, before: String, first: Float = 0): ConnectedEvents
   followerCounter: Int!

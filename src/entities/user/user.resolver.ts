@@ -24,7 +24,6 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 import { School } from '../school/school.model'
 import { Subject } from '../subject/subject.model'
 import { Institute } from '../institute/institute.model'
-import { Calendar } from '../calendar/calendar.model'
 import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
 import { Event } from '../event/event.model'
 
@@ -146,16 +145,6 @@ export class UserResolver {
     @GQL.Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { followerId: user._id, resourceName: Institute.name }
-    const result = await this.followingService.list(filters, connectionArgs)
-    return result
-  }
-
-  @GQL.ResolveField(() => ConnectedUsers)
-  async calendarsFollowingConnection(
-    @GQL.Parent() user: UserDocument,
-    @GQL.Args() connectionArgs: ConnectionArgs,
-  ) {
-    const filters = { followerId: user._id, resourceName: Calendar.name }
     const result = await this.followingService.list(filters, connectionArgs)
     return result
   }

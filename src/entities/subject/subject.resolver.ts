@@ -22,14 +22,14 @@ import {
 
 // Services
 import { SubjectService } from './subject.service'
-import { CalendarService } from '../calendar/calendar.service'
+import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 import { FollowerService } from '../follower/follower.service'
 
 @Resolver(() => Subject)
 export class SubjectResolver {
   constructor(
     private service: SubjectService,
-    private calendarService: CalendarService,
+    private calendarEventService: CalendarEventService,
     private followerService: FollowerService,
   ) {}
 
@@ -65,12 +65,12 @@ export class SubjectResolver {
   //
 
   @ResolveField()
-  async calendarsConnection(
+  async calendarEventsConnection(
     @Parent() subject: SubjectDocument,
     @Args() connectionArgs: ConnectionArgs,
   ) {
     const filters = { subject: subject._id }
-    return this.calendarService.list(filters, connectionArgs)
+    return this.calendarEventService.list(filters, connectionArgs)
   }
 
   @ResolveField()

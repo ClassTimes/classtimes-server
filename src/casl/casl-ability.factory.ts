@@ -9,7 +9,6 @@ import {
 // import { plainToClass } from 'class-transformer'
 
 import { Auth } from '../auth/auth.model'
-import { Calendar } from '../entities/calendar/calendar.model'
 import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
 import { Career } from '../entities/career/career.model'
 import { Event } from '../entities/event/event.model'
@@ -21,7 +20,6 @@ import { User } from '../entities/user/user.model'
 type Subjects =
   | InferSubjects<
       | typeof Auth
-      | typeof Calendar
       | typeof CalendarEvent
       | typeof Career
       | typeof Event
@@ -66,7 +64,6 @@ export class CaslAbilityFactory {
     can([Action.Read], School)
     can([Action.Read], Subject)
     can([Action.Read], Career)
-    can([Action.Read], Calendar)
     can([Action.Read], CalendarEvent)
 
     if (user) {
@@ -130,25 +127,20 @@ export class CaslAbilityFactory {
         'roles.admin.userId': user._id,
       } as any)
 
-      // Calendar abilities -----------------------------------------
-      can([Action.Create, Action.Update, Action.Delete], Calendar, {
-        'subject.roles.admin.userId': user._id,
-      } as any)
-
       // CalendarEvent abilities -----------------------------------------
       can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
-        'calendar.subject.roles.admin.userId': user._id,
+        'subject.roles.admin.userId': user._id,
       } as any)
       can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
-        'calendar.subject.roles.professor.userId': user._id,
+        'subject.roles.professor.userId': user._id,
       } as any)
 
       // Event abilities -----------------------------------------
       can([Action.Create, Action.Update, Action.Delete], Event, {
-        'calendarEvent.calendar.subject.roles.admin.userId': user._id,
+        'calendarEvent.subject.roles.admin.userId': user._id,
       } as any)
       can([Action.Create, Action.Update, Action.Delete], Event, {
-        'calendarEvent.calendar.subject.roles.professor.userId': user._id,
+        'calendarEvent.subject.roles.professor.userId': user._id,
       } as any)
     }
 

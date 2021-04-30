@@ -26,7 +26,6 @@ import { FollowingService } from '../following/following.service'
 import { SchoolService } from '../school/school.service'
 import { SubjectService } from '../subject/subject.service'
 import { InstituteService } from '../institute/institute.service'
-import { CalendarService } from '../calendar/calendar.service'
 import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 import { EventService } from '../event/event.service'
 import { UserService } from '../user/user.service'
@@ -39,7 +38,6 @@ export class FollowResolver {
     private schoolService: SchoolService,
     private subjectService: SubjectService,
     private instituteService: InstituteService,
-    private calendarService: CalendarService,
     private calendarEventService: CalendarEventService,
     private eventService: EventService,
     private userService: UserService,
@@ -66,10 +64,6 @@ export class FollowResolver {
       case 'Institute':
         // update subject followingCount
         this.instituteService.increaseFollowingCount(resourceId)
-        break
-      case 'Calendar':
-        // update calendar followingCount
-        this.calendarService.increaseFollowingCount(resourceId)
         break
       case 'CalendarEvent':
         // update calendarEvent followingCount
@@ -194,10 +188,6 @@ export class FollowResolver {
       case 'Institute':
         // update subject followingCount
         this.instituteService.decreaseFollowingCount(resourceId)
-        break
-      case 'Calendar':
-        // update calendar followingCount
-        this.calendarService.decreaseFollowingCount(resourceId)
         break
       case 'CalendarEvent':
         // update calendarEvent followingCount

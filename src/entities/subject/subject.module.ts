@@ -5,9 +5,6 @@ import { SubjectService } from './subject.service'
 import { Subject, SubjectSchema } from './subject.model'
 import { SubjectResolver } from './subject.resolver'
 
-import { CalendarService } from '../calendar/calendar.service'
-import { Calendar, CalendarSchema } from '../calendar/calendar.model'
-
 import { School, SchoolSchema } from '../school/school.model'
 import { Institute, InstituteSchema } from '../institute/institute.model'
 
@@ -36,8 +33,8 @@ import { FollowerService } from '../follower/follower.service'
         schema: InstituteSchema,
       },
       {
-        name: Calendar.name,
-        schema: CalendarSchema,
+        name: CalendarEvent.name,
+        schema: CalendarEventSchema,
       },
       {
         name: Follower.name,
@@ -49,7 +46,7 @@ import { FollowerService } from '../follower/follower.service'
   providers: [
     SubjectService,
     SubjectResolver,
-    CalendarService,
+    CalendarEventService,
     FollowerService,
   ],
 })

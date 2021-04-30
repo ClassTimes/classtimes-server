@@ -18,9 +18,6 @@ import { SubjectService } from '../subject/subject.service'
 import { Institute, InstituteSchema } from '../institute/institute.model'
 import { InstituteService } from '../institute/institute.service'
 
-import { Calendar, CalendarSchema } from '../calendar/calendar.model'
-import { CalendarService } from '../calendar/calendar.service'
-
 import {
   CalendarEvent,
   CalendarEventSchema,
@@ -57,10 +54,6 @@ import { UserService } from '../user/user.service'
         schema: InstituteSchema,
       },
       {
-        name: Calendar.name,
-        schema: CalendarSchema,
-      },
-      {
         name: CalendarEvent.name,
         schema: CalendarEventSchema,
       },
@@ -81,7 +74,6 @@ import { UserService } from '../user/user.service'
     SchoolService,
     SubjectService,
     InstituteService,
-    CalendarService,
     CalendarEventService,
     EventService,
     UserService,

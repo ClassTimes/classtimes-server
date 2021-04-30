@@ -12,8 +12,8 @@ import {
   UpdateCalendarEventInput,
 } from './calendarEvent.inputs'
 
-// Calendar
-import { Calendar, CalendarDocument } from '../calendar/calendar.model'
+// Subject
+import { Subject, SubjectDocument } from '../subject/subject.model'
 
 // Auth
 import { Action } from '../../casl/casl-ability.factory'
@@ -32,8 +32,8 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
   constructor(
     @InjectModel(CalendarEvent.name)
     dbModel: Model<CalendarEventDocument>,
-    @InjectModel(Calendar.name)
-    private calendarModel: Model<CalendarDocument>,
+    @InjectModel(Subject.name)
+    private subjectModel: Model<SubjectDocument>,
     @Inject(CONTEXT) context,
 
     // private calendarEventService: CalendarEventService,
@@ -44,10 +44,10 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
   }
 
   async create(payload: CreateCalendarEventInput) {
-    const doc: CalendarDocument = await this.calendarModel
-      .findById(payload.calendar)
+    const doc: SubjectDocument = await this.subjectModel
+      .findById(payload.subject)
       .exec()
-    const model: Calendar = plainToClass(Calendar, doc.toObject())
+    const model: Subject = plainToClass(Subject, doc.toObject())
     const record: CalendarEvent = new CalendarEvent(model)
 
     await this.checkPermissons({
@@ -76,8 +76,8 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
   buildListQuery(filters: ListCalendarEventsInput): TListQuery {
     const conditions: TListCondition[] = []
 
-    if (filters?.calendar) {
-      conditions.push({ calendar: filters.calendar })
+    if (filters?.subject) {
+      conditions.push({ subject: filters.subject })
     }
     if (filters?.rangeStart) {
       conditions.push({ endDateUtc: { $gte: filters.rangeStart } })
@@ -95,7 +95,7 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
 }
 
 type TListCondition =
-  | { calendar: Types.ObjectId }
+  | { subject: Types.ObjectId }
   | { startDateUtc: { $lte: Date } }
   | { endDateUtc: { $gte: Date } }
 

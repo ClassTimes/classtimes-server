@@ -9,7 +9,7 @@ import * as Utils from '../../utils/Model'
 import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
-import { Calendar } from '../calendar/calendar.model'
+import { Subject } from '../subject/subject.model'
 import { Event, ConnectedEvents } from '../event/event.model'
 import { User, ConnectedUsers } from '../user/user.model'
 import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
@@ -21,9 +21,9 @@ import { Field, GqlExecutionContext } from '@nestjs/graphql'
   // autoIndex: true
 })
 export class CalendarEvent extends Utils.BaseModel {
-  constructor(calendar: Calendar) {
+  constructor(subject: Subject) {
     super()
-    this.calendar = calendar
+    this.subject = subject
   }
 
   @GQL.Field(() => GQL.ID)
@@ -95,13 +95,13 @@ export class CalendarEvent extends Utils.BaseModel {
    */
   basedOnCalendarEvent: mongoose.Types.ObjectId | CalendarEvent
 
-  @GQL.Field(() => Calendar, { nullable: false })
+  @GQL.Field(() => Subject, { nullable: false })
   @DB.Prop({
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Calendar',
+    ref: 'Subject',
     autopopulate: true,
   })
-  calendar: mongoose.Types.ObjectId | Calendar
+  subject: mongoose.Types.ObjectId | Subject
 
   /*
    *  Connections
