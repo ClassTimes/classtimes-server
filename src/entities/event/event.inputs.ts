@@ -14,6 +14,9 @@ export class CreateEventInput {
   @GQL.Field(() => VirtualLocationInput, { nullable: true })
   virtualLocation?: VirtualLocationInput
 
+  @GQL.Field(() => [CommentInput], { nullable: true })
+  comments?: CommentInput[]
+
   // Relations
   @GQL.Field(() => GQL.ID, { nullable: false })
   calendarEvent: mongoose.Types.ObjectId

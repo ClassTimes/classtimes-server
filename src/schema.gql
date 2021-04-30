@@ -141,6 +141,7 @@ input CreateDiscussionInput {
 
 input CreateEventInput {
   calendarEvent: ID!
+  comments: [CommentInput!]
   description: String
   presentialLocation: String
   usersJoining: [ID!]
@@ -420,6 +421,7 @@ input UpdateDiscussionInput {
 input UpdateEventInput {
   _id: ID!
   calendarEvent: ID!
+  comments: [CommentInput!]
   description: String
   presentialLocation: String
   usersJoining: [ID!]
