@@ -1,7 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import ImageKit from 'imagekit'
 import { SkipAuth } from '../auth/decorators'
 
+const IMAGEKIT_PUBLIC_KEY = 'public_RNd28FuVQCtViXjvAYZOXPb66nY=' // Should be passed
 const IMAGEKIT_PRIVATE_KEY = 'private_rR9KNzYyYCE8RWvY4HAazatNhfA='
 const IMAGEKIT_ENDPOINT = 'https://ik.imagekit.io/classtimes/'
 
@@ -11,25 +12,20 @@ export class ImageKitAuthController {
    *
    * To check if this route is working:
    *
-   * curl -d '{ "publicKey": "tuvieja" }' -H "Content-Type: application/json" -X POST http://localhost:5000/imagekitauth
-   *
+   * curl -H "Content-Type: application/json" -X GET http://localhost:5000/imagekitauth
    */
-  @Post()
+  @Get()
   @SkipAuth() // TODO: Add permissons
-  getAuthenticationParameters(@Body() body: ImageKitAuthBody): ImageKit {
+  getAuthenticationParameters(): ImageKitSignature {
     const imagekit = new ImageKit({
-      publicKey: body?.publicKey,
+      publicKey: IMAGEKIT_PUBLIC_KEY, // TODO: Should be passed in the request
       privateKey: IMAGEKIT_PRIVATE_KEY,
       urlEndpoint: IMAGEKIT_ENDPOINT,
     })
     return imagekit.getAuthenticationParameters()
   }
 }
-
-interface ImageKitAuthBody {
-  publicKey: string
-}
-interface ImageKit {
+interface ImageKitSignature {
   token: string
   expire: number
   signature: string
