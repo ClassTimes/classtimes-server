@@ -177,7 +177,6 @@ input CreateUserInput {
   fullName: String
   mobile: String
   password: String!
-  role: String
   username: String!
 }
 
@@ -455,7 +454,6 @@ input UpdateUserInput {
   fullName: String
   mobile: String
   password: String!
-  role: String
   username: String!
 }
 

@@ -24,9 +24,6 @@ export class CreateUserInput {
   @GQL.Field(() => String, { nullable: true })
   avatarImage?: string
 
-  @GQL.Field(() => String, { nullable: true })
-  role: string
-
   // Realtions
   // @Field(() => ID)
   // calendar: Types.ObjectId
