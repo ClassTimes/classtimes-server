@@ -62,7 +62,7 @@ export class CalendarEvent extends Utils.BaseModel {
   @DB.Prop({ required: false })
   isAllDay: boolean
 
-  @GQL.Field(() => Number, { nullable: false })
+  @GQL.Field(() => Number, { nullable: true })
   @DB.Prop({ required: false })
   durationHours: number
 

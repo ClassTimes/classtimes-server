@@ -67,7 +67,7 @@ export class CaslAbilityFactory {
     can([Action.Read], Subject)
     can([Action.Read], Discussion)
     can([Action.Read], Career)
-    can([Action.Read], CalendarEvent)
+    can([Action.Read, Action.List], CalendarEvent)
     can([Action.Read], Event)
 
     if (user) {

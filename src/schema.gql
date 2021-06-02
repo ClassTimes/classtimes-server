@@ -16,7 +16,7 @@ type CalendarEvent {
   _id: ID!
   basedOnCalendarEvent: ID
   description: String
-  durationHours: Float!
+  durationHours: Float
   endDateUtc: DateTime!
   eventsConnection(after: String, before: String, first: Float = 0): ConnectedEvents
   exceptionsDatesUtc: [DateTime!]
@@ -269,6 +269,11 @@ input ListSchoolInput {
   name: String
 }
 
+input ListSubjectInput {
+  _id: ID
+  name: String
+}
+
 input ListUserInput {
   _id: ID
   fullName: String
@@ -343,6 +348,7 @@ type Query {
   listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): ConnectedCareers!
   listInstitutes(after: String, before: String, filters: ListInstituteInput, first: Float = 0): ConnectedInstitutes!
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): ConnectedSchools!
+  listSubjects(after: String, before: String, filters: ListSubjectInput, first: Float = 0): ConnectedSubjects!
   listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): ConnectedUsers!
   school(_id: ID!): School!
   subject(_id: ID!): Subject!

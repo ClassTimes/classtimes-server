@@ -30,6 +30,9 @@ import {
 import { CalendarEventService } from './calendarEvent.service'
 import { EventService } from '../event/event.service'
 import { FollowerService } from '../follower/follower.service'
+
+// Decorators
+import { SkipAuth } from '../../auth/decorators'
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
   constructor(
@@ -44,6 +47,7 @@ export class CalendarEventResolver {
   }
 
   @Query(() => ConnectedCalendarEvents)
+  @SkipAuth()
   async listCalendarEvents(
     @Args('filters', { nullable: true }) filters: ListCalendarEventsInput,
     @Args() connectionArgs: ConnectionArgs,
