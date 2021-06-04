@@ -5,6 +5,9 @@ import { SchoolService } from './school.service'
 import { School, SchoolSchema } from './school.model'
 import { SchoolResolver } from './school.resolver'
 
+import { Career, CareerSchema } from '../career/career.model'
+import { CareerService } from '../career/career.service'
+
 import { Subject, SubjectSchema } from '../subject/subject.model'
 import { SubjectService } from '../subject/subject.service'
 
@@ -23,6 +26,10 @@ import { FollowingService } from '../following/following.service'
 @Module({
   imports: [
     MongooseModule.forFeature([
+      {
+        name: Career.name,
+        schema: CareerSchema,
+      },
       {
         name: School.name,
         schema: SchoolSchema,
@@ -51,6 +58,7 @@ import { FollowingService } from '../following/following.service'
   ],
   //   controllers: [SchoolsController],
   providers: [
+    CareerService,
     SchoolService,
     SchoolResolver,
     SubjectService,

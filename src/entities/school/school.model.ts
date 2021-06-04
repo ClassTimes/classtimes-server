@@ -8,8 +8,9 @@ import * as Utils from '../../utils/Model'
 import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
-import { Subject, ConnectedSubjects } from '../subject/subject.model'
+import { Career, ConnectedCareers } from '../career/career.model'
 import { Institute, ConnectedInstitutes } from '../institute/institute.model'
+import { Subject, ConnectedSubjects } from '../subject/subject.model'
 import { User, ConnectedUsers } from '../user/user.model'
 
 @GQL.ObjectType()
@@ -60,6 +61,9 @@ export class School extends Utils.BaseModel {
   /*
    *  Connections
    */
+
+  @GQL.Field(() => ConnectedCareers, { nullable: true })
+  careersConnection: ConnectionType<Career>
 
   @GQL.Field(() => ConnectedSubjects, { nullable: true })
   subjectsConnection: ConnectionType<Subject>

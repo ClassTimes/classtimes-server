@@ -361,6 +361,7 @@ union Resource = CalendarEvent | Event | Institute | School | Subject | User
 type School {
   _id: ID!
   avatarImage: String
+  careersConnection(after: String, before: String, first: Float = 0): ConnectedCareers
   childrenSchoolsConnection(after: String, before: String, first: Float = 0): ConnectedSchools
   createdBy: User!
   followerCounter: Int!

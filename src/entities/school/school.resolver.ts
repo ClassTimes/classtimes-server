@@ -15,6 +15,9 @@ import { ConnectionArgs } from '../../utils/Connection'
 // School
 import { School, SchoolDocument, ConnectedSchools } from './school.model'
 import { SchoolService } from './school.service'
+
+// Services
+import { CareerService } from '../career/career.service'
 import { SubjectService } from '../subject/subject.service'
 import { InstituteService } from '../institute/institute.service'
 import { FollowerService } from '../follower/follower.service'
@@ -23,16 +26,22 @@ import {
   ListSchoolInput,
   UpdateSchoolInput,
 } from './school.inputs'
+
+// Decorators
+import { SkipAuth } from '../../auth/decorators'
+
 @Resolver(() => School)
 export class SchoolResolver {
   constructor(
     private service: SchoolService,
+    private careerService: CareerService,
     private subjectService: SubjectService,
     private instituteService: InstituteService,
     private followerService: FollowerService,
   ) {}
 
   @Query(() => School)
+  @SkipAuth()
   async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
     return this.service.getById(_id)
   }
@@ -71,6 +80,15 @@ export class SchoolResolver {
   ) {
     const filters = { school: school._id }
     return this.subjectService.list(filters, connectionArgs)
+  }
+
+  @ResolveField()
+  async careersConnection(
+    @Parent() school: SchoolDocument,
+    @Args() connectionArgs: ConnectionArgs,
+  ) {
+    const filters = { approvingSchool: school._id }
+    return this.careerService.list(filters, connectionArgs)
   }
 
   @ResolveField()
