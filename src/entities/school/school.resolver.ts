@@ -42,8 +42,15 @@ export class SchoolResolver {
 
   @Query(() => School)
   @SkipAuth()
-  async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
+  async school(
+    @Args('_id', { nullable: true, type: () => ID }) _id: Types.ObjectId,
+    @Args('shortName', { nullable: true }) shortName: string,
+  ) {
+    if (shortName) {
+      return this.service.getByShortName(shortName)
+    }
     return this.service.getById(_id)
+    // TODO: Handle errors? Make separate query?
   }
 
   @Query(() => ConnectedSchools)

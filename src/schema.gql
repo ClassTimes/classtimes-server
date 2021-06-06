@@ -350,7 +350,7 @@ type Query {
   listSchools(after: String, before: String, filters: ListSchoolInput, first: Float = 0): ConnectedSchools!
   listSubjects(after: String, before: String, filters: ListSubjectInput, first: Float = 0): ConnectedSubjects!
   listUsers(after: String, before: String, filters: ListUserInput, first: Float = 0): ConnectedUsers!
-  school(_id: ID!): School!
+  school(_id: ID, shortName: String): School!
   subject(_id: ID!): Subject!
   user(_id: ID!): User!
   whoAmI: User!
