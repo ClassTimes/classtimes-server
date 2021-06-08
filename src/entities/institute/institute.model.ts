@@ -42,6 +42,10 @@ export class Institute extends Utils.BaseModel {
   })
   createdBy: mongoose.Types.ObjectId | User
 
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false })
+  avatarImage: string
+
   /*
    *  Relations
    */

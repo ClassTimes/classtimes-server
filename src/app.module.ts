@@ -28,6 +28,7 @@ import { CaslModule } from './casl/casl.module'
 import { EventModule } from './entities/event/event.module'
 import { FollowModule } from './entities/follow/follow.module'
 import { InstituteModule } from './entities/institute/institute.module'
+import { ImageKitAuthModule } from './imageKitAuth/imageKitAuth.module'
 import { PermissonModule } from './entities/permisson/permisson.module'
 import { SchoolModule } from './entities/school/school.module'
 import { SubjectModule } from './entities/subject/subject.module'
@@ -90,6 +91,7 @@ import { UserModule } from './entities/user/user.module'
     EventModule,
     FollowModule,
     InstituteModule,
+    ImageKitAuthModule,
     PermissonModule,
     SchoolModule,
     SubjectModule,

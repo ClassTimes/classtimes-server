@@ -23,64 +23,6 @@ export const CHECK_POLICIES_KEY = 'check_policy'
 export const CheckPolicies = (...args: any[]) =>
   SetMetadata(CHECK_POLICIES_KEY, args)
 
-// export const CheckPolicies = (...args: any[]) => {
-//   // ...handlers: PolicyHandler[]
-//   const metadatDeco = SetMetadata(CHECK_POLICIES_KEY, args)
-//   console.log('[CheckPolicies] SetMetadata ret', metadatDeco)
-//   return function (
-//     target: any,
-//     propertyKey: string,
-//     descriptor: PropertyDescriptor,
-//   ) {
-//     if (descriptor === undefined) {
-//       descriptor = Object.getOwnPropertyDescriptor(target, propertyKey)
-//     }
-//     const originalMethod = descriptor.value
-//     descriptor.value = function () {
-//       const result = originalMethod.apply(this, arguments)
-//       if (result.constructor === Promise) {
-//         result.then((value) => {
-//           // Auth aca
-//           return value
-//         })
-//       }
-
-//       return result
-//     }
-
-//     const result = metadatDeco(target, propertyKey, descriptor)
-
-//     console.log('resultresult', { result })
-//     return result
-//   }
-// }
-
-// export function Test(options: any) {
-//   const kis = this
-//   return function (
-//     target: any,
-//     propertyKey: string,
-//     descriptor: PropertyDescriptor,
-//   ) {
-//     if (descriptor === undefined) {
-//       descriptor = Object.getOwnPropertyDescriptor(target, propertyKey)
-//     }
-//     const originalMethod = descriptor.value
-//     descriptor.value = function () {
-//       const result = originalMethod.apply(this, arguments)
-//       if (result.constructor === Promise) {
-//         result.then((value) => {
-//           // Auth aca
-//           return value
-//         })
-//       }
-
-//       return result
-//     }
-//     return descriptor
-//   }
-// }
-
 @Injectable()
 export class PoliciesGuard implements CanActivate {
   constructor(

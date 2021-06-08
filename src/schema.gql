@@ -151,18 +151,22 @@ input CreateEventInput {
 }
 
 input CreateInstituteInput {
+  avatarImage: String
   name: String!
   school: ID!
   shortName: String
 }
 
 input CreateSchoolInput {
+  avatarImage: String
   name: String!
   parentSchool: ID
   shortName: String
 }
 
 input CreateSubjectInput {
+  """Imagekit link to uploaded image"""
+  avatarImage: String
   description: String
   institute: ID
   name: String!
@@ -170,6 +174,7 @@ input CreateSubjectInput {
 }
 
 input CreateUserInput {
+  avatarImage: String
   email: String
   fullName: String
   mobile: String
@@ -210,8 +215,15 @@ type Following {
   resourceName: String!
 }
 
+type ImageKitAuth {
+  expire: Int!
+  signature: String!
+  token: String!
+}
+
 type Institute {
   _id: ID!
+  avatarImage: String
   createdBy: User!
   followerCounter: Int!
   name: String!
@@ -313,6 +325,7 @@ type Query {
   calendarEvent(_id: ID!): CalendarEvent!
   career(_id: ID!): Career!
   event(_id: ID!): Event!
+  getImageKitSignature(publicKey: String!): ImageKitAuth!
   institute(_id: ID!): Institute!
   listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput, first: Float = 0): ConnectedCalendarEvents!
   listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): ConnectedCareers!
@@ -329,6 +342,7 @@ union Resource = Calendar | CalendarEvent | Event | Institute | School | Subject
 
 type School {
   _id: ID!
+  avatarImage: String
   childrenSchoolsConnection(after: String, before: String, first: Float = 0): ConnectedSchools
   createdBy: User!
   followerCounter: Int!
@@ -347,6 +361,7 @@ type SchoolEdge {
 
 type Subject {
   _id: ID!
+  avatarImage: String
   calendarsConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
   description: String!
   followerCounter: Int!
@@ -411,13 +426,15 @@ input UpdateSchoolInput {
 
 input UpdateSubjectInput {
   _id: ID!
+  avatarImage: String
   description: String
   name: String
-  school: ID!
+  school: ID
 }
 
 input UpdateUserInput {
   _id: ID!
+  avatarImage: String
   email: String
   fullName: String
   mobile: String
@@ -428,6 +445,7 @@ input UpdateUserInput {
 
 type User {
   _id: ID!
+  avatarImage: String
   calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): ConnectedUsers!
   calendarsEventsSubscribedConnection: ConnectedCalendarEvents
   calendarsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
