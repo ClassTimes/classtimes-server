@@ -9,9 +9,9 @@ import {
 // import { plainToClass } from 'class-transformer'
 
 import { Auth } from '../auth/auth.model'
-import { Calendar } from '../entities/calendar/calendar.model'
 import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
 import { Career } from '../entities/career/career.model'
+import { Discussion } from '../entities/discussion/discussion.model'
 import { Event } from '../entities/event/event.model'
 import { Institute } from '../entities/institute/institute.model'
 import { School } from '../entities/school/school.model'
@@ -21,9 +21,9 @@ import { User } from '../entities/user/user.model'
 type Subjects =
   | InferSubjects<
       | typeof Auth
-      | typeof Calendar
       | typeof CalendarEvent
       | typeof Career
+      | typeof Discussion
       | typeof Event
       | typeof Institute
       | typeof School
@@ -65,9 +65,10 @@ export class CaslAbilityFactory {
     // TODO: Add Action.RemovePermisson
     can([Action.Read], School)
     can([Action.Read], Subject)
+    can([Action.Read], Discussion)
     can([Action.Read], Career)
-    can([Action.Read], Calendar)
     can([Action.Read], CalendarEvent)
+    can([Action.Read], Event)
 
     if (user) {
       // Super Admin abilities -----------------------------------------
@@ -130,25 +131,25 @@ export class CaslAbilityFactory {
         'roles.admin.userId': user._id,
       } as any)
 
-      // Calendar abilities -----------------------------------------
-      can([Action.Create, Action.Update, Action.Delete], Calendar, {
+      // Discussion abilities ------------------------------------
+      can([Action.Create, Action.Update, Action.Delete], Discussion, {
         'subject.roles.admin.userId': user._id,
       } as any)
 
-      // CalendarEvent abilities -----------------------------------------
+      // CalendarEvent abilities ---------------------------------
       can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
-        'calendar.subject.roles.admin.userId': user._id,
+        'subject.roles.admin.userId': user._id,
       } as any)
       can([Action.Create, Action.Update, Action.Delete], CalendarEvent, {
-        'calendar.subject.roles.professor.userId': user._id,
+        'subject.roles.professor.userId': user._id,
       } as any)
 
       // Event abilities -----------------------------------------
       can([Action.Create, Action.Update, Action.Delete], Event, {
-        'calendarEvent.calendar.subject.roles.admin.userId': user._id,
+        'calendarEvent.subject.roles.admin.userId': user._id,
       } as any)
       can([Action.Create, Action.Update, Action.Delete], Event, {
-        'calendarEvent.calendar.subject.roles.professor.userId': user._id,
+        'calendarEvent.subject.roles.professor.userId': user._id,
       } as any)
     }
 

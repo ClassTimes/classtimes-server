@@ -8,8 +8,6 @@ import { Subject, SubjectSchema } from '../subject/subject.model'
 import { Institute, InstituteSchema } from '../institute/institute.model'
 import { User, UserSchema } from '../user/user.model'
 
-import { Calendar, CalendarSchema } from '../calendar/calendar.model'
-
 import {
   CalendarEvent,
   CalendarEventSchema,

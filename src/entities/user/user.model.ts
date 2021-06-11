@@ -10,7 +10,7 @@ import * as Utils from '../../utils/Model'
 import { School, ConnectedSchools } from '../school/school.model'
 import { Subject, ConnectedSubjects } from '../subject/subject.model'
 import { Institute, ConnectedInstitutes } from '../institute/institute.model'
-import { Calendar, ConnectedCalendars } from '../calendar/calendar.model'
+// import { Calendar, ConnectedCalendars } from '../calendar/calendar.model'
 import {
   CalendarEvent,
   ConnectedCalendarEvents,
@@ -84,9 +84,6 @@ export class User extends Utils.BaseModel {
 
   @GQL.Field(() => ConnectedSubjects, { nullable: true })
   subjectsFollowingConnection: ConnectionType<Subject>
-
-  @GQL.Field(() => ConnectedCalendars, { nullable: true })
-  calendarsFollowingConnection: ConnectionType<Calendar>
 
   @GQL.Field(() => ConnectedCalendarEvents, { nullable: true })
   calendarsEventsSubscribedConnection: ConnectionType<CalendarEvent>

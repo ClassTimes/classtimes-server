@@ -21,10 +21,10 @@ import { AppService } from './app.service'
 
 // Modules
 import { AuthModule } from './auth/auth.module'
-import { CalendarModule } from './entities/calendar/calendar.module'
 import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
 import { CareerModule } from './entities/career/career.module'
 import { CaslModule } from './casl/casl.module'
+import { DiscussionModule } from './entities/discussion/discussion.module'
 import { EventModule } from './entities/event/event.module'
 import { FollowModule } from './entities/follow/follow.module'
 import { InstituteModule } from './entities/institute/institute.module'
@@ -84,10 +84,10 @@ import { UserModule } from './entities/user/user.module'
       // }),
     }),
     AuthModule,
-    CalendarModule,
     CalendarEventModule,
     CaslModule,
     CareerModule,
+    DiscussionModule,
     EventModule,
     FollowModule,
     InstituteModule,

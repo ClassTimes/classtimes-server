@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { CalendarEventService } from './calendarEvent.service'
 import { CalendarEvent, CalendarEventSchema } from './calendarEvent.model'
 import { CalendarEventResolver } from './calendarEvent.resolver'
-import { Calendar, CalendarSchema } from '../calendar/calendar.model'
+import { Subject, SubjectSchema } from '../subject/subject.model'
 import { EventService } from '../event/event.service'
 import { Event, EventSchema } from '../event/event.model'
 
@@ -23,8 +23,8 @@ import { FollowerService } from '../follower/follower.service'
         schema: CalendarEventSchema,
       },
       {
-        name: Calendar.name,
-        schema: CalendarSchema,
+        name: Subject.name,
+        schema: SubjectSchema,
       },
       {
         name: Follower.name,

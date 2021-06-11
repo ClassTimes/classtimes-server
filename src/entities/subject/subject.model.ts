@@ -8,10 +8,17 @@ import * as Utils from '../../utils/Model'
 import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
-import { Calendar, ConnectedCalendars } from '../calendar/calendar.model'
+import {
+  CalendarEvent,
+  ConnectedCalendarEvents,
+} from '../calendarEvent/calendarEvent.model'
 import { School } from '../school/school.model'
 import { Institute } from '../institute/institute.model'
 import { User, ConnectedUsers } from '../user/user.model'
+import {
+  Discussion,
+  ConnectedDiscussions,
+} from '../discussion/discussion.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -40,6 +47,10 @@ export class Subject extends Utils.BaseModel {
   @DB.Prop()
   description: string
   
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false })
+  avatarImage: string
+
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false })
   avatarImage: string
@@ -77,8 +88,11 @@ export class Subject extends Utils.BaseModel {
    *  Connections
    */
 
-  @GQL.Field(() => ConnectedCalendars, { nullable: true })
-  calendarsConnection: ConnectionType<Calendar>
+  @GQL.Field(() => ConnectedCalendarEvents, { nullable: true })
+  calendarEventsConnection: ConnectionType<CalendarEvent>
+
+  @GQL.Field(() => ConnectedDiscussions, { nullable: true })
+  discussionsConnection: ConnectionType<Discussion>
 
   @GQL.Field(() => ConnectedUsers, { nullable: true })
   usersFollowerConnection: ConnectionType<User>

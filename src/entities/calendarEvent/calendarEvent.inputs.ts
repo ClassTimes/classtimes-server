@@ -38,7 +38,7 @@ export class CreateCalendarEventInput {
 
   // Relations
   @Field(() => ID)
-  calendar: Types.ObjectId
+  subject: Types.ObjectId
 
   @Field(() => ID, { nullable: true })
   basedOnCalendarEvent: Types.ObjectId
@@ -47,7 +47,7 @@ export class CreateCalendarEventInput {
 @InputType()
 export class ListCalendarEventsInput {
   @Field(() => ID, { nullable: true })
-  calendar?: Types.ObjectId
+  subject?: Types.ObjectId
 
   @Field(() => Date, { nullable: true })
   rangeStart?: Date

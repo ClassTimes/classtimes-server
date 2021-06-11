@@ -12,24 +12,9 @@ type Auth {
   user: User!
 }
 
-type Calendar {
-  _id: ID!
-  calendarEventsConnection(after: String, before: String, first: Float = 0): ConnectedCalendarEvents
-  followerCounter: Int!
-  name: String!
-  subject: Subject!
-  usersFollowerConnection(after: String, before: String, first: Float = 0): ConnectedUsers
-}
-
-type CalendarEdge {
-  cursor: String!
-  node: Calendar!
-}
-
 type CalendarEvent {
   _id: ID!
   basedOnCalendarEvent: ID
-  calendar: Calendar!
   description: String
   durationHours: Float!
   endDateUtc: DateTime!
@@ -40,6 +25,7 @@ type CalendarEvent {
   presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
+  subject: Subject!
   tags: [String!]!
   title: String!
   usersSubscriberConnection(after: String, before: String, first: Float = 0): ConnectedUsers
@@ -64,20 +50,30 @@ type CareerEdge {
   node: Career!
 }
 
+type Comment {
+  content: String!
+  createdBy: User!
+}
+
+input CommentInput {
+  content: String!
+  createdBy: ID!
+}
+
 type ConnectedCalendarEvents {
   edges: [CalendarEventEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
 
-type ConnectedCalendars {
-  edges: [CalendarEdge!]
+type ConnectedCareers {
+  edges: [CareerEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
 
-type ConnectedCareers {
-  edges: [CareerEdge!]
+type ConnectedDiscussions {
+  edges: [DiscussionEdge!]
   pageInfo: PageInfoType!
   totalCount: Int!
 }
@@ -114,7 +110,6 @@ type ConnectedUsers {
 
 input CreateCalendarEventInput {
   basedOnCalendarEvent: ID
-  calendar: ID!
   description: String
   durationHours: Float
   exceptionsDatesUtc: [DateTime!]
@@ -122,13 +117,9 @@ input CreateCalendarEventInput {
   presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
+  subject: ID!
   title: String!
   virtualLocation: VirtualLocationInput
-}
-
-input CreateCalendarInput {
-  name: String!
-  subject: ID!
 }
 
 input CreateCareerInput {
@@ -142,8 +133,15 @@ input CreateCareerSubjectInput {
   subjectId: ID!
 }
 
+input CreateDiscussionInput {
+  content: String!
+  subject: ID!
+  title: String!
+}
+
 input CreateEventInput {
   calendarEvent: ID!
+  comments: [CommentInput!]
   description: String
   presentialLocation: String
   usersJoining: [ID!]
@@ -179,7 +177,6 @@ input CreateUserInput {
   fullName: String
   mobile: String
   password: String!
-  role: String
   username: String!
 }
 
@@ -188,9 +185,23 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Discussion {
+  _id: ID!
+  comments: [Comment!]
+  content: String!
+  subject: Subject!
+  title: String!
+}
+
+type DiscussionEdge {
+  cursor: String!
+  node: Discussion!
+}
+
 type Event {
   _id: ID!
   calendarEvent: CalendarEvent!
+  comments: [Comment!]
   description: String
   followerCounter: Int!
   presentialLocation: String
@@ -239,9 +250,9 @@ type InstituteEdge {
 }
 
 input ListCalendarEventsInput {
-  calendar: ID
   rangeEnd: DateTime
   rangeStart: DateTime
+  subject: ID
 }
 
 input ListCareerInput {
@@ -269,19 +280,20 @@ input LoginInput {
 }
 
 type Mutation {
+  addCommentToDiscussion(comment: CommentInput!, discussionId: ID!): Discussion
   addSubjectToCareer(payload: CreateCareerSubjectInput!): Career!
   approveCareerBySchool(payload: ApproveCareerInput!): Career!
-  createCalendar(payload: CreateCalendarInput!): Calendar!
   createCalendarEvent(payload: CreateCalendarEventInput!): CalendarEvent!
   createCareer(payload: CreateCareerInput!): Career!
+  createDiscussion(payload: CreateDiscussionInput!): Discussion!
   createEvent(payload: CreateEventInput!): Event!
   createInstitute(payload: CreateInstituteInput!): Institute!
   createSchool(payload: CreateSchoolInput!): School!
   createSubject(payload: CreateSubjectInput!): Subject!
   createUser(payload: CreateUserInput!): User!
-  deleteCalendar(_id: ID!): Calendar
   deleteCalendarEvent(_id: ID!): CalendarEvent
   deleteCareer(_id: ID!): Career!
+  deleteDiscussion(_id: ID!): Discussion
   deleteEvent(_id: ID!): Event
   deleteInstitute(_id: ID!): Institute!
   deleteSchool(_id: ID!): School!
@@ -297,9 +309,9 @@ type Mutation {
   subscribeToCalendarEvent(calendarEventId: ID!): Following!
   unfollowResource(resourceId: ID!): Following!
   unfollowUser(followeeId: ID!): Following!
-  updateCalendar(payload: UpdateCalendarInput!): Calendar
   updateCalendarEvent(payload: UpdateCalendarEventInput!): CalendarEvent
   updateCareer(payload: UpdateCareerInput!): Career!
+  updateDiscussion(payload: UpdateDiscussionInput!): Discussion
   updateEvent(payload: UpdateEventInput!): Event
   updateInstitute(payload: UpdateInstituteInput!): Institute!
   updateSchool(payload: UpdateSchoolInput!): School!
@@ -321,9 +333,9 @@ type Permisson {
 }
 
 type Query {
-  calendar(_id: ID!): Calendar!
   calendarEvent(_id: ID!): CalendarEvent!
   career(_id: ID!): Career!
+  discussion(_id: ID!): Discussion!
   event(_id: ID!): Event!
   getImageKitSignature(publicKey: String!): ImageKitAuth!
   institute(_id: ID!): Institute!
@@ -338,7 +350,7 @@ type Query {
   whoAmI: User!
 }
 
-union Resource = Calendar | CalendarEvent | Event | Institute | School | Subject | User
+union Resource = CalendarEvent | Event | Institute | School | Subject | User
 
 type School {
   _id: ID!
@@ -362,8 +374,9 @@ type SchoolEdge {
 type Subject {
   _id: ID!
   avatarImage: String
-  calendarsConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
+  calendarEventsConnection(after: String, before: String, first: Float = 0): ConnectedCalendarEvents
   description: String!
+  discussionsConnection(after: String, before: String, first: Float = 0): ConnectedDiscussions
   followerCounter: Int!
   institute: Institute!
   name: String!
@@ -381,7 +394,6 @@ type SubjectEdge {
 input UpdateCalendarEventInput {
   _id: ID!
   basedOnCalendarEvent: ID
-  calendar: ID!
   description: String
   durationHours: Float
   exceptionsDatesUtc: [DateTime!]
@@ -389,23 +401,26 @@ input UpdateCalendarEventInput {
   presentialLocation: String
   rrule: String
   startDateUtc: DateTime!
+  subject: ID!
   title: String!
   virtualLocation: VirtualLocationInput
-}
-
-input UpdateCalendarInput {
-  _id: ID!
-  name: String
-  subject: ID
 }
 
 input UpdateCareerInput {
   _id: ID!
 }
 
+input UpdateDiscussionInput {
+  _id: ID!
+  content: String!
+  subject: ID!
+  title: String!
+}
+
 input UpdateEventInput {
   _id: ID!
   calendarEvent: ID!
+  comments: [CommentInput!]
   description: String
   presentialLocation: String
   usersJoining: [ID!]
@@ -439,7 +454,6 @@ input UpdateUserInput {
   fullName: String
   mobile: String
   password: String!
-  role: String
   username: String!
 }
 
@@ -448,7 +462,6 @@ type User {
   avatarImage: String
   calendarEventsSubscribedConnection(after: String, before: String, first: Float = 0): ConnectedUsers!
   calendarsEventsSubscribedConnection: ConnectedCalendarEvents
-  calendarsFollowingConnection(after: String, before: String, first: Float = 0): ConnectedCalendars
   email: String
   eventsJoiningConnection(after: String, before: String, first: Float = 0): ConnectedEvents
   followerCounter: Int!
