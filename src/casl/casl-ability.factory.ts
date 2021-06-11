@@ -67,7 +67,7 @@ export class CaslAbilityFactory {
     can([Action.Read], Subject)
     can([Action.Read], Discussion)
     can([Action.Read], Career)
-    can([Action.Read], CalendarEvent)
+    can([Action.Read, Action.List], CalendarEvent)
     can([Action.Read], Event)
 
     if (user) {
@@ -155,7 +155,7 @@ export class CaslAbilityFactory {
 
     // User abilities -----------------------------------------
     can([Action.Read, Action.Create], User)
-    can([Action.Update], User, ['email', 'username'], { _id: user._id })
+    can([Action.Update], User, ['email', 'username'], { _id: user?._id })
 
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details

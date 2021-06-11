@@ -56,10 +56,13 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
     })
 
     /*
-     *  If able to create calendarEvent, compute endDate from RRULE
+     *  If able to create calendarEvent, compute endDate from RRULE (if present)
      */
-
-    payload.endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
+    if (payload.rrule) {
+      payload.endDateUtc = parseEndDate(payload.startDateUtc, payload.rrule)
+    } else {
+      payload.endDateUtc = payload.startDateUtc
+    }
     return await this.dbModel.create(payload)
   }
 

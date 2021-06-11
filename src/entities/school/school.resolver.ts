@@ -15,6 +15,9 @@ import { ConnectionArgs } from '../../utils/Connection'
 // School
 import { School, SchoolDocument, ConnectedSchools } from './school.model'
 import { SchoolService } from './school.service'
+
+// Services
+import { CareerService } from '../career/career.service'
 import { SubjectService } from '../subject/subject.service'
 import { InstituteService } from '../institute/institute.service'
 import { FollowerService } from '../follower/follower.service'
@@ -23,18 +26,31 @@ import {
   ListSchoolInput,
   UpdateSchoolInput,
 } from './school.inputs'
+
+// Decorators
+import { SkipAuth } from '../../auth/decorators'
+
 @Resolver(() => School)
 export class SchoolResolver {
   constructor(
     private service: SchoolService,
+    private careerService: CareerService,
     private subjectService: SubjectService,
     private instituteService: InstituteService,
     private followerService: FollowerService,
   ) {}
 
   @Query(() => School)
-  async school(@Args('_id', { type: () => ID }) _id: Types.ObjectId) {
+  @SkipAuth()
+  async school(
+    @Args('_id', { nullable: true, type: () => ID }) _id: Types.ObjectId,
+    @Args('shortName', { nullable: true }) shortName: string,
+  ) {
+    if (shortName) {
+      return this.service.getByShortName(shortName)
+    }
     return this.service.getById(_id)
+    // TODO: Handle errors? Make separate query?
   }
 
   @Query(() => ConnectedSchools)
@@ -71,6 +87,15 @@ export class SchoolResolver {
   ) {
     const filters = { school: school._id }
     return this.subjectService.list(filters, connectionArgs)
+  }
+
+  @ResolveField()
+  async careersConnection(
+    @Parent() school: SchoolDocument,
+    @Args() connectionArgs: ConnectionArgs,
+  ) {
+    const filters = { approvingSchool: school._id }
+    return this.careerService.list(filters, connectionArgs)
   }
 
   @ResolveField()

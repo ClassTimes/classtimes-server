@@ -13,7 +13,7 @@ import { Types } from 'mongoose'
 import { ConnectionArgs } from '../../utils/Connection'
 
 // Subject
-import { Subject, SubjectDocument } from './subject.model'
+import { Subject, SubjectDocument, ConnectedSubjects } from './subject.model'
 import {
   CreateSubjectInput,
   ListSubjectInput,
@@ -40,12 +40,13 @@ export class SubjectResolver {
     return this.service.getById(_id)
   }
 
-  // @Query(() => [Subject])
-  // async subjects(
-  //   @Args('filters', { nullable: true }) filters?: ListSubjectInput,
-  // ) {
-  //   return this.service.list(filters)
-  // }
+  @Query(() => ConnectedSubjects)
+  async listSubjects(
+    @Args('filters', { nullable: true }) filters?: ListSubjectInput,
+    @Args() connectionArgs?: ConnectionArgs,
+  ) {
+    return this.service.list(filters, connectionArgs)
+  }
 
   @Mutation(() => Subject)
   async createSubject(@Args('payload') payload: CreateSubjectInput) {
