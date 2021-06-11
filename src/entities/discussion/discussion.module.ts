@@ -20,13 +20,6 @@ import { Subject, SubjectSchema } from '../subject/subject.model'
       },
     ]),
   ],
-  providers: [
-    DiscussionService,
-    DiscussionResolver,
-    // {
-    //   provide: getModelToken(Event.name),
-    //   useValue: eventModel,
-    // },
-  ],
+  providers: [DiscussionService, DiscussionResolver],
 })
 export class DiscussionModule {}
