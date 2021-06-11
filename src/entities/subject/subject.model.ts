@@ -46,6 +46,10 @@ export class Subject extends Utils.BaseModel {
   @GQL.Field(() => String)
   @DB.Prop()
   description: string
+  
+  @GQL.Field(() => String, { nullable: true })
+  @DB.Prop({ required: false })
+  avatarImage: string
 
   @GQL.Field(() => String, { nullable: true })
   @DB.Prop({ required: false })
