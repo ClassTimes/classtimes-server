@@ -1,9 +1,12 @@
 import { Schema, Prop } from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import { ObjectType, Field } from '@nestjs/graphql'
+import { MinLength } from 'class-validator'
 import mongoose from 'mongoose'
 import * as Utils from '../../utils/Model'
 
+// Models
 import { User } from '../user/user.model'
+
 @ObjectType()
 @Schema({
   timestamps: true,
@@ -11,6 +14,7 @@ import { User } from '../user/user.model'
 export class Comment extends Utils.BaseModel {
   @Field(() => String)
   @Prop(() => String)
+  @MinLength(2)
   content: string
 
   @Field(() => User, { nullable: false })

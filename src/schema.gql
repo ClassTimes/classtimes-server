@@ -188,9 +188,9 @@ scalar DateTime
 type Discussion {
   _id: ID!
   comments: [Comment!]
-  content: String
+  content: String!
   subject: Subject!
-  title: String
+  title: String!
 }
 
 type DiscussionEdge {

@@ -1,9 +1,9 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
+import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
-import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
 import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
@@ -30,12 +30,14 @@ export class Discussion extends Utils.BaseModel {
   @GQL.Field(() => GQL.ID)
   _id: mongoose.Types.ObjectId
 
-  @GQL.Field(() => String, { nullable: true })
+  @GQL.Field(() => String, { nullable: false })
   @DB.Prop(() => String)
+  @V.MinLength(2)
   title: string
 
-  @GQL.Field(() => String, { nullable: true })
+  @GQL.Field(() => String, { nullable: false })
   @DB.Prop(() => String)
+  @V.MinLength(2)
   content: string
 
   /*

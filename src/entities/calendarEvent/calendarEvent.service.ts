@@ -77,7 +77,7 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
   }
 
   buildListQuery(filters: ListCalendarEventsInput): TListQuery {
-    const conditions: TListCondition[] = []
+    const conditions: TConditions = []
 
     if (filters?.subject) {
       conditions.push({ subject: filters.subject })
@@ -101,6 +101,8 @@ type TListCondition =
   | { subject: Types.ObjectId }
   | { startDateUtc: { $lte: Date } }
   | { endDateUtc: { $gte: Date } }
+
+type TConditions = TListCondition[]
 
 type TListQuery = {
   $and?: TListCondition[]
