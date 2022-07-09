@@ -7,10 +7,10 @@ import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { MongooseModule } from '@nestjs/mongoose'
 import * as Utils from './utils'
 import { APP_GUARD } from '@nestjs/core'
-import { GqlAuthGuard } from './auth/gql-auth.guard'
+import { GqlAuthGuard } from './modules/auth/gql-auth.guard'
 
 // Modules
-import { AuthModule } from './auth/auth.module'
+import { AuthModule } from './modules/auth/auth.module'
 import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
 import { CareerModule } from './entities/career/career.module'
 import { CaslModule } from './modules/casl/casl.module'

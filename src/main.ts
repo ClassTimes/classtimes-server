@@ -11,7 +11,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import weekday from 'dayjs/plugin/weekday'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import { GqlAuthGuard } from './auth/gql-auth.guard'
+import { GqlAuthGuard } from './modules/auth/gql-auth.guard'
 
 import { AppModule } from './app.module'
 

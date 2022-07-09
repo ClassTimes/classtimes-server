@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { AccessibleRecordModel } from '@casl/mongoose'
-import { defineAbility } from '@casl/ability'
-import { CurrentUser } from '../../auth/currentUser'
 import mongoose from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
 import * as bcrypt from 'bcrypt'
-import { BaseService } from '../../utils/BaseService'
 
 // Pagination
 import {
-  fromCursorHash,
   ConnectionArgs,
   buildConnection,
   getConnectionResults,

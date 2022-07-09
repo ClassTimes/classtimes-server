@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 import { plainToClass } from 'class-transformer'
 
 // Service
@@ -11,10 +11,13 @@ import { BaseService } from '../../utils/BaseService'
 import { Action } from '@modules/casl/casl-ability.factory'
 
 // Models
-import { School, SchoolDocument } from '../school/school.model'
-import { Subject, SubjectDocument } from '../subject/subject.model'
-import { Institute, InstituteDocument } from '../institute/institute.model'
-import { User, UserDocument } from '../user/user.model'
+import { School, SchoolDocument } from '@entities/school/school.model'
+import { Subject, SubjectDocument } from '@entities/subject/subject.model'
+import {
+  Institute,
+  InstituteDocument,
+} from '@entities/institute/institute.model'
+import { User, UserDocument } from '@entities/user/user.model'
 
 import { WritePermissonsInput } from './permisson.inputs'
 

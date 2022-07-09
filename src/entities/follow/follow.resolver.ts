@@ -1,34 +1,26 @@
-import {
-  Args,
-  Mutation,
-  Query,
-  Resolver,
-  Field,
-  ObjectType,
-  ID,
-} from '@nestjs/graphql'
+import { Args, Mutation, Resolver, ID } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
 // Current User
-import { User } from '../user/user.model'
-import { CurrentUser } from '../../auth/currentUser'
+import { User } from '@entities/user/user.model'
+import { CurrentUser } from '@modules/auth/currentUser'
 
 import { Follow } from './follow.model'
 
 // Follower
-import { FollowerService } from '../follower/follower.service'
+import { FollowerService } from '@entities/follower/follower.service'
 
 // Following
-import { Following } from '../following/following.model'
-import { FollowingService } from '../following/following.service'
+import { Following } from '@entities/following/following.model'
+import { FollowingService } from '@entities/following/following.service'
 
 // Resource services
-import { SchoolService } from '../school/school.service'
-import { SubjectService } from '../subject/subject.service'
-import { InstituteService } from '../institute/institute.service'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
-import { EventService } from '../event/event.service'
-import { UserService } from '../user/user.service'
+import { SchoolService } from '@entities/school/school.service'
+import { SubjectService } from '@entities/subject/subject.service'
+import { InstituteService } from '@entities/institute/institute.service'
+import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
+import { EventService } from '@entities/event/event.service'
+import { UserService } from '@entities/user/user.service'
 
 @Resolver(() => Follow)
 export class FollowResolver {

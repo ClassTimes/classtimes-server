@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 
 // Guard
 // import { GqlAuthGuard } from '../../auth/gql-auth.guard'
-import { CurrentUser } from '../../auth/currentUser'
+import { CurrentUser } from '@modules/auth/currentUser'
 import { CheckPolicies } from '@modules/casl/policy.guard'
 import { AppAbility, Action } from '@modules/casl/casl-ability.factory'
 
@@ -12,8 +12,8 @@ import { AppAbility, Action } from '@modules/casl/casl-ability.factory'
 import { ConnectionArgs } from '../../utils/Connection'
 
 // Auth
-import { SkipAuth } from '../../auth/decorators'
-import { Auth } from '../../auth/auth.model'
+import { SkipAuth } from '@modules/auth/decorators'
+import { Auth } from '@modules/auth/auth.model'
 
 // User
 import { User, UserDocument, ConnectedUsers } from './user.model'
@@ -21,15 +21,15 @@ import { UserService } from './user.service'
 import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 
 // Entities
-import { School } from '../school/school.model'
-import { Subject } from '../subject/subject.model'
-import { Institute } from '../institute/institute.model'
-import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-import { Event } from '../event/event.model'
+import { School } from '@entities/school/school.model'
+import { Subject } from '@entities/subject/subject.model'
+import { Institute } from '@entities/institute/institute.model'
+import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { Event } from '@entities/event/event.model'
 
 // Services
-import { FollowerService } from '../follower/follower.service'
-import { FollowingService } from '../following/following.service'
+import { FollowerService } from '@entities/follower/follower.service'
+import { FollowingService } from '@entities/following/following.service'
 
 // Calendar
 // import { Calendar } from '../calendar/calendar.model'
