@@ -4,7 +4,7 @@
   "description": "ClassTimes.app Calendar Server",
   "author": "Classtimes",
   "private": false,
-  "license": "Copyright Classtimes 2021",
+  "license": "Copyright Classtimes 2022",
   "typings": "*.d.ts",
   "scripts": {
     "prebuild": "rimraf dist",
