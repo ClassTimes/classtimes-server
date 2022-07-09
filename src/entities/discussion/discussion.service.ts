@@ -15,7 +15,7 @@ import { CreateDiscussionInput } from './discussion.inputs'
 import { Subject, SubjectDocument } from '@entities/subject/subject.model'
 
 // Comment
-import { CommentInput } from '@entities/comment/comment.inputs'
+import { CommentInput } from '@modules/comment/comment.inputs'
 
 // Service methods
 import { BaseService } from '@utils/BaseService'

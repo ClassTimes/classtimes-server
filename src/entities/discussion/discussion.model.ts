@@ -9,10 +9,10 @@ import * as Utils from '@utils/Model'
 import { Connected, withCursor } from '@utils/Connection'
 
 // Entities
-import { Subject } from '../subject/subject.model'
+import { Subject } from '@entities/subject/subject.model'
 
 // Embedded documents
-import { Comment, CommentSchema } from '../comment/comment.model'
+import { Comment, CommentSchema } from '@modules/comment/comment.model'
 
 @GQL.ObjectType()
 @DB.Schema({

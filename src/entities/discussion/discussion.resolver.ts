@@ -4,26 +4,20 @@ import {
   Mutation,
   Query,
   Resolver,
-  ResolveField,
-  Parent,
   ID,
 } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
-// Pagination
-import { ConnectionArgs } from '@utils/Connection'
-
 // Discussion
-import { Discussion, DiscussionDocument } from './discussion.model'
+import { Discussion } from './discussion.model'
 import { DiscussionService } from './discussion.service'
 import {
   CreateDiscussionInput,
-  ListDiscussionInput,
   UpdateDiscussionInput,
 } from './discussion.inputs'
 
 // Comment
-import { CommentInput } from '../comment/comment.inputs'
+import { CommentInput } from '@modules/comment/comment.inputs'
 
 @Resolver(() => Discussion)
 export class DiscussionResolver {

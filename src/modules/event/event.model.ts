@@ -12,7 +12,7 @@ import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
 import { User, ConnectedUsers } from '@modules/user/user.model'
 
 // Embedded documents
-import { Comment } from '@entities/comment/comment.model'
+import { Comment } from '@modules/comment/comment.model'
 import { VirtualLocation } from '@entities/virtualLocation/virtualLocation.model'
 
 @GQL.ObjectType()

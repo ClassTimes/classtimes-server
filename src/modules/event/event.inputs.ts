@@ -2,7 +2,7 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 
 import { VirtualLocationInput } from '@entities/virtualLocation/virtualLocation.inputs'
-import { CommentInput } from '@entities/comment/comment.inputs'
+import { CommentInput } from '@modules/comment/comment.inputs'
 @GQL.InputType()
 export class CreateEventInput {
   @GQL.Field(() => String, { nullable: true })
