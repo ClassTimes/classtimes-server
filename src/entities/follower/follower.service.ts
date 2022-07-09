@@ -11,7 +11,7 @@ import {
   ConnectionArgs,
   getConnectionResults,
   // buildConnection,
-} from '../../utils/Connection'
+} from '@utils/Connection'
 
 // Follower
 import { Follower, FollowerDocument } from './follower.model'

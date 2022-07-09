@@ -11,7 +11,7 @@ import {
 import { Types } from 'mongoose'
 
 // Pagination
-import { ConnectionArgs } from '../../utils/Connection'
+import { ConnectionArgs } from '@utils/Connection'
 
 // Discussion
 import { Discussion, DiscussionDocument } from './discussion.model'

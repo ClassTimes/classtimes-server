@@ -5,7 +5,7 @@ import { Model } from 'mongoose'
 import { plainToClass } from 'class-transformer'
 
 // Base Service
-import { BaseService } from '../../utils/BaseService'
+import { BaseService } from '@utils/BaseService'
 
 // School
 import { School } from '@modules/school/school.model'

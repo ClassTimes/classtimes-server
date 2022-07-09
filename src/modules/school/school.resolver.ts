@@ -10,7 +10,7 @@ import {
 import { Types } from 'mongoose'
 
 // Pagination
-import { ConnectionArgs } from '../../utils/Connection'
+import { ConnectionArgs } from '@utils/Connection'
 
 // School
 import { School, SchoolDocument, ConnectedSchools } from './school.model'

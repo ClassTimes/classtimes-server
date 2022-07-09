@@ -18,7 +18,7 @@ import { Subject, SubjectDocument } from '@entities/subject/subject.model'
 import { CommentInput } from '@entities/comment/comment.inputs'
 
 // Service methods
-import { BaseService } from '../../utils/BaseService'
+import { BaseService } from '@utils/BaseService'
 
 const MODEL_CLASS = Discussion
 @Injectable()

@@ -9,7 +9,7 @@ import { CheckPolicies } from '@modules/casl/policy.guard'
 import { AppAbility, Action } from '@modules/casl/casl-ability.factory'
 
 // Pagination
-import { ConnectionArgs } from '../../utils/Connection'
+import { ConnectionArgs } from '@utils/Connection'
 
 // Auth
 import { SkipAuth } from '@modules/auth/decorators'

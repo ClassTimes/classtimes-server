@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer'
 import { Model, Types, Document } from 'mongoose'
 
 // Pagination
-import { ConnectionArgs, getConnection } from '../utils/Connection'
+import { ConnectionArgs, getConnection } from '@utils/Connection'
 
 // Auth
 import { ForbiddenError } from '@casl/ability'

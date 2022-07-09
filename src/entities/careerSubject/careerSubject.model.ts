@@ -5,9 +5,9 @@ import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { withCursor } from '../../utils/Connection'
+import { withCursor } from '@utils/Connection'
 
-import * as Utils from '../../utils/Model'
+import * as Utils from '@utils/Model'
 import { Career } from '../career/career.model'
 import { Subject } from '../subject/subject.model'
 

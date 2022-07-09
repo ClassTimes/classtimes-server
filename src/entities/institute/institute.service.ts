@@ -5,7 +5,7 @@ import { Model } from 'mongoose'
 import { plainToInstance } from 'class-transformer'
 
 // Service
-import { BaseService } from '../../utils/BaseService'
+import { BaseService } from '@utils/BaseService'
 
 // Auth
 import { Action } from '@modules/casl/casl-ability.factory'

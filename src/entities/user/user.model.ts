@@ -3,8 +3,8 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
-import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
-import * as Utils from '../../utils/Model'
+import { Connected, ConnectionType, withCursor } from '@utils/Connection'
+import * as Utils from '@utils/Model'
 
 // Entities
 import { School, ConnectedSchools } from '@modules/school/school.model'

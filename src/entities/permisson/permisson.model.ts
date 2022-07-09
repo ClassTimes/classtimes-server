@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 // import autopopulate from 'mongoose-autopopulate'
 // // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
-import * as Utils from '../../utils/Model'
+import * as Utils from '@utils/Model'
 // import { Subject } from '../subject/subject.model'
 // import { User } from '../user/user.model'
 

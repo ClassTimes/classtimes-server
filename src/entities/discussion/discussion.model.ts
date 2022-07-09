@@ -3,10 +3,10 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
-import * as Utils from '../../utils/Model'
+import * as Utils from '@utils/Model'
 
 // Pagination
-import { Connected, withCursor } from '../../utils/Connection'
+import { Connected, withCursor } from '@utils/Connection'
 
 // Entities
 import { Subject } from '../subject/subject.model'

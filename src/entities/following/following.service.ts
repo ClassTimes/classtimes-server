@@ -8,7 +8,7 @@ import { Model, Types } from 'mongoose'
 // import { Action } from '../../casl/casl-ability.factory'
 
 // Pagination
-import { ConnectionArgs, getConnectionResults } from '../../utils/Connection'
+import { ConnectionArgs, getConnectionResults } from '@utils/Connection'
 
 // Entities
 import { User } from '../user/user.model'

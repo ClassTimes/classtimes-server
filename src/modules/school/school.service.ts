@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
 // Service
-import { BaseService } from '../../utils/BaseService'
+import { BaseService } from '@utils/BaseService'
 
 // Auth
 import { Action } from '@modules/casl/casl-ability.factory'

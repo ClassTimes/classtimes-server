@@ -11,7 +11,7 @@ import {
   ConnectionArgs,
   getConnectionResults,
   // buildConnection,
-} from '../../utils/Connection'
+} from '@utils/Connection'
 
 // CareerSubject
 import { CareerSubject, CareerSubjectDocument } from './careerSubject.model'

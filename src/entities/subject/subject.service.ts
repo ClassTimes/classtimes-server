@@ -10,7 +10,7 @@ import { Subject, SubjectDocument } from './subject.model'
 import { Action } from '@modules/casl/casl-ability.factory'
 
 // Service
-import { BaseService } from '../../utils/BaseService'
+import { BaseService } from '@utils/BaseService'
 import { School, SchoolDocument } from '@modules/school/school.model'
 import {
   Institute,

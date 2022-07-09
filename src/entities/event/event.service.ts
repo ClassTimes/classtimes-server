@@ -18,7 +18,7 @@ import {
 } from '@entities/calendarEvent/calendarEvent.model'
 
 // Service methods
-import { BaseService } from '../../utils/BaseService'
+import { BaseService } from '@utils/BaseService'
 
 const MODEL_CLASS = Event
 @Injectable()

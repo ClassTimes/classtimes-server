@@ -10,7 +10,7 @@ import {
   ConnectionArgs,
   buildConnection,
   getConnectionResults,
-} from '../../utils/Connection'
+} from '@utils/Connection'
 
 // User
 import { User, UserDocument } from './user.model'

@@ -2,7 +2,7 @@ import { Schema, Prop } from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory
 import { ObjectType, Field } from '@nestjs/graphql'
 import { MinLength } from 'class-validator'
 import mongoose from 'mongoose'
-import * as Utils from '../../utils/Model'
+import * as Utils from '@utils/Model'
 
 // Models
 import { User } from '../user/user.model'

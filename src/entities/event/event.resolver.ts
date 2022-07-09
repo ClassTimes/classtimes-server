@@ -12,7 +12,7 @@ import { Types } from 'mongoose'
 // import * as dayjs from 'dayjs'
 
 // Pagination
-import { ConnectionArgs } from '../../utils/Connection'
+import { ConnectionArgs } from '@utils/Connection'
 
 // Event
 import { Event, EventDocument } from './event.model'

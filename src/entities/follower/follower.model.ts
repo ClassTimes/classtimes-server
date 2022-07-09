@@ -5,9 +5,9 @@ import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { withCursor } from '../../utils/Connection'
+import { withCursor } from '@utils/Connection'
 
-import * as Utils from '../../utils/Model'
+import * as Utils from '@utils/Model'
 import { School } from '@modules/school/school.model'
 import { Subject } from '@entities/subject/subject.model'
 import { Institute } from '@entities/institute/institute.model'

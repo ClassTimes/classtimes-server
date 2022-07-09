@@ -112,6 +112,7 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+      "^@utils/(.*)$": "<rootDir>/src/utils/$1",
       "^@entities/(.*)$": "<rootDir>/src/entities/$1"
     }
   }

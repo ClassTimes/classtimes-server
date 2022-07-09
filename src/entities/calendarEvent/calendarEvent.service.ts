@@ -18,8 +18,8 @@ import { Subject, SubjectDocument } from '../subject/subject.model'
 import { Action } from '@modules/casl/casl-ability.factory'
 
 // Utils
-import { BaseService } from '../../utils/BaseService'
-import { parseEndDate } from '../../utils/RRuleParsing'
+import { BaseService } from '@utils/BaseService'
+import { parseEndDate } from '@utils/RRuleParsing'
 
 const MODEL_CLASS = CalendarEvent
 @Injectable()

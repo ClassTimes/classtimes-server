@@ -2,11 +2,11 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql'
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
-import * as Utils from '../../utils/Model'
+import * as Utils from '@utils/Model'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
-import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
+import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 
 // Entities
 import { Subject } from '../subject/subject.model'
