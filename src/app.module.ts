@@ -15,7 +15,7 @@ import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.modu
 import { CareerModule } from './entities/career/career.module'
 import { CaslModule } from './modules/casl/casl.module'
 import { DiscussionModule } from './entities/discussion/discussion.module'
-import { EventModule } from './entities/event/event.module'
+import { EventModule } from './modules/event/event.module'
 import { FollowModule } from './entities/follow/follow.module'
 import { InstituteModule } from './entities/institute/institute.module'
 // import { ImageKitAuthModule } from './imageKitAuth/imageKitAuth.module'

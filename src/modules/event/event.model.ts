@@ -13,7 +13,7 @@ import { User, ConnectedUsers } from '@modules/user/user.model'
 
 // Embedded documents
 import { Comment } from '@entities/comment/comment.model'
-import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
+import { VirtualLocation } from '@entities/virtualLocation/virtualLocation.model'
 
 @GQL.ObjectType()
 @DB.Schema({

@@ -4,12 +4,12 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { CalendarEventService } from './calendarEvent.service'
 import { CalendarEvent, CalendarEventSchema } from './calendarEvent.model'
 import { CalendarEventResolver } from './calendarEvent.resolver'
-import { Subject, SubjectSchema } from '../subject/subject.model'
-import { EventService } from '../event/event.service'
-import { Event, EventSchema } from '../event/event.model'
+import { Subject, SubjectSchema } from '@entities/subject/subject.model'
+import { EventService } from '@modules/event/event.service'
+import { Event, EventSchema } from '@modules/event/event.model'
 
-import { Follower, FollowerSchema } from '../follower/follower.model'
-import { FollowerService } from '../follower/follower.service'
+import { Follower, FollowerSchema } from '@entities/follower/follower.model'
+import { FollowerService } from '@entities/follower/follower.service'
 
 @Module({
   imports: [

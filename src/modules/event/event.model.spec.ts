@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 // import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 // import * as V from 'class-validator'
 
-import { connectFakeMongo, disconnectFakeMongo } from '../tests/db-handler'
-import { Event } from './entities/event.model'
+import { connectFakeMongo, disconnectFakeMongo } from '../../tests/db-handler'
+import { Event } from './event.model'
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
 

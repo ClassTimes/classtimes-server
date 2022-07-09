@@ -19,13 +19,12 @@ import { Event, EventDocument } from './event.model'
 import { EventService } from './event.service'
 import {
   CreateEventInput,
-  ListEventInput,
   UpdateEventInput,
   // CreateEventInputsSchema,
 } from './event.inputs'
 
 // Services
-import { FollowerService } from '../follower/follower.service'
+import { FollowerService } from '@entities/follower/follower.service'
 
 @Resolver(() => Event)
 export class EventResolver {

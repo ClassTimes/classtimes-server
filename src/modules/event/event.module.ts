@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule, getModelToken } from '@nestjs/mongoose'
+import { MongooseModule } from '@nestjs/mongoose'
 
 import { EventService } from './event.service'
 import { Event, EventSchema } from './event.model'
@@ -7,11 +7,11 @@ import { EventResolver } from './event.resolver'
 import {
   CalendarEvent,
   CalendarEventSchema,
-} from '../calendarEvent/calendarEvent.model'
+} from '@entities/calendarEvent/calendarEvent.model'
 // import { User, UserSchema } from '../user/user.model'
 
-import { Follower, FollowerSchema } from '../follower/follower.model'
-import { FollowerService } from '../follower/follower.service'
+import { Follower, FollowerSchema } from '@entities/follower/follower.model'
+import { FollowerService } from '@entities/follower/follower.service'
 
 @Module({
   imports: [

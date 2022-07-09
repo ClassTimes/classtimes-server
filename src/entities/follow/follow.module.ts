@@ -24,8 +24,8 @@ import {
 } from '@entities/calendarEvent/calendarEvent.model'
 import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
 
-import { Event, EventSchema } from '@entities/event/event.model'
-import { EventService } from '@entities/event/event.service'
+import { Event, EventSchema } from '@modules/event/event.model'
+import { EventService } from '@modules/event/event.service'
 
 import { User, UserSchema } from '@modules/user/user.model'
 import { UserService } from '@modules/user/user.service'

@@ -25,7 +25,7 @@ import { School } from '@modules/school/school.model'
 import { Subject } from '@entities/subject/subject.model'
 import { Institute } from '@entities/institute/institute.model'
 import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
-import { Event } from '@entities/event/event.model'
+import { Event } from '@modules/event/event.model'
 
 // Services
 import { FollowerService } from '@entities/follower/follower.service'
