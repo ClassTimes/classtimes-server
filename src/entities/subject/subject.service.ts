@@ -11,11 +11,11 @@ import { Action } from '../../casl/casl-ability.factory'
 
 // Service
 import { BaseService } from '../../utils/BaseService'
-import { School, SchoolDocument } from '../../entities/school/school.model'
+import { School, SchoolDocument } from '@entities/school/school.model'
 import {
   Institute,
   InstituteDocument,
-} from '../../entities/institute/institute.model'
+} from '@entities/institute/institute.model'
 
 import { CreateSubjectInput } from './subject.inputs'
 

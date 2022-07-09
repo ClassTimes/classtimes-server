@@ -8,9 +8,12 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "incremental": true,
     "esModuleInterop": true,
-    "typeRoots": ["./src/types/*.d.ts", "@types", "node_modules/@types"]
+    "typeRoots": ["./src/types/*.d.ts", "@types", "node_modules/@types"],
+    "paths": {
+      "@entities/*": ["src/entities/*"]
+    }
   }
 }

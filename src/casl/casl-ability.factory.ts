@@ -9,14 +9,14 @@ import {
 // import { plainToClass } from 'class-transformer'
 
 import { Auth } from '../auth/auth.model'
-import { CalendarEvent } from '../entities/calendarEvent/calendarEvent.model'
-import { Career } from '../entities/career/career.model'
-import { Discussion } from '../entities/discussion/discussion.model'
-import { Event } from '../entities/event/event.model'
-import { Institute } from '../entities/institute/institute.model'
-import { School } from '../entities/school/school.model'
-import { Subject } from '../entities/subject/subject.model'
-import { User } from '../entities/user/user.model'
+import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { Career } from '@entities/career/career.model'
+import { Discussion } from '@entities/discussion/discussion.model'
+import { Event } from '@entities/event/event.model'
+import { Institute } from '@entities/institute/institute.model'
+import { School } from '@entities/school/school.model'
+import { Subject } from '@entities/subject/subject.model'
+import { User } from '@entities/user/user.model'
 
 type Subjects =
   | InferSubjects<

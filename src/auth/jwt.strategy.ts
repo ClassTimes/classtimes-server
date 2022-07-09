@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common'
 import mongoose from 'mongoose'
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
-import { UserService } from '../entities/user/user.service'
-import { User } from '../entities/user/user.model'
+import { UserService } from '@entities/user/user.service'
+import { User } from '@entities/user/user.model'
 import { jwtConstants } from './constants'
 
 @Injectable()

@@ -15,7 +15,7 @@ import { Institute, InstituteDocument } from './institute.model'
 import { CreateInstituteInput } from './institute.inputs'
 
 // School
-import { School, SchoolDocument } from '../../entities/school/school.model'
+import { School, SchoolDocument } from '@entities/school/school.model'
 
 const MODEL_CLASS = Institute
 @Injectable()
