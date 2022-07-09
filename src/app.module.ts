@@ -1,40 +1,28 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
-import * as GQL from '@nestjs/graphql'
-import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { join } from 'path'
 import gitCommitInfo from 'git-commit-info'
+import { GraphQLModule } from '@nestjs/graphql'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { SendGridModule } from '@anchan828/nest-sendgrid'
+import { MongooseModule } from '@nestjs/mongoose'
 import * as Utils from './utils'
 import { APP_GUARD } from '@nestjs/core'
-import { GqlAuthGuard } from './auth/gql-auth.guard'
-// import { PoliciesGuard } from './casl/policy.guard'
-
-// import {
-//   ApolloErrorConverter, // required: core export
-//   // mapItemBases, // optional: MapItem bases of common Errors that can be extended
-//   // extendMapItem, // optional: tool for extending MapItems with new configurations
-// } from 'apollo-error-converter'
-
-// App
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { GqlAuthGuard } from './modules/auth/gql-auth.guard'
 
 // Modules
-import { AuthModule } from './auth/auth.module'
-import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
-import { CareerModule } from './entities/career/career.module'
-import { CaslModule } from './casl/casl.module'
-import { DiscussionModule } from './entities/discussion/discussion.module'
-import { EventModule } from './entities/event/event.module'
-import { FollowModule } from './entities/follow/follow.module'
-import { InstituteModule } from './entities/institute/institute.module'
-import { ImageKitAuthModule } from './imageKitAuth/imageKitAuth.module'
-import { PermissonModule } from './entities/permisson/permisson.module'
-import { SchoolModule } from './entities/school/school.module'
-import { SubjectModule } from './entities/subject/subject.module'
-import { UserModule } from './entities/user/user.module'
-
-// import { ValidationError } from 'class-validator'
+import { AuthModule } from './modules/auth/auth.module'
+import { CalendarEventModule } from './modules/calendarEvent/calendarEvent.module'
+import { CareerModule } from './modules/career/career.module'
+import { CaslModule } from './modules/casl/casl.module'
+import { DiscussionModule } from './modules/discussion/discussion.module'
+import { EventModule } from './modules/event/event.module'
+import { FollowModule } from './modules/follow/follow.module'
+import { InstituteModule } from './modules/institute/institute.module'
+// import { ImageKitAuthModule } from './imageKitAuth/imageKitAuth.module'
+import { PermissonModule } from './modules/permisson/permisson.module'
+import { SchoolModule } from './modules/school/school.module'
+import { SubjectModule } from './modules/subject/subject.module'
+import { UserModule } from './modules/user/user.module'
 
 @Module({
   imports: [
@@ -42,27 +30,22 @@ import { UserModule } from './entities/user/user.module'
       apikey: process.env.SENDGRID_API_KEY,
     }),
     MongooseModule.forRoot(
-      process.env.MONGODB || 'mongodb://localhost/classtimes',
+      process.env.MONGODB || 'mongodb://localhost:27017/classtimes',
     ),
-    GQL.GraphQLModule.forRoot({
-      installSubscriptionHandlers: true,
-      // dateScalarMode: 'timestamp',
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      debug: false,
+      playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      playground: true,
-      debug: false,
       introspection: true, // TODO Remove in production at release time
-      // context: ({ req }) => ({ req }),
+      installSubscriptionHandlers: true,
       context: (options) => {
-        // console.log(`[GQL] [context]`, { options: Object.keys(options) })
         const { req } = options
-        // console.log(`[GQL] [context] [req]`, { req: Object.keys(req) })
-        // res.header('key', 'value')
         return { req }
       },
-      formatResponse: (response, options) => {
+      formatResponse: (response) => {
         let extensions
-
         if (Utils.isDev) {
           const commit = gitCommitInfo() // information of process.cwd() and the latest commit
           const date = new Date().toISOString()
@@ -71,46 +54,32 @@ import { UserModule } from './entities/user/user.module'
             env: { date, commit },
           }
         }
-
         return {
           ...response,
           extensions,
         }
       },
-      // formatError: new ApolloErrorConverter({
-      //   // logger,
-      //   // fallback,
-      //   // errorMap
-      // }),
     }),
     AuthModule,
     CalendarEventModule,
-    CaslModule,
     CareerModule,
+    CaslModule,
     DiscussionModule,
     EventModule,
     FollowModule,
     InstituteModule,
-    ImageKitAuthModule,
+    // ImageKitAuthModule,
     PermissonModule,
     SchoolModule,
     SubjectModule,
     UserModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: GqlAuthGuard,
     },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: PoliciesGuard,
-    // },
-    // ObjectidScalar,
-    // Logger,
-    // JwtStrategy,
   ],
 })
 export class AppModule {}

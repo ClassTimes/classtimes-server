@@ -226,12 +226,6 @@ type Following {
   resourceName: String!
 }
 
-type ImageKitAuth {
-  expire: Int!
-  signature: String!
-  token: String!
-}
-
 type Institute {
   _id: ID!
   avatarImage: String
@@ -337,7 +331,6 @@ type Query {
   career(_id: ID!): Career!
   discussion(_id: ID!): Discussion!
   event(_id: ID!): Event!
-  getImageKitSignature(publicKey: String!): ImageKitAuth!
   institute(_id: ID!): Institute!
   listCalendarEvents(after: String, before: String, filters: ListCalendarEventsInput, first: Float = 0): ConnectedCalendarEvents!
   listCareers(after: String, before: String, filters: ListCareerInput, first: Float = 0): ConnectedCareers!

@@ -1,6 +1,6 @@
 import { Query, Resolver, Args } from '@nestjs/graphql'
 
-import { SkipAuth } from '../auth/decorators'
+import { SkipAuth } from '@modules/auth/decorators'
 
 import { ImageKitAuth } from './imageKitAuth.model'
 import { ImageKitAuthService } from './imageKitAuth.service'
