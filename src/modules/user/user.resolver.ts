@@ -28,8 +28,8 @@ import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
 import { Event } from '@modules/event/event.model'
 
 // Services
-import { FollowerService } from '@entities/follower/follower.service'
-import { FollowingService } from '@entities/following/following.service'
+import { FollowerService } from '@modules/follower/follower.service'
+import { FollowingService } from '@modules/following/following.service'
 
 // Calendar
 // import { Calendar } from '../calendar/calendar.model'

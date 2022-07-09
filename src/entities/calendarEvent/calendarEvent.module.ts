@@ -8,8 +8,8 @@ import { Subject, SubjectSchema } from '@entities/subject/subject.model'
 import { EventService } from '@modules/event/event.service'
 import { Event, EventSchema } from '@modules/event/event.model'
 
-import { Follower, FollowerSchema } from '@entities/follower/follower.model'
-import { FollowerService } from '@entities/follower/follower.service'
+import { Follower, FollowerSchema } from '@modules/follower/follower.model'
+import { FollowerService } from '@modules/follower/follower.service'
 
 @Module({
   imports: [

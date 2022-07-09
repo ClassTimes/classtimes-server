@@ -8,11 +8,11 @@ import { CurrentUser } from '@modules/auth/currentUser'
 import { Follow } from './follow.model'
 
 // Follower
-import { FollowerService } from '@entities/follower/follower.service'
+import { FollowerService } from '@modules/follower/follower.service'
 
 // Following
-import { Following } from '@entities/following/following.model'
-import { FollowingService } from '@entities/following/following.service'
+import { Following } from '@modules/following/following.model'
+import { FollowingService } from '@modules/following/following.service'
 
 // Resource services
 import { SchoolService } from '@modules/school/school.service'

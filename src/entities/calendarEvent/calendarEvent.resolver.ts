@@ -29,7 +29,7 @@ import {
 // Services
 import { CalendarEventService } from './calendarEvent.service'
 import { EventService } from '@modules/event/event.service'
-import { FollowerService } from '@entities/follower/follower.service'
+import { FollowerService } from '@modules/follower/follower.service'
 @Resolver(() => CalendarEvent)
 export class CalendarEventResolver {
   constructor(

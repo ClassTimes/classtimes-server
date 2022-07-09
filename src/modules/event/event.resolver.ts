@@ -24,7 +24,7 @@ import {
 } from './event.inputs'
 
 // Services
-import { FollowerService } from '@entities/follower/follower.service'
+import { FollowerService } from '@modules/follower/follower.service'
 
 @Resolver(() => Event)
 export class EventResolver {

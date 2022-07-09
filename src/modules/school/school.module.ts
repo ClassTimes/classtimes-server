@@ -15,10 +15,10 @@ import { User, UserSchema } from '@modules/user/user.model'
 import { UserService } from '@modules/user/user.service'
 import { UserResolver } from '@modules/user/user.resolver'
 
-import { Follower, FollowerSchema } from '@entities/follower/follower.model'
-import { FollowerService } from '@entities/follower/follower.service'
-import { Following, FollowingSchema } from '@entities/following/following.model'
-import { FollowingService } from '@entities/following/following.service'
+import { Follower, FollowerSchema } from '@modules/follower/follower.model'
+import { FollowerService } from '@modules/follower/follower.service'
+import { Following, FollowingSchema } from '@modules/following/following.model'
+import { FollowingService } from '@modules/following/following.service'
 
 @Module({
   imports: [

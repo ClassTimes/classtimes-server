@@ -20,8 +20,8 @@ import {
   CalendarEventSchema,
 } from '@entities/calendarEvent/calendarEvent.model'
 
-import { Follower, FollowerSchema } from '@entities/follower/follower.model'
-import { FollowerService } from '@entities/follower/follower.service'
+import { Follower, FollowerSchema } from '@modules/follower/follower.model'
+import { FollowerService } from '@modules/follower/follower.service'
 
 @Module({
   imports: [

@@ -19,7 +19,7 @@ import {
 } from '@entities/institute/institute.model'
 import { InstituteService } from './institute.service'
 import { SubjectService } from '@entities/subject/subject.service'
-import { FollowerService } from '@entities/follower/follower.service'
+import { FollowerService } from '@modules/follower/follower.service'
 import {
   CreateInstituteInput,
   ListInstituteInput,

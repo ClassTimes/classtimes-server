@@ -17,7 +17,7 @@ import { School, SchoolDocument, ConnectedSchools } from './school.model'
 import { SchoolService } from './school.service'
 import { SubjectService } from '@entities/subject/subject.service'
 import { InstituteService } from '@entities/institute/institute.service'
-import { FollowerService } from '@entities/follower/follower.service'
+import { FollowerService } from '@modules/follower/follower.service'
 import {
   CreateSchoolInput,
   ListSchoolInput,

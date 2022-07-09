@@ -11,11 +11,11 @@ import { UserResolver } from './user.resolver'
 import { CaslAbilityFactory } from '@modules/casl/casl-ability.factory'
 // import { PoliciesGuard } from '../../casl/policy.guard'
 
-import { Follower, FollowerSchema } from '@entities/follower/follower.model'
-import { FollowerService } from '@entities/follower/follower.service'
+import { Follower, FollowerSchema } from '@modules/follower/follower.model'
+import { FollowerService } from '@modules/follower/follower.service'
 
-import { Following, FollowingSchema } from '@entities/following/following.model'
-import { FollowingService } from '@entities/following/following.service'
+import { Following, FollowingSchema } from '@modules/following/following.model'
+import { FollowingService } from '@modules/following/following.service'
 
 @Module({
   imports: [

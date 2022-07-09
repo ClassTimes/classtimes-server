@@ -14,17 +14,13 @@ import { ConnectionArgs } from '@utils/Connection'
 
 // Subject
 import { Subject, SubjectDocument } from './subject.model'
-import {
-  CreateSubjectInput,
-  ListSubjectInput,
-  UpdateSubjectInput,
-} from './subject.inputs'
+import { CreateSubjectInput, UpdateSubjectInput } from './subject.inputs'
 
 // Services
 import { SubjectService } from './subject.service'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
-import { DiscussionService } from '../discussion/discussion.service'
-import { FollowerService } from '../follower/follower.service'
+import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
+import { DiscussionService } from '@entities/discussion/discussion.service'
+import { FollowerService } from '@modules/follower/follower.service'
 
 @Resolver(() => Subject)
 export class SubjectResolver {
