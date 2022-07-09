@@ -8,7 +8,7 @@ import {
 } from '@casl/ability'
 // import { plainToClass } from 'class-transformer'
 
-import { Auth } from '../auth/auth.model'
+import { Auth } from '../../auth/auth.model'
 import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
 import { Career } from '@entities/career/career.model'
 import { Discussion } from '@entities/discussion/discussion.model'

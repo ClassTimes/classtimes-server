@@ -1,27 +1,22 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 import { plainToClass } from 'class-transformer'
 
 // Base Service
 import { BaseService } from '../../utils/BaseService'
 
 // School
-import { School } from '../school/school.model'
-import { SchoolService } from '../school/school.service'
+import { School } from '@entities/school/school.model'
+import { SchoolService } from '@entities/school/school.service'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // Career
 import { Career, CareerDocument } from './career.model'
-import {
-  ApproveCareerInput,
-  CreateCareerInput,
-  ListCareerInput,
-  UpdateCareerInput,
-} from './career.inputs'
+import { ApproveCareerInput, CreateCareerInput } from './career.inputs'
 
 const MODEL_CLASS = Career
 @Injectable()

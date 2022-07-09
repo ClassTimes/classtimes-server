@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { APP_GUARD } from '@nestjs/core'
+// import { APP_GUARD } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 
 // import { AuthService } from '../auth/auth.service'
@@ -8,7 +8,7 @@ import { User, UserSchema } from './user.model'
 import { UserResolver } from './user.resolver'
 // import { AuthModule } from '../auth/auth.module'
 
-import { CaslAbilityFactory } from '../../casl/casl-ability.factory'
+import { CaslAbilityFactory } from '@modules/casl/casl-ability.factory'
 // import { PoliciesGuard } from '../../casl/policy.guard'
 
 import { Follower, FollowerSchema } from '../follower/follower.model'

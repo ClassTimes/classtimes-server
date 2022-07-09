@@ -5,7 +5,7 @@ import { Model } from 'mongoose'
 import { plainToInstance } from 'class-transformer'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // Event
 import { Event, EventDocument } from './event.model'
@@ -15,7 +15,7 @@ import { CreateEventInput } from './event.inputs'
 import {
   CalendarEvent,
   CalendarEventDocument,
-} from '../calendarEvent/calendarEvent.model'
+} from '@entities/calendarEvent/calendarEvent.model'
 
 // Service methods
 import { BaseService } from '../../utils/BaseService'

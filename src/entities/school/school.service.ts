@@ -1,21 +1,17 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 
 // Service
 import { BaseService } from '../../utils/BaseService'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // School
 import { School, SchoolDocument } from './school.model'
-import {
-  CreateSchoolInput,
-  ListSchoolInput,
-  UpdateSchoolInput,
-} from './school.inputs'
+import { CreateSchoolInput } from './school.inputs'
 
 const MODEL_CLASS = School
 @Injectable()

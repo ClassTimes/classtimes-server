@@ -15,7 +15,7 @@ import {
 import { Subject, SubjectDocument } from '../subject/subject.model'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // Utils
 import { BaseService } from '../../utils/BaseService'

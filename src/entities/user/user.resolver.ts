@@ -5,8 +5,8 @@ import mongoose from 'mongoose'
 // Guard
 // import { GqlAuthGuard } from '../../auth/gql-auth.guard'
 import { CurrentUser } from '../../auth/currentUser'
-import { CheckPolicies } from '../../casl/policy.guard'
-import { AppAbility, Action } from '../../casl/casl-ability.factory'
+import { CheckPolicies } from '@modules/casl/policy.guard'
+import { AppAbility, Action } from '@modules/casl/casl-ability.factory'
 
 // Pagination
 import { ConnectionArgs } from '../../utils/Connection'

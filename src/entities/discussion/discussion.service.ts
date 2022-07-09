@@ -5,17 +5,17 @@ import { Model, Types } from 'mongoose'
 import { plainToInstance } from 'class-transformer'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // Discussion
 import { Discussion, DiscussionDocument } from './discussion.model'
 import { CreateDiscussionInput } from './discussion.inputs'
 
 // Subject
-import { Subject, SubjectDocument } from '../subject/subject.model'
+import { Subject, SubjectDocument } from '@entities/subject/subject.model'
 
 // Comment
-import { CommentInput } from '../comment/comment.inputs'
+import { CommentInput } from '@entities/comment/comment.inputs'
 
 // Service methods
 import { BaseService } from '../../utils/BaseService'

@@ -10,7 +10,7 @@ import { Reflector } from '@nestjs/core'
 import {
   AppAbility,
   // CaslAbilityFactory
-} from '../casl/casl-ability.factory'
+} from './casl-ability.factory'
 interface IPolicyHandler {
   handle(ability: AppAbility): boolean
 }

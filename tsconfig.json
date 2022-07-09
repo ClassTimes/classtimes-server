@@ -13,7 +13,8 @@
     "esModuleInterop": true,
     "typeRoots": ["./src/types/*.d.ts", "@types", "node_modules/@types"],
     "paths": {
-      "@entities/*": ["src/entities/*"]
+      "@entities/*": ["src/entities/*"],
+      "@modules/*": ["src/modules/*"]
     }
   }
 }

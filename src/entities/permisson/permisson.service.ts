@@ -8,7 +8,7 @@ import { plainToClass } from 'class-transformer'
 import { BaseService } from '../../utils/BaseService'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // Models
 import { School, SchoolDocument } from '../school/school.model'

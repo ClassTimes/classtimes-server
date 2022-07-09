@@ -7,7 +7,7 @@ import { plainToInstance } from 'class-transformer'
 import { Subject, SubjectDocument } from './subject.model'
 
 // Auth
-import { Action } from '../../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
 
 // Service
 import { BaseService } from '../../utils/BaseService'

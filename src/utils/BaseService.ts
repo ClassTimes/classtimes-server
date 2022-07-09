@@ -7,8 +7,8 @@ import { ConnectionArgs, getConnection } from '../utils/Connection'
 
 // Auth
 import { ForbiddenError } from '@casl/ability'
-import { Action } from '../casl/casl-ability.factory'
-import { CaslAbilityFactory } from '../casl/casl-ability.factory'
+import { Action } from '@modules/casl/casl-ability.factory'
+import { CaslAbilityFactory } from '@modules/casl/casl-ability.factory'
 
 // User
 import { User } from '@entities/user/user.model'
