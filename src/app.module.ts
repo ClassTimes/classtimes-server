@@ -21,7 +21,7 @@ import { InstituteModule } from './modules/institute/institute.module'
 // import { ImageKitAuthModule } from './imageKitAuth/imageKitAuth.module'
 import { PermissonModule } from './modules/permisson/permisson.module'
 import { SchoolModule } from './modules/school/school.module'
-import { SubjectModule } from './entities/subject/subject.module'
+import { SubjectModule } from './modules/subject/subject.module'
 import { UserModule } from './modules/user/user.module'
 
 @Module({

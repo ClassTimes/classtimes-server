@@ -12,8 +12,8 @@ import { FollowingService } from '@modules/following/following.service'
 import { School, SchoolSchema } from '@modules/school/school.model'
 import { SchoolService } from '@modules/school/school.service'
 
-import { Subject, SubjectSchema } from '@entities/subject/subject.model'
-import { SubjectService } from '@entities/subject/subject.service'
+import { Subject, SubjectSchema } from '@modules/subject/subject.model'
+import { SubjectService } from '@modules/subject/subject.service'
 
 import { Institute, InstituteSchema } from '@modules/institute/institute.model'
 import { InstituteService } from '@modules/institute/institute.service'

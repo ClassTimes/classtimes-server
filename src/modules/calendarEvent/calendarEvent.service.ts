@@ -12,7 +12,7 @@ import {
 } from './calendarEvent.inputs'
 
 // Subject
-import { Subject, SubjectDocument } from '@entities/subject/subject.model'
+import { Subject, SubjectDocument } from '@modules/subject/subject.model'
 
 // Auth
 import { Action } from '@modules/casl/casl-ability.factory'

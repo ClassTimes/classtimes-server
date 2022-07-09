@@ -9,7 +9,7 @@ import * as Utils from '@utils/Model'
 import { Connected, withCursor } from '@utils/Connection'
 
 // Entities
-import { Subject } from '@entities/subject/subject.model'
+import { Subject } from '@modules/subject/subject.model'
 
 // Embedded documents
 import { Comment, CommentSchema } from '@modules/comment/comment.model'

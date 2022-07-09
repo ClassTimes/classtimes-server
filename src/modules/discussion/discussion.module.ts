@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule, getModelToken } from '@nestjs/mongoose'
+import { MongooseModule } from '@nestjs/mongoose'
 
 import { DiscussionService } from './discussion.service'
 import { Discussion, DiscussionSchema } from './discussion.model'
 import { DiscussionResolver } from './discussion.resolver'
 
-import { Subject, SubjectSchema } from '@entities/subject/subject.model'
+import { Subject, SubjectSchema } from '@modules/subject/subject.model'
 
 @Module({
   imports: [

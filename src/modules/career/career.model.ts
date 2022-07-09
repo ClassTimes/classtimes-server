@@ -10,7 +10,7 @@ import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 
 // Entities
 import { User } from '@modules/user/user.model'
-import { Subject, ConnectedSubjects } from '@entities/subject/subject.model'
+import { Subject, ConnectedSubjects } from '@modules/subject/subject.model'
 import { School } from '@modules/school/school.model'
 
 @GQL.ObjectType()

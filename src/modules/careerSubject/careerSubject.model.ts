@@ -9,7 +9,7 @@ import { withCursor } from '@utils/Connection'
 
 import * as Utils from '@utils/Model'
 import { Career } from '@modules/career/career.model'
-import { Subject } from '@entities/subject/subject.model'
+import { Subject } from '@modules/subject/subject.model'
 
 @GQL.ObjectType()
 @DB.Schema({

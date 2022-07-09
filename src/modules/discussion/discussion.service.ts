@@ -12,7 +12,7 @@ import { Discussion, DiscussionDocument } from './discussion.model'
 import { CreateDiscussionInput } from './discussion.inputs'
 
 // Subject
-import { Subject, SubjectDocument } from '@entities/subject/subject.model'
+import { Subject, SubjectDocument } from '@modules/subject/subject.model'
 
 // Comment
 import { CommentInput } from '@modules/comment/comment.inputs'

@@ -12,7 +12,7 @@ import { Action } from '@modules/casl/casl-ability.factory'
 
 // Models
 import { School, SchoolDocument } from '@modules/school/school.model'
-import { Subject, SubjectDocument } from '@entities/subject/subject.model'
+import { Subject, SubjectDocument } from '@modules/subject/subject.model'
 import {
   Institute,
   InstituteDocument,

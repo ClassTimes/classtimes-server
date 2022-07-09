@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { CalendarEventService } from './calendarEvent.service'
 import { CalendarEvent, CalendarEventSchema } from './calendarEvent.model'
 import { CalendarEventResolver } from './calendarEvent.resolver'
-import { Subject, SubjectSchema } from '@entities/subject/subject.model'
+import { Subject, SubjectSchema } from '@modules/subject/subject.model'
 import { EventService } from '@modules/event/event.service'
 import { Event, EventSchema } from '@modules/event/event.model'
 

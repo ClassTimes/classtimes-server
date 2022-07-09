@@ -8,7 +8,7 @@ import * as Utils from '@utils/Model'
 
 // Entities
 import { School, ConnectedSchools } from '@modules/school/school.model'
-import { Subject, ConnectedSubjects } from '@entities/subject/subject.model'
+import { Subject, ConnectedSubjects } from '@modules/subject/subject.model'
 import {
   Institute,
   ConnectedInstitutes,
