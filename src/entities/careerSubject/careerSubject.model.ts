@@ -10,7 +10,6 @@ import { withCursor } from '../../utils/Connection'
 import * as Utils from '../../utils/Model'
 import { Career } from '../career/career.model'
 import { Subject } from '../subject/subject.model'
-import { User } from '../user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -72,6 +71,8 @@ export class CareerSubject extends Utils.BaseModel {
 }
 
 export type CareerSubjectDocument = CareerSubject & mongoose.Document
-export const CareerSubjectSchema = withCursor(CareerSubject.schema)
+export const CareerSubjectSchema = withCursor(
+  CareerSubject.schema as mongoose.Schema,
+)
 CareerSubjectSchema.index({ careerId: 1, subjectId: 1 }, { unique: true })
 CareerSubjectSchema.plugin(autopopulate)

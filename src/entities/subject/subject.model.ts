@@ -95,7 +95,7 @@ export class Subject extends Utils.BaseModel {
 }
 
 export type SubjectDocument = Subject & mongoose.Document
-export const SubjectSchema = withCursor(Subject.schema)
+export const SubjectSchema = withCursor(Subject.schema as mongoose.Schema)
 SubjectSchema.plugin(autopopulate)
 
 @GQL.ObjectType()

@@ -75,7 +75,7 @@ export class School extends Utils.BaseModel {
 }
 
 export type SchoolDocument = School & mongoose.Document
-export const SchoolSchema = withCursor(School.schema)
+export const SchoolSchema = withCursor(School.schema as mongoose.Schema)
 SchoolSchema.plugin(autopopulate)
 @GQL.ObjectType()
 export class ConnectedSchools extends Connected(School) {}

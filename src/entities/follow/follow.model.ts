@@ -1,6 +1,5 @@
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
-import autopopulate from 'mongoose-autopopulate'
 
 import * as Utils from '../../utils/Model'
 import { User } from '../user/user.model'

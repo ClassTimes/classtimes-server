@@ -3,14 +3,10 @@ import { Module } from '@nestjs/common'
 // import gitCommitInfo from 'git-commit-info'
 // import * as GQL from '@nestjs/graphql'
 import { SendGridModule } from '@anchan828/nest-sendgrid'
-// import { MongooseModule } from '@nestjs/mongoose'
+import { MongooseModule } from '@nestjs/mongoose'
 // import * as Utils from './utils'
 // import { APP_GUARD } from '@nestjs/core'
 // import { GqlAuthGuard } from './auth/gql-auth.guard'
-
-// // App
-// import { AppController } from './app.controller'
-// import { AppService } from './app.service'
 
 // // Modules
 // import { AuthModule } from './auth/auth.module'
@@ -32,9 +28,9 @@ import { SendGridModule } from '@anchan828/nest-sendgrid'
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
     }),
-    // MongooseModule.forRoot(
-    //   process.env.MONGODB || 'mongodb://localhost/classtimes',
-    // ),
+    MongooseModule.forRoot(
+      process.env.MONGODB || 'mongodb://localhost:27017/classtimes',
+    ),
     // GQL.GraphQLModule.forRoot({
     //   installSubscriptionHandlers: true,
     //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -78,7 +74,6 @@ import { SendGridModule } from '@anchan828/nest-sendgrid'
   ],
   controllers: [],
   providers: [
-    // AppService,
     // {
     //   provide: APP_GUARD,
     //   useClass: GqlAuthGuard,

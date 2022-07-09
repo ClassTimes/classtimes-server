@@ -6,12 +6,10 @@ import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
 
 // Pagination
-import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
+import { Connected, withCursor } from '../../utils/Connection'
 
 // Entities
 import { Subject } from '../subject/subject.model'
-import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-import { User, ConnectedUsers } from '../user/user.model'
 
 // Embedded documents
 import { Comment, CommentSchema } from '../comment/comment.model'
@@ -68,7 +66,7 @@ export class Discussion extends Utils.BaseModel {
 }
 
 export type DiscussionDocument = Discussion & mongoose.Document
-export const DiscussionSchema = withCursor(Discussion.schema)
+export const DiscussionSchema = withCursor(Discussion.schema as mongoose.Schema)
 DiscussionSchema.plugin(autopopulate)
 
 @GQL.ObjectType()

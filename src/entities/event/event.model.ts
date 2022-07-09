@@ -3,7 +3,6 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 import * as Utils from '../../utils/Model'
-import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
 
 // Pagination
 import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
@@ -73,7 +72,7 @@ export class Event extends Utils.BaseModel {
 }
 
 export type EventDocument = Event & mongoose.Document
-export const EventSchema = withCursor(Event.schema)
+export const EventSchema = withCursor(Event.schema as mongoose.Schema)
 EventSchema.plugin(autopopulate)
 
 @GQL.ObjectType()

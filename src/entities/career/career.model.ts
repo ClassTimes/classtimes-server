@@ -55,7 +55,7 @@ export class Career extends Utils.BaseModel {
 }
 
 export type CareerDocument = Career & mongoose.Document
-export const CareerSchema = withCursor(Career.schema)
+export const CareerSchema = withCursor(Career.schema as mongoose.Schema)
 CareerSchema.plugin(autopopulate)
 @GQL.ObjectType()
 export class ConnectedCareers extends Connected(Career) {}

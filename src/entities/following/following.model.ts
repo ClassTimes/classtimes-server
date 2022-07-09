@@ -1,6 +1,5 @@
 import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
-import { ModuleRef } from '@nestjs/core'
 import mongoose from 'mongoose'
 import autopopulate from 'mongoose-autopopulate'
 // import * as V from 'class-validator' // { Prop, Schema, SchemaFactory }
@@ -88,6 +87,6 @@ export class Following extends Utils.BaseModel {
 }
 
 export type FollowingDocument = Following & mongoose.Document
-export const FollowingSchema = withCursor(Following.schema)
+export const FollowingSchema = withCursor(Following.schema as mongoose.Schema)
 FollowingSchema.index({ followerId: 1, resourceId: 1 }, { unique: true })
 FollowingSchema.plugin(autopopulate)

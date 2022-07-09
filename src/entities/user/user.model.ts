@@ -93,7 +93,7 @@ export class User extends Utils.BaseModel {
 }
 
 export type UserDocument = User & mongoose.Document
-export const UserSchema = withCursor(User.schema)
+export const UserSchema = withCursor(User.schema as mongoose.Schema)
 UserSchema.plugin(autopopulate)
 
 @GQL.ObjectType()

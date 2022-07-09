@@ -13,7 +13,6 @@ import { Subject } from '../subject/subject.model'
 import { Event, ConnectedEvents } from '../event/event.model'
 import { User, ConnectedUsers } from '../user/user.model'
 import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
-import { Field, GqlExecutionContext } from '@nestjs/graphql'
 
 @GQL.ObjectType()
 @DB.Schema({
@@ -124,7 +123,9 @@ export class CalendarEvent extends Utils.BaseModel {
 }
 
 export type CalendarEventDocument = CalendarEvent & mongoose.Document
-export const CalendarEventSchema = withCursor(CalendarEvent.schema)
+export const CalendarEventSchema = withCursor(
+  CalendarEvent.schema as mongoose.Schema,
+)
 CalendarEventSchema.index({ startDateUtc: 1, endDateUtc: -1 })
 CalendarEventSchema.plugin(autopopulate)
 

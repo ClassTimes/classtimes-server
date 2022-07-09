@@ -88,6 +88,6 @@ export class Follower extends Utils.BaseModel {
 }
 
 export type FollowerDocument = Follower & mongoose.Document
-export const FollowerSchema = withCursor(Follower.schema)
+export const FollowerSchema = withCursor(Follower.schema as mongoose.Schema)
 FollowerSchema.index({ resourceId: 1, followerId: 1 }, { unique: true })
 FollowerSchema.plugin(autopopulate)

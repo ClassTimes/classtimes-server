@@ -74,7 +74,7 @@ export class Institute extends Utils.BaseModel {
 }
 
 export type InstituteDocument = Institute & mongoose.Document
-export const InstituteSchema = withCursor(Institute.schema)
+export const InstituteSchema = withCursor(Institute.schema as mongoose.Schema)
 InstituteSchema.plugin(autopopulate)
 @GQL.ObjectType()
 export class ConnectedInstitutes extends Connected(Institute) {}
