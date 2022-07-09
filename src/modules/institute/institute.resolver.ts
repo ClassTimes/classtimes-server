@@ -16,7 +16,7 @@ import {
   Institute,
   InstituteDocument,
   ConnectedInstitutes,
-} from '@entities/institute/institute.model'
+} from '@modules/institute/institute.model'
 import { InstituteService } from './institute.service'
 import { SubjectService } from '@entities/subject/subject.service'
 import { FollowerService } from '@modules/follower/follower.service'

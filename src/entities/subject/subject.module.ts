@@ -6,7 +6,7 @@ import { Subject, SubjectSchema } from './subject.model'
 import { SubjectResolver } from './subject.resolver'
 
 import { School, SchoolSchema } from '@modules/school/school.model'
-import { Institute, InstituteSchema } from '@entities/institute/institute.model'
+import { Institute, InstituteSchema } from '@modules/institute/institute.model'
 
 import { DiscussionService } from '@entities/discussion/discussion.service'
 import {

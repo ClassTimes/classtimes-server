@@ -15,7 +15,7 @@ import { School, SchoolDocument } from '@modules/school/school.model'
 import {
   Institute,
   InstituteDocument,
-} from '@entities/institute/institute.model'
+} from '@modules/institute/institute.model'
 
 import { CreateSubjectInput } from './subject.inputs'
 

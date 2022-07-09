@@ -12,7 +12,7 @@ import { Subject, ConnectedSubjects } from '@entities/subject/subject.model'
 import {
   Institute,
   ConnectedInstitutes,
-} from '@entities/institute/institute.model'
+} from '@modules/institute/institute.model'
 // import { Calendar, ConnectedCalendars } from '@entities/calendar/calendar.model'
 import {
   CalendarEvent,

@@ -8,8 +8,8 @@ import { SchoolResolver } from './school.resolver'
 import { Subject, SubjectSchema } from '@entities/subject/subject.model'
 import { SubjectService } from '@entities/subject/subject.service'
 
-import { Institute, InstituteSchema } from '@entities/institute/institute.model'
-import { InstituteService } from '@entities/institute/institute.service'
+import { Institute, InstituteSchema } from '@modules/institute/institute.model'
+import { InstituteService } from '@modules/institute/institute.service'
 
 import { User, UserSchema } from '@modules/user/user.model'
 import { UserService } from '@modules/user/user.service'

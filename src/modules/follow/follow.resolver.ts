@@ -17,7 +17,7 @@ import { FollowingService } from '@modules/following/following.service'
 // Resource services
 import { SchoolService } from '@modules/school/school.service'
 import { SubjectService } from '@entities/subject/subject.service'
-import { InstituteService } from '@entities/institute/institute.service'
+import { InstituteService } from '@modules/institute/institute.service'
 import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
 import { EventService } from '@modules/event/event.service'
 import { UserService } from '@modules/user/user.service'
