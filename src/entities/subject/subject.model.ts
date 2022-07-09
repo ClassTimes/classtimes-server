@@ -18,7 +18,7 @@ import { User, ConnectedUsers } from '@modules/user/user.model'
 import {
   Discussion,
   ConnectedDiscussions,
-} from '@entities/discussion/discussion.model'
+} from '@modules/discussion/discussion.model'
 
 @GQL.ObjectType()
 @DB.Schema({

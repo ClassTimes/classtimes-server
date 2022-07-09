@@ -8,11 +8,11 @@ import { SubjectResolver } from './subject.resolver'
 import { School, SchoolSchema } from '@modules/school/school.model'
 import { Institute, InstituteSchema } from '@modules/institute/institute.model'
 
-import { DiscussionService } from '@entities/discussion/discussion.service'
+import { DiscussionService } from '@modules/discussion/discussion.service'
 import {
   Discussion,
   DiscussionSchema,
-} from '@entities/discussion/discussion.model'
+} from '@modules/discussion/discussion.model'
 
 import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
 import {

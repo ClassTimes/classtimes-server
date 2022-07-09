@@ -5,7 +5,7 @@ import { DiscussionService } from './discussion.service'
 import { Discussion, DiscussionSchema } from './discussion.model'
 import { DiscussionResolver } from './discussion.resolver'
 
-import { Subject, SubjectSchema } from '../subject/subject.model'
+import { Subject, SubjectSchema } from '@entities/subject/subject.model'
 
 @Module({
   imports: [
