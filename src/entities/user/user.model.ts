@@ -7,15 +7,18 @@ import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 import * as Utils from '../../utils/Model'
 
 // Entities
-import { School, ConnectedSchools } from '../school/school.model'
-import { Subject, ConnectedSubjects } from '../subject/subject.model'
-import { Institute, ConnectedInstitutes } from '../institute/institute.model'
-// import { Calendar, ConnectedCalendars } from '../calendar/calendar.model'
+import { School, ConnectedSchools } from '@modules/school/school.model'
+import { Subject, ConnectedSubjects } from '@entities/subject/subject.model'
+import {
+  Institute,
+  ConnectedInstitutes,
+} from '@entities/institute/institute.model'
+// import { Calendar, ConnectedCalendars } from '@entities/calendar/calendar.model'
 import {
   CalendarEvent,
   ConnectedCalendarEvents,
-} from '../calendarEvent/calendarEvent.model'
-import { Event, ConnectedEvents } from '../event/event.model'
+} from '@entities/calendarEvent/calendarEvent.model'
+import { Event, ConnectedEvents } from '@entities/event/event.model'
 
 @GQL.ObjectType()
 @DB.Schema({

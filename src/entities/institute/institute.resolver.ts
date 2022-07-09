@@ -7,7 +7,7 @@ import {
   Parent,
   ID,
 } from '@nestjs/graphql'
-import { Model, Types } from 'mongoose'
+import { Types } from 'mongoose'
 
 // Pagination
 import { ConnectionArgs } from '../../utils/Connection'
@@ -16,11 +16,10 @@ import {
   Institute,
   InstituteDocument,
   ConnectedInstitutes,
-} from '../institute/institute.model'
+} from '@entities/institute/institute.model'
 import { InstituteService } from './institute.service'
-import { SchoolService } from '../school/school.service'
-import { SubjectService } from '../subject/subject.service'
-import { FollowerService } from '../follower/follower.service'
+import { SubjectService } from '@entities/subject/subject.service'
+import { FollowerService } from '@entities/follower/follower.service'
 import {
   CreateInstituteInput,
   ListInstituteInput,

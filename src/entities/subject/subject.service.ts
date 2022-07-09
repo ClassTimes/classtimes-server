@@ -11,7 +11,7 @@ import { Action } from '@modules/casl/casl-ability.factory'
 
 // Service
 import { BaseService } from '../../utils/BaseService'
-import { School, SchoolDocument } from '@entities/school/school.model'
+import { School, SchoolDocument } from '@modules/school/school.model'
 import {
   Institute,
   InstituteDocument,

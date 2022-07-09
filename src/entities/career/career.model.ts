@@ -9,9 +9,9 @@ import * as Utils from '../../utils/Model'
 import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 
 // Entities
-import { User } from '../user/user.model'
-import { Subject, ConnectedSubjects } from '../subject/subject.model'
-import { School } from '../school/school.model'
+import { User } from '@entities/user/user.model'
+import { Subject, ConnectedSubjects } from '@entities/subject/subject.model'
+import { School } from '@modules/school/school.model'
 
 @GQL.ObjectType()
 @DB.Schema({

@@ -8,12 +8,12 @@ import autopopulate from 'mongoose-autopopulate'
 import { withCursor } from '../../utils/Connection'
 
 import * as Utils from '../../utils/Model'
-import { School } from '../school/school.model'
-import { Subject } from '../subject/subject.model'
-import { Institute } from '../institute/institute.model'
-import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-import { Event } from '../event/event.model'
-import { User } from '../user/user.model'
+import { School } from '@modules/school/school.model'
+import { Subject } from '@entities/subject/subject.model'
+import { Institute } from '@entities/institute/institute.model'
+import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { Event } from '@entities/event/event.model'
+import { User } from '@entities/user/user.model'
 
 const Resource = GQL.createUnionType({
   name: 'Resource',

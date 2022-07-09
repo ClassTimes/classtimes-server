@@ -11,14 +11,14 @@ import { Connected, ConnectionType, withCursor } from '../../utils/Connection'
 import {
   CalendarEvent,
   ConnectedCalendarEvents,
-} from '../calendarEvent/calendarEvent.model'
-import { School } from '../school/school.model'
-import { Institute } from '../institute/institute.model'
-import { User, ConnectedUsers } from '../user/user.model'
+} from '@entities/calendarEvent/calendarEvent.model'
+import { School } from '@modules/school/school.model'
+import { Institute } from '@entities/institute/institute.model'
+import { User, ConnectedUsers } from '@entities/user/user.model'
 import {
   Discussion,
   ConnectedDiscussions,
-} from '../discussion/discussion.model'
+} from '@entities/discussion/discussion.model'
 
 @GQL.ObjectType()
 @DB.Schema({

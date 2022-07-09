@@ -3,18 +3,14 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 // import { SchoolService } from './school.service'
 // import { SchoolResolver } from './school.resolver'
-import { School, SchoolSchema } from '../school/school.model'
-import { Subject, SubjectSchema } from '../subject/subject.model'
-import { Institute, InstituteSchema } from '../institute/institute.model'
-import { User, UserSchema } from '../user/user.model'
-
-import {
-  CalendarEvent,
-  CalendarEventSchema,
-} from '../calendarEvent/calendarEvent.model'
+import { School, SchoolSchema } from '@modules/school/school.model'
+import { Subject, SubjectSchema } from '@entities/subject/subject.model'
+import { Institute, InstituteSchema } from '@entities/institute/institute.model'
+import { User, UserSchema } from '@entities/user/user.model'
 
 import { PermissonResolver } from './permisson.resolver'
 import { PermissonService } from './permisson.service'
+
 @Module({
   imports: [
     MongooseModule.forFeature([

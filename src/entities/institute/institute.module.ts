@@ -5,21 +5,20 @@ import { InstituteService } from './institute.service'
 import { Institute, InstituteSchema } from './institute.model'
 import { InstituteResolver } from './institute.resolver'
 
-import { SchoolService } from '../school/school.service'
-import { School, SchoolSchema } from '../school/school.model'
-import { SchoolResolver } from '../school/school.resolver'
+import { SchoolService } from '@modules/school/school.service'
+import { School, SchoolSchema } from '@modules/school/school.model'
 
-import { Subject, SubjectSchema } from '../subject/subject.model'
-import { SubjectService } from '../subject/subject.service'
+import { Subject, SubjectSchema } from '@entities/subject/subject.model'
+import { SubjectService } from '@entities/subject/subject.service'
 
-import { User, UserSchema } from '../user/user.model'
-import { UserService } from '../user/user.service'
-import { UserResolver } from '../user/user.resolver'
+import { User, UserSchema } from '@entities/user/user.model'
+import { UserService } from '@entities/user/user.service'
+import { UserResolver } from '@entities/user/user.resolver'
 
-import { Follower, FollowerSchema } from '../follower/follower.model'
-import { FollowerService } from '../follower/follower.service'
-import { Following, FollowingSchema } from '../following/following.model'
-import { FollowingService } from '../following/following.service'
+import { Follower, FollowerSchema } from '@entities/follower/follower.model'
+import { FollowerService } from '@entities/follower/follower.service'
+import { Following, FollowingSchema } from '@entities/following/following.model'
+import { FollowingService } from '@entities/following/following.service'
 
 @Module({
   imports: [

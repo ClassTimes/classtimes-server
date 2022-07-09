@@ -8,15 +8,15 @@ import { CareerResolver } from './career.resolver'
 import {
   CareerSubject,
   CareerSubjectSchema,
-} from '../careerSubject/careerSubject.model'
-import { CareerSubjectService } from '../careerSubject/careerSubject.service'
+} from '@entities/careerSubject/careerSubject.model'
+import { CareerSubjectService } from '@entities/careerSubject/careerSubject.service'
 
 // School
-import { School, SchoolSchema } from '../school/school.model'
-import { SchoolService } from '../school/school.service'
+import { School, SchoolSchema } from '@modules/school/school.model'
+import { SchoolService } from '@modules/school/school.service'
 
 // User
-import { User, UserSchema } from '../user/user.model'
+import { User, UserSchema } from '@entities/user/user.model'
 
 // import { Institute, InstituteSchema } from '../institute/institute.model'
 // import { InstituteService } from '../institute/institute.service'

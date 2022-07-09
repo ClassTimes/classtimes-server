@@ -3,32 +3,32 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 import { FollowResolver } from './follow.resolver'
 
-import { Follower, FollowerSchema } from '../follower/follower.model'
-import { FollowerService } from '../follower/follower.service'
+import { Follower, FollowerSchema } from '@entities/follower/follower.model'
+import { FollowerService } from '@entities/follower/follower.service'
 
-import { Following, FollowingSchema } from '../following/following.model'
-import { FollowingService } from '../following/following.service'
+import { Following, FollowingSchema } from '@entities/following/following.model'
+import { FollowingService } from '@entities/following/following.service'
 
-import { School, SchoolSchema } from '../school/school.model'
-import { SchoolService } from '../school/school.service'
+import { School, SchoolSchema } from '@modules/school/school.model'
+import { SchoolService } from '@modules/school/school.service'
 
-import { Subject, SubjectSchema } from '../subject/subject.model'
-import { SubjectService } from '../subject/subject.service'
+import { Subject, SubjectSchema } from '@entities/subject/subject.model'
+import { SubjectService } from '@entities/subject/subject.service'
 
-import { Institute, InstituteSchema } from '../institute/institute.model'
-import { InstituteService } from '../institute/institute.service'
+import { Institute, InstituteSchema } from '@entities/institute/institute.model'
+import { InstituteService } from '@entities/institute/institute.service'
 
 import {
   CalendarEvent,
   CalendarEventSchema,
-} from '../calendarEvent/calendarEvent.model'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+} from '@entities/calendarEvent/calendarEvent.model'
+import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
 
-import { Event, EventSchema } from '../event/event.model'
-import { EventService } from '../event/event.service'
+import { Event, EventSchema } from '@entities/event/event.model'
+import { EventService } from '@entities/event/event.service'
 
-import { User, UserSchema } from '../user/user.model'
-import { UserService } from '../user/user.service'
+import { User, UserSchema } from '@entities/user/user.model'
+import { UserService } from '@entities/user/user.service'
 
 @Module({
   imports: [

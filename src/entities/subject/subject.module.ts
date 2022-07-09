@@ -5,20 +5,23 @@ import { SubjectService } from './subject.service'
 import { Subject, SubjectSchema } from './subject.model'
 import { SubjectResolver } from './subject.resolver'
 
-import { School, SchoolSchema } from '../school/school.model'
-import { Institute, InstituteSchema } from '../institute/institute.model'
+import { School, SchoolSchema } from '@modules/school/school.model'
+import { Institute, InstituteSchema } from '@entities/institute/institute.model'
 
-import { DiscussionService } from '../discussion/discussion.service'
-import { Discussion, DiscussionSchema } from '../discussion/discussion.model'
+import { DiscussionService } from '@entities/discussion/discussion.service'
+import {
+  Discussion,
+  DiscussionSchema,
+} from '@entities/discussion/discussion.model'
 
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
+import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
 import {
   CalendarEvent,
   CalendarEventSchema,
-} from '../calendarEvent/calendarEvent.model'
+} from '@entities/calendarEvent/calendarEvent.model'
 
-import { Follower, FollowerSchema } from '../follower/follower.model'
-import { FollowerService } from '../follower/follower.service'
+import { Follower, FollowerSchema } from '@entities/follower/follower.model'
+import { FollowerService } from '@entities/follower/follower.service'
 
 @Module({
   imports: [
