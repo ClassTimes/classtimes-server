@@ -17,7 +17,7 @@ import {
   Institute,
   InstituteDocument,
 } from '@entities/institute/institute.model'
-import { User, UserDocument } from '@entities/user/user.model'
+import { User, UserDocument } from '@modules/user/user.model'
 
 import { WritePermissonsInput } from './permisson.inputs'
 

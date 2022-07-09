@@ -27,8 +27,8 @@ import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.serv
 import { Event, EventSchema } from '@entities/event/event.model'
 import { EventService } from '@entities/event/event.service'
 
-import { User, UserSchema } from '@entities/user/user.model'
-import { UserService } from '@entities/user/user.service'
+import { User, UserSchema } from '@modules/user/user.model'
+import { UserService } from '@modules/user/user.service'
 
 @Module({
   imports: [

@@ -13,7 +13,7 @@ import {
   Institute,
   ConnectedInstitutes,
 } from '@entities/institute/institute.model'
-import { User, ConnectedUsers } from '@entities/user/user.model'
+import { User, ConnectedUsers } from '@modules/user/user.model'
 
 @GQL.ObjectType()
 @DB.Schema({

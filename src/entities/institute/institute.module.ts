@@ -11,9 +11,9 @@ import { School, SchoolSchema } from '@modules/school/school.model'
 import { Subject, SubjectSchema } from '@entities/subject/subject.model'
 import { SubjectService } from '@entities/subject/subject.service'
 
-import { User, UserSchema } from '@entities/user/user.model'
-import { UserService } from '@entities/user/user.service'
-import { UserResolver } from '@entities/user/user.resolver'
+import { User, UserSchema } from '@modules/user/user.model'
+import { UserService } from '@modules/user/user.service'
+import { UserResolver } from '@modules/user/user.resolver'
 
 import { Follower, FollowerSchema } from '@entities/follower/follower.model'
 import { FollowerService } from '@entities/follower/follower.service'

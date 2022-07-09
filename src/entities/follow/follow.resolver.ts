@@ -2,7 +2,7 @@ import { Args, Mutation, Resolver, ID } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
 // Current User
-import { User } from '@entities/user/user.model'
+import { User } from '@modules/user/user.model'
 import { CurrentUser } from '@modules/auth/currentUser'
 
 import { Follow } from './follow.model'
@@ -20,7 +20,7 @@ import { SubjectService } from '@entities/subject/subject.service'
 import { InstituteService } from '@entities/institute/institute.service'
 import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
 import { EventService } from '@entities/event/event.service'
-import { UserService } from '@entities/user/user.service'
+import { UserService } from '@modules/user/user.service'
 
 @Resolver(() => Follow)
 export class FollowResolver {

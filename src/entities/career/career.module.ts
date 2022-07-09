@@ -16,7 +16,7 @@ import { School, SchoolSchema } from '@modules/school/school.model'
 import { SchoolService } from '@modules/school/school.service'
 
 // User
-import { User, UserSchema } from '@entities/user/user.model'
+import { User, UserSchema } from '@modules/user/user.model'
 
 // import { Institute, InstituteSchema } from '../institute/institute.model'
 // import { InstituteService } from '../institute/institute.service'

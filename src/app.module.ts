@@ -22,7 +22,7 @@ import { InstituteModule } from './entities/institute/institute.module'
 import { PermissonModule } from './entities/permisson/permisson.module'
 import { SchoolModule } from './modules/school/school.module'
 import { SubjectModule } from './entities/subject/subject.module'
-import { UserModule } from './entities/user/user.module'
+import { UserModule } from './modules/user/user.module'
 
 @Module({
   imports: [

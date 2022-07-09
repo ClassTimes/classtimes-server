@@ -9,7 +9,7 @@ import * as Utils from '@utils/Model'
 import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 
 // Entities
-import { User } from '@entities/user/user.model'
+import { User } from '@modules/user/user.model'
 import { Subject, ConnectedSubjects } from '@entities/subject/subject.model'
 import { School } from '@modules/school/school.model'
 

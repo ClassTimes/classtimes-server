@@ -11,7 +11,7 @@ import { Model, Types } from 'mongoose'
 import { ConnectionArgs, getConnectionResults } from '@utils/Connection'
 
 // Entities
-import { User } from '../user/user.model'
+import { User } from '@modules/user/user.model'
 
 // Following
 import { Following, FollowingDocument } from './following.model'

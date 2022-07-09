@@ -8,11 +8,11 @@ import * as Utils from '@utils/Model'
 import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 
 // Entities
-import { CalendarEvent } from '../calendarEvent/calendarEvent.model'
-import { User, ConnectedUsers } from '../user/user.model'
+import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { User, ConnectedUsers } from '@modules/user/user.model'
 
 // Embedded documents
-import { Comment } from '../comment/comment.model'
+import { Comment } from '@entities/comment/comment.model'
 import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
 
 @GQL.ObjectType()

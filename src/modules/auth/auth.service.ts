@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 
 // User
-import { UserService } from '@entities/user/user.service'
+import { UserService } from '@modules/user/user.service'
 import { LoginInput } from './auth.inputs'
 import { AuthenticationError } from './auth.errors'
 

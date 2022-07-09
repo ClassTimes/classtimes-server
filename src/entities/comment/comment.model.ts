@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import * as Utils from '@utils/Model'
 
 // Models
-import { User } from '../user/user.model'
+import { User } from '@modules/user/user.model'
 
 @ObjectType()
 @Schema({

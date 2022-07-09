@@ -16,7 +16,7 @@ import { Event } from '@entities/event/event.model'
 import { Institute } from '@entities/institute/institute.model'
 import { School } from '@modules/school/school.model'
 import { Subject } from '@entities/subject/subject.model'
-import { User } from '@entities/user/user.model'
+import { User } from '@modules/user/user.model'
 
 type Subjects =
   | InferSubjects<

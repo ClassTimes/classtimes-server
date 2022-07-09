@@ -9,9 +9,9 @@ import * as Utils from '@utils/Model'
 import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 
 // Entities
-import { Subject } from '../subject/subject.model'
-import { Event, ConnectedEvents } from '../event/event.model'
-import { User, ConnectedUsers } from '../user/user.model'
+import { Subject } from '@entities/subject/subject.model'
+import { Event, ConnectedEvents } from '@entities/event/event.model'
+import { User, ConnectedUsers } from '@modules/user/user.model'
 import { VirtualLocation } from '../virtualLocation/virtualLocation.model'
 
 @GQL.ObjectType()

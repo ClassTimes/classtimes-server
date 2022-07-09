@@ -14,7 +14,7 @@ import {
 } from '@entities/calendarEvent/calendarEvent.model'
 import { School } from '@modules/school/school.model'
 import { Institute } from '@entities/institute/institute.model'
-import { User, ConnectedUsers } from '@entities/user/user.model'
+import { User, ConnectedUsers } from '@modules/user/user.model'
 import {
   Discussion,
   ConnectedDiscussions,

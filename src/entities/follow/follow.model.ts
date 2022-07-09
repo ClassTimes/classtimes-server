@@ -2,7 +2,7 @@ import * as GQL from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 
 import * as Utils from '@utils/Model'
-import { User } from '../user/user.model'
+import { User } from '@modules/user/user.model'
 
 // const Resource = GQL.createUnionType({
 //   name: 'Resource',
