@@ -8,8 +8,8 @@ import { CareerResolver } from './career.resolver'
 import {
   CareerSubject,
   CareerSubjectSchema,
-} from '@entities/careerSubject/careerSubject.model'
-import { CareerSubjectService } from '@entities/careerSubject/careerSubject.service'
+} from '@modules/careerSubject/careerSubject.model'
+import { CareerSubjectService } from '@modules/careerSubject/careerSubject.service'
 
 // School
 import { School, SchoolSchema } from '@modules/school/school.model'

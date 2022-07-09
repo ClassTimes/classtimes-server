@@ -16,8 +16,8 @@ import { ConnectionArgs } from '@utils/Connection'
 import { Career, CareerDocument, ConnectedCareers } from './career.model'
 import { CareerService } from './career.service'
 
-import { CreateCareerSubjectInput } from '@entities/careerSubject/careerSubject.inputs'
-import { CareerSubjectService } from '@entities/careerSubject/careerSubject.service'
+import { CreateCareerSubjectInput } from '@modules/careerSubject/careerSubject.inputs'
+import { CareerSubjectService } from '@modules/careerSubject/careerSubject.service'
 
 // import { SchoolService } from './school.service'
 // import { SubjectService } from '../subject/subject.service'
