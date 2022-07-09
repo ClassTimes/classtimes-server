@@ -1,7 +1,7 @@
-import { Field, ID, InputType, ArgsType } from '@nestjs/graphql'
+import { Field, ID, InputType } from '@nestjs/graphql'
 import { Types } from 'mongoose'
 
-import { VirtualLocationInput } from '@entities/virtualLocation/virtualLocation.inputs'
+import { VirtualLocationInput } from '@modules/virtualLocation/virtualLocation.inputs'
 // https://docs.nestjs.com/graphql/scalars
 
 @InputType()

@@ -1,8 +1,8 @@
 import { InputType, Field, ID } from '@nestjs/graphql' // { Field, ObjectType, ID }
 import mongoose from 'mongoose'
 
-import { VirtualLocationInput } from '@entities/virtualLocation/virtualLocation.inputs'
-import { CommentInput } from '@modules/comment/comment.inputs'
+// import { VirtualLocationInput } from '@modules/virtualLocation/virtualLocation.inputs'
+// import { CommentInput } from '@modules/comment/comment.inputs'
 
 @InputType()
 export class CreateDiscussionInput {
