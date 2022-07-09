@@ -7,7 +7,7 @@ import { EventResolver } from './event.resolver'
 import {
   CalendarEvent,
   CalendarEventSchema,
-} from '@entities/calendarEvent/calendarEvent.model'
+} from '@modules/calendarEvent/calendarEvent.model'
 // import { User, UserSchema } from '../user/user.model'
 
 import { Follower, FollowerSchema } from '@modules/follower/follower.model'

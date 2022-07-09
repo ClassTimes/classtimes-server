@@ -9,7 +9,7 @@ import {
 // import { plainToClass } from 'class-transformer'
 
 import { Auth } from '@modules/auth/auth.model'
-import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { CalendarEvent } from '@modules/calendarEvent/calendarEvent.model'
 import { Career } from '@modules/career/career.model'
 import { Discussion } from '@modules/discussion/discussion.model'
 import { Event } from '@modules/event/event.model'

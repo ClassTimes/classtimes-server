@@ -8,7 +8,7 @@ import * as Utils from '@utils/Model'
 import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 
 // Entities
-import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { CalendarEvent } from '@modules/calendarEvent/calendarEvent.model'
 import { User, ConnectedUsers } from '@modules/user/user.model'
 
 // Embedded documents

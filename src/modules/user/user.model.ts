@@ -17,7 +17,7 @@ import {
 import {
   CalendarEvent,
   ConnectedCalendarEvents,
-} from '@entities/calendarEvent/calendarEvent.model'
+} from '@modules/calendarEvent/calendarEvent.model'
 import { Event, ConnectedEvents } from '@modules/event/event.model'
 
 @GQL.ObjectType()

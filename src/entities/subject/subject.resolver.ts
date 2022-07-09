@@ -18,7 +18,7 @@ import { CreateSubjectInput, UpdateSubjectInput } from './subject.inputs'
 
 // Services
 import { SubjectService } from './subject.service'
-import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
+import { CalendarEventService } from '@modules/calendarEvent/calendarEvent.service'
 import { DiscussionService } from '@modules/discussion/discussion.service'
 import { FollowerService } from '@modules/follower/follower.service'
 

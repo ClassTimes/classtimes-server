@@ -24,7 +24,7 @@ import { CreateUserInput, ListUserInput, UpdateUserInput } from './user.inputs'
 import { School } from '@modules/school/school.model'
 import { Subject } from '@entities/subject/subject.model'
 import { Institute } from '@modules/institute/institute.model'
-import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
+import { CalendarEvent } from '@modules/calendarEvent/calendarEvent.model'
 import { Event } from '@modules/event/event.model'
 
 // Services

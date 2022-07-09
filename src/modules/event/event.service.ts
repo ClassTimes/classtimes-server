@@ -15,7 +15,7 @@ import { CreateEventInput } from './event.inputs'
 import {
   CalendarEvent,
   CalendarEventDocument,
-} from '@entities/calendarEvent/calendarEvent.model'
+} from '@modules/calendarEvent/calendarEvent.model'
 
 // Service methods
 import { BaseService } from '@utils/BaseService'

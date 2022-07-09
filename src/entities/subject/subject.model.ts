@@ -11,7 +11,7 @@ import { Connected, ConnectionType, withCursor } from '@utils/Connection'
 import {
   CalendarEvent,
   ConnectedCalendarEvents,
-} from '@entities/calendarEvent/calendarEvent.model'
+} from '@modules/calendarEvent/calendarEvent.model'
 import { School } from '@modules/school/school.model'
 import { Institute } from '@modules/institute/institute.model'
 import { User, ConnectedUsers } from '@modules/user/user.model'

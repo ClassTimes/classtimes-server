@@ -21,8 +21,8 @@ import { InstituteService } from '@modules/institute/institute.service'
 import {
   CalendarEvent,
   CalendarEventSchema,
-} from '@entities/calendarEvent/calendarEvent.model'
-import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
+} from '@modules/calendarEvent/calendarEvent.model'
+import { CalendarEventService } from '@modules/calendarEvent/calendarEvent.service'
 
 import { Event, EventSchema } from '@modules/event/event.model'
 import { EventService } from '@modules/event/event.service'

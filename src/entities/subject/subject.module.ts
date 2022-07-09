@@ -14,11 +14,11 @@ import {
   DiscussionSchema,
 } from '@modules/discussion/discussion.model'
 
-import { CalendarEventService } from '@entities/calendarEvent/calendarEvent.service'
+import { CalendarEventService } from '@modules/calendarEvent/calendarEvent.service'
 import {
   CalendarEvent,
   CalendarEventSchema,
-} from '@entities/calendarEvent/calendarEvent.model'
+} from '@modules/calendarEvent/calendarEvent.model'
 
 import { Follower, FollowerSchema } from '@modules/follower/follower.model'
 import { FollowerService } from '@modules/follower/follower.service'
