@@ -8,8 +8,8 @@ import autopopulate from 'mongoose-autopopulate'
 import { withCursor } from '@utils/Connection'
 
 import * as Utils from '@utils/Model'
-import { Career } from '../career/career.model'
-import { Subject } from '../subject/subject.model'
+import { Career } from '@modules/career/career.model'
+import { Subject } from '@entities/subject/subject.model'
 
 @GQL.ObjectType()
 @DB.Schema({

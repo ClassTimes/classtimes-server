@@ -10,7 +10,7 @@ import {
 
 import { Auth } from '@modules/auth/auth.model'
 import { CalendarEvent } from '@entities/calendarEvent/calendarEvent.model'
-import { Career } from '@entities/career/career.model'
+import { Career } from '@modules/career/career.model'
 import { Discussion } from '@modules/discussion/discussion.model'
 import { Event } from '@modules/event/event.model'
 import { Institute } from '@modules/institute/institute.model'

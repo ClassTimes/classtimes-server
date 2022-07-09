@@ -7,7 +7,7 @@ import {
   Parent,
   ID,
 } from '@nestjs/graphql'
-import { Model, Types } from 'mongoose'
+import { Types } from 'mongoose'
 
 // Pagination
 import { ConnectionArgs } from '@utils/Connection'
@@ -16,8 +16,8 @@ import { ConnectionArgs } from '@utils/Connection'
 import { Career, CareerDocument, ConnectedCareers } from './career.model'
 import { CareerService } from './career.service'
 
-import { CreateCareerSubjectInput } from '../careerSubject/careerSubject.inputs'
-import { CareerSubjectService } from '../careerSubject/careerSubject.service'
+import { CreateCareerSubjectInput } from '@entities/careerSubject/careerSubject.inputs'
+import { CareerSubjectService } from '@entities/careerSubject/careerSubject.service'
 
 // import { SchoolService } from './school.service'
 // import { SubjectService } from '../subject/subject.service'

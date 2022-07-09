@@ -12,7 +12,7 @@ import { GqlAuthGuard } from './modules/auth/gql-auth.guard'
 // Modules
 import { AuthModule } from './modules/auth/auth.module'
 import { CalendarEventModule } from './entities/calendarEvent/calendarEvent.module'
-import { CareerModule } from './entities/career/career.module'
+import { CareerModule } from './modules/career/career.module'
 import { CaslModule } from './modules/casl/casl.module'
 import { DiscussionModule } from './modules/discussion/discussion.module'
 import { EventModule } from './modules/event/event.module'
