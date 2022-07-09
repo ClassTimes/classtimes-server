@@ -27,7 +27,7 @@
     "migrate": "ts-node node_modules/.bin/migrate-mongo up -f migrate-mongo-config.ts"
   },
   "dependencies": {
-    "@anchan828/nest-sendgrid": "^0.4.12",
+    "@anchan828/nest-sendgrid": "^0.6.0",
     "@apollo/gateway": "^0.24.4",
     "@casl/ability": "^5.2.2",
     "@casl/mongoose": "^4.0.1",

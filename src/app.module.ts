@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
-// import { MongooseModule } from '@nestjs/mongoose'
-// import * as GQL from '@nestjs/graphql'
-// import { SendGridModule } from '@anchan828/nest-sendgrid'
 // import { join } from 'path'
 // import gitCommitInfo from 'git-commit-info'
+// import * as GQL from '@nestjs/graphql'
+import { SendGridModule } from '@anchan828/nest-sendgrid'
+// import { MongooseModule } from '@nestjs/mongoose'
 // import * as Utils from './utils'
 // import { APP_GUARD } from '@nestjs/core'
 // import { GqlAuthGuard } from './auth/gql-auth.guard'
@@ -29,25 +29,24 @@ import { Module } from '@nestjs/common'
 
 @Module({
   imports: [
-    // SendGridModule.forRoot({
-    //   apikey: process.env.SENDGRID_API_KEY,
-    // }),
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_API_KEY,
+    }),
     // MongooseModule.forRoot(
     //   process.env.MONGODB || 'mongodb://localhost/classtimes',
     // ),
     // GQL.GraphQLModule.forRoot({
     //   installSubscriptionHandlers: true,
-    //   // dateScalarMode: 'timestamp',
     //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     //   sortSchema: true,
-    //   playground: true,
+    //   // playground: true,
     //   debug: false,
     //   introspection: true, // TODO Remove in production at release time
     //   context: (options) => {
     //     const { req } = options
     //     return { req }
     //   },
-    //   formatResponse: (response, options) => {
+    //   formatResponse: (response) => {
     //     let extensions
     //     if (Utils.isDev) {
     //       const commit = gitCommitInfo() // information of process.cwd() and the latest commit
@@ -77,7 +76,7 @@ import { Module } from '@nestjs/common'
     // SubjectModule,
     // UserModule,
   ],
-  controllers: [], // AppController],
+  controllers: [],
   providers: [
     // AppService,
     // {
