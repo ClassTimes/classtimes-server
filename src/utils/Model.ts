@@ -2,7 +2,7 @@ import * as DB from '@nestjs/mongoose' // { Prop, Schema, SchemaFactory }
 import * as V from 'class-validator'
 import mongoose from 'mongoose'
 import { ApolloError } from 'apollo-server-errors'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import pluralize from 'pluralize'
 import titleize from 'titleize'
 import {
@@ -190,10 +190,10 @@ Object.defineProperty(BaseModel, 'schema', {
       // TODO Cleanup to a function
       schema.pre('validate', async function (next) {
         const modelData = this.toObject()
-        const model = plainToClass(klass, modelData)
+        const model = plainToInstance(klass, modelData)
         try {
           //console.log('model', model)
-          await V.validateOrReject(model)
+          await V.validateOrReject(model as Record<string, unknown>)
         } catch (_errors) {
           console.log('_errors', _errors)
           const paths = new Set()

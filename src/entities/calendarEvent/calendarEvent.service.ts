@@ -2,14 +2,13 @@ import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 
 // CalendarEvent
 import { CalendarEvent, CalendarEventDocument } from './calendarEvent.model'
 import {
   CreateCalendarEventInput,
   ListCalendarEventsInput,
-  UpdateCalendarEventInput,
 } from './calendarEvent.inputs'
 
 // Subject
@@ -47,7 +46,10 @@ export class CalendarEventService extends BaseService<CalendarEvent> {
     const doc: SubjectDocument = await this.subjectModel
       .findById(payload.subject)
       .exec()
-    const model: Subject = plainToClass(Subject, doc.toObject())
+    const model: Subject = plainToInstance(
+      Subject,
+      doc.toObject() as SubjectDocument,
+    )
     const record: CalendarEvent = new CalendarEvent(model)
 
     await this.checkPermissons({

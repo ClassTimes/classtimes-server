@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model, Types } from 'mongoose'
-import { plainToClass } from 'class-transformer'
+import { Model } from 'mongoose'
+import { plainToInstance } from 'class-transformer'
 
 // Service
 import { BaseService } from '../../utils/BaseService'
@@ -12,11 +12,7 @@ import { Action } from '../../casl/casl-ability.factory'
 
 // Institute
 import { Institute, InstituteDocument } from './institute.model'
-import {
-  CreateInstituteInput,
-  ListInstituteInput,
-  UpdateInstituteInput,
-} from './institute.inputs'
+import { CreateInstituteInput } from './institute.inputs'
 
 // School
 import { School, SchoolDocument } from '../../entities/school/school.model'
@@ -42,7 +38,7 @@ export class InstituteService extends BaseService<Institute> {
 
   async create(payload: CreateInstituteInput) {
     const doc = await this.schoolModel.findById(payload.school).exec()
-    const model = plainToClass(School, doc.toObject())
+    const model = plainToInstance(School, doc.toObject() as School)
     const record = new Institute(model)
     await this.checkPermissons({
       action: Action.Create,

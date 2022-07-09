@@ -7,14 +7,14 @@ const MONGO_SERVER = new MongoMemoryServer()
  * Connect to the in-memory database.
  */
 export async function connectFakeMongo() {
-  const opts = {
-    autoReconnect: true,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000,
-  }
+  // const opts = {
+  //   autoReconnect: true,
+  //   reconnectTries: Number.MAX_VALUE,
+  //   reconnectInterval: 1000,
+  // }
 
   const mongoUri = await MONGO_SERVER.getUri()
-  const result = await mongoose.connect(mongoUri, opts)
+  const result = await mongoose.connect(mongoUri)
   //    (err) => {
   //   if (err) {
   //     console.error(err)

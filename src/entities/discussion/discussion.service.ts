@@ -2,22 +2,17 @@ import { Injectable, Inject } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { CONTEXT } from '@nestjs/graphql'
 import { Model, Types } from 'mongoose'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 
 // Auth
 import { Action } from '../../casl/casl-ability.factory'
 
 // Discussion
 import { Discussion, DiscussionDocument } from './discussion.model'
-import {
-  CreateDiscussionInput,
-  ListDiscussionInput,
-  UpdateDiscussionInput,
-} from './discussion.inputs'
+import { CreateDiscussionInput } from './discussion.inputs'
 
 // Subject
 import { Subject, SubjectDocument } from '../subject/subject.model'
-import { SubjectService } from '../subject/subject.service'
 
 // Comment
 import { CommentInput } from '../comment/comment.inputs'
@@ -48,7 +43,10 @@ export class DiscussionService extends BaseService<Discussion> {
     const doc: SubjectDocument = await this.subjectModel
       .findById(payload.subject)
       .exec()
-    const model: Subject = plainToClass(Subject, doc.toObject())
+    const model: Subject = plainToInstance(
+      Subject,
+      doc.toObject() as SubjectDocument,
+    )
     const record: Discussion = new Discussion(model)
     await this.checkPermissons({
       action: Action.Create,
@@ -65,8 +63,4 @@ export class DiscussionService extends BaseService<Discussion> {
     discussion.comments.push(comment)
     return discussion.save()
   }
-
-  // list(filters: ListEventInput) {
-  //   //  return this.model.find({ ...filters }).exec()
-  //
 }

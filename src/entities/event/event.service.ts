@@ -1,19 +1,15 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { CONTEXT } from '@nestjs/graphql'
-import { Model, Types } from 'mongoose'
-import { plainToClass } from 'class-transformer'
+import { Model } from 'mongoose'
+import { plainToInstance } from 'class-transformer'
 
 // Auth
 import { Action } from '../../casl/casl-ability.factory'
 
 // Event
 import { Event, EventDocument } from './event.model'
-import {
-  CreateEventInput,
-  ListEventInput,
-  UpdateEventInput,
-} from './event.inputs'
+import { CreateEventInput } from './event.inputs'
 
 // Calendar Event
 import {
@@ -23,7 +19,6 @@ import {
 
 // Service methods
 import { BaseService } from '../../utils/BaseService'
-import { CalendarEventService } from '../calendarEvent/calendarEvent.service'
 
 const MODEL_CLASS = Event
 @Injectable()
@@ -48,7 +43,10 @@ export class EventService extends BaseService<Event> {
     const doc: CalendarEventDocument = await this.calendarEventModel
       .findById(payload.calendarEvent)
       .exec()
-    const model: CalendarEvent = plainToClass(CalendarEvent, doc.toObject())
+    const model: CalendarEvent = plainToInstance(
+      CalendarEvent,
+      doc.toObject() as CalendarEvent,
+    )
     const record: Event = new Event(model)
     await this.checkPermissons({
       action: Action.Create,
@@ -56,8 +54,4 @@ export class EventService extends BaseService<Event> {
     })
     return await this.dbModel.create(payload)
   }
-
-  // list(filters: ListEventInput) {
-  //   //  return this.model.find({ ...filters }).exec()
-  // }
 }

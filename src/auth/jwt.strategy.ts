@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const { sub: userID } = payload
     let user: User
     try {
-      const userObjectID = mongoose.Types.ObjectId(userID)
+      const userObjectID = new mongoose.Types.ObjectId(userID)
       user = await this.userService.getById(userObjectID)
     } catch (error) {
       console.error(error)
