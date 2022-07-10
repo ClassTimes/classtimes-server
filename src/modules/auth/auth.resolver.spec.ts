@@ -1,5 +1,6 @@
 import supertest from 'supertest'
 import { join } from 'path'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Test } from '@nestjs/testing'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SendGridModule } from '@anchan828/nest-sendgrid'
@@ -8,7 +9,6 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication } from '@nestjs/common'
 import { AuthModule } from '@modules/auth/auth.module'
-import { AuthResolver } from '@modules/auth/auth.resolver'
 import { UserResolver } from '@modules/user/user.resolver'
 import { User, UserSchema } from '@modules/user/user.model'
 import { UserService } from '@modules/user/user.service'
@@ -19,11 +19,26 @@ import { FollowingService } from '@modules/following/following.service'
 import loginUser from '@modules/auth/queries/login-user'
 import { EConfiguration } from '@utils/enum'
 
+const STUBBED_USER = {
+  email: 'test@email.com',
+  password: 'supersecret',
+  username: 'test_user',
+  fullName: 'Test User',
+  mobile: '112112122',
+}
+
 describe('AuthResolver', () => {
   let app: INestApplication
-  let resolver: AuthResolver
+  let mongod: MongoMemoryServer
 
-  beforeEach(async () => {
+  beforeAll(async () => {
+    /**
+     * Mongo stub setup:
+     * https://betterprogramming.pub/testing-controllers-in-nestjs-and-mongo-with-jest-63e1b208503c
+     */
+    mongod = await MongoMemoryServer.create()
+    const uri = mongod.getUri()
+
     const moduleRef = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
@@ -39,14 +54,7 @@ describe('AuthResolver', () => {
           driver: ApolloDriver,
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         }),
-        MongooseModule.forRootAsync({
-          inject: [ConfigService],
-          useFactory: (_config: ConfigService) => ({
-            uri:
-              _config.get(EConfiguration.MONGODB_URL) ||
-              'mongodb://localhost/classtimes',
-          }),
-        }),
+        MongooseModule.forRoot(uri),
         MongooseModule.forFeature([
           {
             name: User.name,
@@ -66,8 +74,12 @@ describe('AuthResolver', () => {
       providers: [UserResolver, UserService, FollowerService, FollowingService],
     }).compile()
 
-    resolver = moduleRef.get<AuthResolver>(AuthResolver)
     app = moduleRef.createNestApplication()
+
+    // Create a stubbed User
+    const userService = app.get<UserService>(UserService)
+    await userService.create(STUBBED_USER)
+
     await app.init()
   })
 
@@ -76,10 +88,28 @@ describe('AuthResolver', () => {
   })
 
   describe('[MUTATION] loginUser', () => {
-    it('Should throw an error for invalid credentials', async () => {
-      return supertest(app.getHttpServer())
+    it('Should success for valid credentials', async () => {
+      await supertest(app.getHttpServer())
         .post('/graphql')
-        .send({ operationName: null, query: loginUser })
+        .send({
+          operationName: null,
+          query: loginUser,
+          variables: {
+            emailOrUsername: 'test@email.com',
+            password: 'supersecret',
+          },
+        })
+        .expect(200)
+    })
+
+    it('Should throw an error for invalid credentials', async () => {
+      await supertest(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query: loginUser,
+          variables: { emailOrUsername: 'test@email.com', password: 'invalid' },
+        })
         .expect(200)
     })
   })

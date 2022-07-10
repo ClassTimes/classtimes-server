@@ -1,8 +1,8 @@
 const query = `#graphql
-  mutation LoginUser {
+  mutation LoginUser($emailOrUsername: String!, $password: String!) {
     loginUser(payload: {
-      emailOrUsername: "frankmangone",
-      password: "supersecre",
+      emailOrUsername: $emailOrUsername,
+      password: $password,
     }) {
       jwt
       user {
