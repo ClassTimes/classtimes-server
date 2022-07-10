@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { join } from 'path'
 import gitCommitInfo from 'git-commit-info'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { SendGridModule } from '@anchan828/nest-sendgrid'
@@ -8,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import * as Utils from './utils'
 import { APP_GUARD } from '@nestjs/core'
 import { GqlAuthGuard } from './modules/auth/gql-auth.guard'
+import { EConfiguration } from '@utils/enum'
 
 // Modules
 import { AuthModule } from './modules/auth/auth.module'
@@ -26,12 +28,23 @@ import { UserModule } from './modules/user/user.module'
 
 @Module({
   imports: [
-    SendGridModule.forRoot({
-      apikey: process.env.SENDGRID_API_KEY,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-    MongooseModule.forRoot(
-      process.env.MONGODB || 'mongodb://localhost:27017/classtimes',
-    ),
+    SendGridModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (_config: ConfigService) => ({
+        apikey: _config.get(EConfiguration.SENDGRID_API_KEY),
+      }),
+    }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (_config: ConfigService) => ({
+        uri:
+          _config.get(EConfiguration.MONGODB_URL) ||
+          'mongodb://localhost/classtimes',
+      }),
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       debug: false,

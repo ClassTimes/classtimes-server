@@ -33,6 +33,7 @@
     "@casl/mongoose": "^6.0.0",
     "@nestjs/apollo": "^10.0.17",
     "@nestjs/common": "^9.0.1",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.1",
     "@nestjs/graphql": "^10.0.18",
     "@nestjs/jwt": "^7.2.0",

@@ -1,0 +1,5 @@
+export enum EConfiguration {
+  MONGODB_URL = 'MONGODB_URL',
+  SENDGRID_API_KEY = 'SENDGRID_API_KEY',
+  JWT_SECRET = 'JWT_SECRET',
+}
