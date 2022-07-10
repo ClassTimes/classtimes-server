@@ -73,9 +73,7 @@ describe('AuthResolver', () => {
     app = moduleRef.createNestApplication()
 
     // Create a stubbed User
-    // TODO: We may wanna do this directly through the connection
-    const userService = app.get<UserService>(UserService)
-    await userService.create(STUBBED_USER)
+    await mongoStub.createUser(STUBBED_USER)
 
     await app.init()
   })
