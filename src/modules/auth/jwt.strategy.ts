@@ -22,6 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: CT.JWTPayload): Promise<User> {
+    console.log('this happens')
+    /**
+     * Kinda convoluted, but the return value of this function determines
+     * the value of the `user` key in the GQL context.
+     */
     const { sub: userID } = payload
     let user: User
     try {
@@ -33,6 +38,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     } finally {
       //console.log('[JwtStrategy] #validate', { payload, user })
     }
-    return user // { userId: payload.sub, username: payload.username }
+    return user
   }
 }

@@ -1,13 +1,7 @@
 import supertest from 'supertest'
-import { join } from 'path'
 import { Test } from '@nestjs/testing'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { MongooseModule } from '@nestjs/mongoose'
-import { GraphQLModule } from '@nestjs/graphql'
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication } from '@nestjs/common'
-import { AuthModule } from '@modules/auth/auth.module'
 import { SchoolService } from './school.service'
 import { SchoolResolver } from './school.resolver'
 import { School, SchoolSchema } from './school.model'
@@ -25,8 +19,8 @@ import { FollowingService } from '@modules/following/following.service'
 import { MongoStubService } from '@utils/tests/mongo-stub.service'
 import { loginTestUser } from '@utils/tests/login-test-user'
 import { STUBBED_USER, STUBBED_SCHOOL } from '@utils/tests/record-stubs'
+import { baseImports, baseProviders } from '@utils/tests/module-setup'
 import findSchool from './queries/find-school'
-import { EConfiguration } from '@utils/enum'
 
 describe('SchoolResolver', () => {
   let app: INestApplication
@@ -40,19 +34,7 @@ describe('SchoolResolver', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-        }),
-        SendGridModule.forRootAsync({
-          inject: [ConfigService],
-          useFactory: (_config: ConfigService) => ({
-            apikey: _config.get(EConfiguration.SENDGRID_API_KEY),
-          }),
-        }),
-        GraphQLModule.forRoot<ApolloDriverConfig>({
-          driver: ApolloDriver,
-          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-        }),
+        ...baseImports,
         MongooseModule.forRoot(uri),
         MongooseModule.forFeature([
           {
@@ -80,9 +62,9 @@ describe('SchoolResolver', () => {
             schema: FollowingSchema,
           },
         ]),
-        AuthModule,
       ],
       providers: [
+        ...baseProviders,
         SchoolService,
         SchoolResolver,
         SubjectService,
@@ -129,6 +111,7 @@ describe('SchoolResolver', () => {
         .expect(200)
 
       console.log(body)
+
       // expect(typeof body.data?.loginUser?.jwt).toBe('string')
     })
   })

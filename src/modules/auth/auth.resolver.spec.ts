@@ -1,13 +1,7 @@
 import supertest from 'supertest'
-import { join } from 'path'
 import { Test } from '@nestjs/testing'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { MongooseModule } from '@nestjs/mongoose'
-import { GraphQLModule } from '@nestjs/graphql'
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication } from '@nestjs/common'
-import { AuthModule } from '@modules/auth/auth.module'
 import { UserResolver } from '@modules/user/user.resolver'
 import { User, UserSchema } from '@modules/user/user.model'
 import { UserService } from '@modules/user/user.service'
@@ -17,8 +11,8 @@ import { Following, FollowingSchema } from '@modules/following/following.model'
 import { FollowingService } from '@modules/following/following.service'
 import { MongoStubService } from '@utils/tests/mongo-stub.service'
 import { STUBBED_USER } from '@utils/tests/record-stubs'
+import { baseImports, baseProviders } from '@utils/tests/module-setup'
 import loginUser from './queries/login-user'
-import { EConfiguration } from '@utils/enum'
 
 describe('AuthResolver', () => {
   let app: INestApplication
@@ -30,19 +24,7 @@ describe('AuthResolver', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-        }),
-        SendGridModule.forRootAsync({
-          inject: [ConfigService],
-          useFactory: (_config: ConfigService) => ({
-            apikey: _config.get(EConfiguration.SENDGRID_API_KEY),
-          }),
-        }),
-        GraphQLModule.forRoot<ApolloDriverConfig>({
-          driver: ApolloDriver,
-          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-        }),
+        ...baseImports,
         MongooseModule.forRoot(uri),
         MongooseModule.forFeature([
           {
@@ -58,9 +40,14 @@ describe('AuthResolver', () => {
             schema: FollowingSchema,
           },
         ]),
-        AuthModule,
       ],
-      providers: [UserResolver, UserService, FollowerService, FollowingService],
+      providers: [
+        UserResolver,
+        UserService,
+        FollowerService,
+        FollowingService,
+        ...baseProviders,
+      ],
     }).compile()
 
     app = moduleRef.createNestApplication()
