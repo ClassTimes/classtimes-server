@@ -25,13 +25,14 @@ import { FollowingService } from '@modules/following/following.service'
 import { MongoStubService } from '@utils/tests/mongo-stub.service'
 import { loginTestUser } from '@utils/tests/login-test-user'
 import { STUBBED_USER, STUBBED_SCHOOL } from '@utils/tests/record-stubs'
-import loginUser from '@modules/auth/queries/login-user'
+import findSchool from './queries/find-school'
 import { EConfiguration } from '@utils/enum'
 
 describe('SchoolResolver', () => {
   let app: INestApplication
   let mongoStub: MongoStubService
   let jwt: string
+  let schoolId: string
 
   beforeAll(async () => {
     mongoStub = new MongoStubService()
@@ -97,7 +98,11 @@ describe('SchoolResolver', () => {
 
     // Create a stubbed data
     await mongoStub.createUser(STUBBED_USER)
-    await mongoStub.createEntity(STUBBED_SCHOOL, School, SchoolSchema)
+    schoolId = await mongoStub.createEntity(
+      STUBBED_SCHOOL,
+      School,
+      SchoolSchema,
+    )
 
     // Log in with stubbed user
     jwt = await loginTestUser(STUBBED_USER, moduleRef)
@@ -112,18 +117,18 @@ describe('SchoolResolver', () => {
 
   describe('[QUERY] school', () => {
     it('Should respond with 200 and a JWT for valid credentials', async () => {
-      // const { body } = await supertest(app.getHttpServer())
-      //   .post('/graphql')
-      //   .send({
-      //     operationName: null,
-      //     query: loginUser,
-      //     authorization: `Bearer ${jwt}`,
-      //     variables: {
-      //       emailOrUsername: 'test@email.com',
-      //       password: 'supersecret',
-      //     },
-      //   })
-      //   .expect(200)
+      const { body } = await supertest(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: findSchool,
+          authorization: `Bearer ${jwt}`,
+          variables: {
+            id: schoolId,
+          },
+        })
+        .expect(200)
+
+      console.log(body)
       // expect(typeof body.data?.loginUser?.jwt).toBe('string')
     })
   })

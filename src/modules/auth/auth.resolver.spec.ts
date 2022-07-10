@@ -17,7 +17,7 @@ import { Following, FollowingSchema } from '@modules/following/following.model'
 import { FollowingService } from '@modules/following/following.service'
 import { MongoStubService } from '@utils/tests/mongo-stub.service'
 import { STUBBED_USER } from '@utils/tests/record-stubs'
-import loginUser from '@modules/auth/queries/login-user'
+import loginUser from './queries/login-user'
 import { EConfiguration } from '@utils/enum'
 
 describe('AuthResolver', () => {
