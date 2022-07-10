@@ -1,6 +1,5 @@
 import supertest from 'supertest'
 import { join } from 'path'
-import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Test } from '@nestjs/testing'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SendGridModule } from '@anchan828/nest-sendgrid'
@@ -8,7 +7,6 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication } from '@nestjs/common'
-import { Connection, connect } from 'mongoose'
 import { AuthModule } from '@modules/auth/auth.module'
 import { UserResolver } from '@modules/user/user.resolver'
 import { User, UserSchema } from '@modules/user/user.model'
@@ -17,6 +15,7 @@ import { Follower, FollowerSchema } from '@modules/follower/follower.model'
 import { FollowerService } from '@modules/follower/follower.service'
 import { Following, FollowingSchema } from '@modules/following/following.model'
 import { FollowingService } from '@modules/following/following.service'
+import { MongoStubService } from '@utils/tests/mongo-stub.service'
 import loginUser from '@modules/auth/queries/login-user'
 import { EConfiguration } from '@utils/enum'
 
@@ -30,17 +29,11 @@ const STUBBED_USER = {
 
 describe('AuthResolver', () => {
   let app: INestApplication
-  let mongod: MongoMemoryServer
-  let mongoConnection: Connection
+  let mongoStub: MongoStubService
 
   beforeAll(async () => {
-    /**
-     * Mongo stub setup:
-     * https://betterprogramming.pub/testing-controllers-in-nestjs-and-mongo-with-jest-63e1b208503c
-     */
-    mongod = await MongoMemoryServer.create()
-    const uri = mongod.getUri()
-    mongoConnection = (await connect(uri)).connection
+    mongoStub = new MongoStubService()
+    const { uri } = await mongoStub.init()
 
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -88,9 +81,7 @@ describe('AuthResolver', () => {
   })
 
   afterAll(async () => {
-    await mongoConnection.dropDatabase()
-    await mongoConnection.close()
-    await mongod.stop()
+    await mongoStub.close()
     await app.close()
   })
 
