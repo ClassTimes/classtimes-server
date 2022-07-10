@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication } from '@nestjs/common'
+import { Connection, connect } from 'mongoose'
 import { AuthModule } from '@modules/auth/auth.module'
 import { UserResolver } from '@modules/user/user.resolver'
 import { User, UserSchema } from '@modules/user/user.model'
@@ -30,6 +31,7 @@ const STUBBED_USER = {
 describe('AuthResolver', () => {
   let app: INestApplication
   let mongod: MongoMemoryServer
+  let mongoConnection: Connection
 
   beforeAll(async () => {
     /**
@@ -38,6 +40,7 @@ describe('AuthResolver', () => {
      */
     mongod = await MongoMemoryServer.create()
     const uri = mongod.getUri()
+    mongoConnection = (await connect(uri)).connection
 
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -84,6 +87,9 @@ describe('AuthResolver', () => {
   })
 
   afterAll(async () => {
+    await mongoConnection.dropDatabase()
+    await mongoConnection.close()
+    await mongod.stop()
     await app.close()
   })
 
