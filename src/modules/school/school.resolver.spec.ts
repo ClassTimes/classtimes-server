@@ -1,4 +1,3 @@
-import supertest from 'supertest'
 import { Test } from '@nestjs/testing'
 import { MongooseModule } from '@nestjs/mongoose'
 import { INestApplication } from '@nestjs/common'
@@ -20,7 +19,7 @@ import { MongoStubService } from '@utils/tests/mongo-stub.service'
 import { loginTestUser } from '@utils/tests/login-test-user'
 import { STUBBED_USER, STUBBED_SCHOOL } from '@utils/tests/record-stubs'
 import { baseImports, baseProviders } from '@utils/tests/module-setup'
-import { runQuery } from '@utils/tests/run-query'
+import { QueryRunner } from '@utils/tests/query-runner'
 import findSchool from './queries/find-school'
 
 describe('SchoolResolver', () => {
@@ -99,15 +98,15 @@ describe('SchoolResolver', () => {
   })
 
   describe('[QUERY] school', () => {
+    const findSchoolQuery = new QueryRunner(app, findSchool)
+
     it('Should respond with 200 and school data when credentials are valid and `id` is correct', async () => {
-      const { body } = await runQuery({
-        app,
-        query: findSchool,
-        variables: {
-          id: schoolId,
-        },
-        jwt,
-      }).expect(200)
+      const { body } = await findSchoolQuery
+        .runQuery({
+          variables: { id: schoolId },
+          jwt,
+        })
+        .expect(200)
 
       const { school } = body.data
 
@@ -117,27 +116,24 @@ describe('SchoolResolver', () => {
     })
 
     it('Should respond with 200 but without data when `id` is incorrect', async () => {
-      const { body } = await runQuery({
-        app,
-        query: findSchool,
-        variables: {
-          id: '62cb32b820b3d170a2ce0946', // Non-existing ID
-        },
-        jwt,
-      }).expect(200)
+      const { body } = await findSchoolQuery
+        .runQuery({
+          // Non-existing ID
+          variables: { id: '62cb32b820b3d170a2ce0946' },
+          jwt,
+        })
+        .expect(200)
 
       // TODO: Better errors?
       expect(body.data).toBe(null)
     })
 
     it('Should respond with 200 and with "Unauthorized" when missing credentials', async () => {
-      const { body } = await runQuery({
-        app,
-        query: findSchool,
-        variables: {
-          id: schoolId,
-        },
-      }).expect(200)
+      const { body } = await findSchoolQuery
+        .runQuery({
+          variables: { id: schoolId },
+        })
+        .expect(200)
 
       expect(body.data).toBe(null)
       expect(body.errors[0].message).toBe('Unauthorized')
