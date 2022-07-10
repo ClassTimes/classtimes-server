@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { CONTEXT } from '@nestjs/graphql'
 import { Model } from 'mongoose'
-import { plainToInstance } from 'class-transformer'
 
 // Auth
 import { Action } from '@modules/casl/casl-ability.factory'
@@ -29,13 +28,13 @@ export class EventService extends BaseService<Event> {
 
   constructor(
     @InjectModel(Event.name)
-    dbModel: Model<EventDocument>,
+    private eventModel: Model<EventDocument>,
     @InjectModel(CalendarEvent.name)
     private calendarEventModel: Model<CalendarEventDocument>,
     @Inject(CONTEXT) context,
   ) {
     super()
-    this.dbModel = dbModel
+    this.dbModel = this.eventModel
     this.context = context
   }
 
@@ -43,11 +42,10 @@ export class EventService extends BaseService<Event> {
     const doc: CalendarEventDocument = await this.calendarEventModel
       .findById(payload.calendarEvent)
       .exec()
-    const model: CalendarEvent = plainToInstance(
-      CalendarEvent,
-      doc.toObject() as CalendarEvent,
+    const calendarEvent: CalendarEvent = new this.calendarEventModel(
+      doc.toObject(),
     )
-    const record: Event = new Event(model)
+    const record: Event = new Event(calendarEvent)
     await this.checkPermissons({
       action: Action.Create,
       record,

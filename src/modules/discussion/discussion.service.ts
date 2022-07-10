@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { CONTEXT } from '@nestjs/graphql'
 import { Model, Types } from 'mongoose'
-import { plainToInstance } from 'class-transformer'
 
 // Auth
 import { Action } from '@modules/casl/casl-ability.factory'
@@ -29,13 +28,13 @@ export class DiscussionService extends BaseService<Discussion> {
 
   constructor(
     @InjectModel(Discussion.name)
-    dbModel: Model<DiscussionDocument>,
+    private discussionModel: Model<DiscussionDocument>,
     @InjectModel(Subject.name)
     private subjectModel: Model<SubjectDocument>,
     @Inject(CONTEXT) context,
   ) {
     super()
-    this.dbModel = dbModel
+    this.dbModel = this.discussionModel
     this.context = context
   }
 
@@ -43,11 +42,9 @@ export class DiscussionService extends BaseService<Discussion> {
     const doc: SubjectDocument = await this.subjectModel
       .findById(payload.subject)
       .exec()
-    const model: Subject = plainToInstance(
-      Subject,
-      doc.toObject() as SubjectDocument,
-    )
-    const record: Discussion = new Discussion(model)
+    const subject: Subject = new this.subjectModel(doc.toObject())
+    const record: Discussion = new Discussion(subject)
+
     await this.checkPermissons({
       action: Action.Create,
       record,

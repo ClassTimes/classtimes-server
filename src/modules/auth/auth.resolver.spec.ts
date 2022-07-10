@@ -19,15 +19,12 @@ describe('AuthResolver', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
-        SendGridModule.forRoot({
-          apikey: process.env.SENDGRID_API_KEY || 'test_api_key',
-        }),
         GraphQLModule.forRoot({
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         }),
-        MongooseModule.forRoot(
-          process.env.MONGODB || 'mongodb://localhost/classtimes',
-        ),
+        // MongooseModule.forRoot(
+        //   process.env.MONGODB || 'mongodb://localhost/classtimes',
+        // ),
         MongooseModule.forFeature([
           {
             name: User.name,

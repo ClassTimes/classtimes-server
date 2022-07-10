@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@nestjs/common'
 import { CONTEXT } from '@nestjs/graphql'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { plainToInstance } from 'class-transformer'
 
 import { Subject, SubjectDocument } from './subject.model'
 
@@ -28,7 +27,7 @@ export class SubjectService extends BaseService<Subject> {
 
   constructor(
     @InjectModel(Subject.name)
-    dbModel: Model<SubjectDocument>,
+    private subjectModel: Model<SubjectDocument>,
     @InjectModel(School.name)
     private schoolModel: Model<SchoolDocument>,
     @InjectModel(Institute.name)
@@ -36,7 +35,7 @@ export class SubjectService extends BaseService<Subject> {
     @Inject(CONTEXT) context,
   ) {
     super()
-    this.dbModel = dbModel
+    this.dbModel = this.subjectModel
     this.context = context
   }
 
@@ -53,17 +52,14 @@ export class SubjectService extends BaseService<Subject> {
       instituteDoc = await this.instituteModel
         .findById(payload.institute)
         .exec()
-      institute = plainToInstance(
-        Institute,
-        instituteDoc.toObject() as Institute,
-      )
+      institute = new this.instituteModel(instituteDoc)
       if (institute?.school) {
         school = institute.school as School
         payload['school'] = school._id // Update payload for .create()
       }
     } else if (payload?.school) {
       schoolDoc = await this.schoolModel.findById(payload.school).exec()
-      school = plainToInstance(School, schoolDoc.toObject() as School)
+      school = new this.schoolModel(schoolDoc.toObject())
     }
 
     const record: Subject = new Subject(school, institute)

@@ -195,7 +195,6 @@ Object.defineProperty(BaseModel, 'schema', {
           //console.log('model', model)
           await V.validateOrReject(model as Record<string, unknown>)
         } catch (_errors) {
-          console.log('_errors', _errors)
           const paths = new Set()
           const errors = []
           for (const error of _errors) {
