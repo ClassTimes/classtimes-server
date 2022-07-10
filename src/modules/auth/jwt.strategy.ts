@@ -22,7 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: CT.JWTPayload): Promise<User> {
-    console.log('this happens')
     /**
      * Kinda convoluted, but the return value of this function determines
      * the value of the `user` key in the GQL context.

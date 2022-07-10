@@ -98,21 +98,23 @@ describe('SchoolResolver', () => {
   })
 
   describe('[QUERY] school', () => {
-    it('Should respond with 200 and a JWT for valid credentials', async () => {
+    it('Should respond with 200 and school data when credentials are valid and `id` is correct', async () => {
       const { body } = await supertest(app.getHttpServer())
         .post('/graphql')
         .send({
           query: findSchool,
-          authorization: `Bearer ${jwt}`,
           variables: {
             id: schoolId,
           },
         })
+        .set({ Authorization: `Bearer ${jwt}` })
         .expect(200)
 
-      console.log(body)
+      const { school } = body.data
 
-      // expect(typeof body.data?.loginUser?.jwt).toBe('string')
+      expect(school?._id).toBe(schoolId)
+      expect(school?.name).toBe(STUBBED_SCHOOL.name)
+      expect(school?.shortName).toBe(STUBBED_SCHOOL.shortName)
     })
   })
 })
