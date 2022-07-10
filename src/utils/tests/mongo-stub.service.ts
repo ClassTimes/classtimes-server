@@ -54,7 +54,7 @@ export class MongoStubService {
   }
 
   /**
-   * createStubbedUser
+   * createUser
    *
    * Creates a stubbed user from the provided payload
    *
@@ -64,6 +64,24 @@ export class MongoStubService {
   public async createUser(input: CreateUserInput): Promise<void> {
     const payload = await hashPasswordForPayload(input)
     const record = new this.UserModel(payload)
+    await record.save()
+  }
+
+  /**
+   * createEntity
+   *
+   * Creates an entity based on the provided model
+   *
+   * @param {Record<string, unknown>} input
+   * @param {T & { name: string }} model
+   * @returns {Promise<void>}
+   */
+  public async createEntity<T>(
+    input: Record<string, unknown>,
+    model: T & { name: string },
+  ): Promise<void> {
+    const EntityModel = this.connection.model(model.name, UserSchema)
+    const record = new EntityModel(input)
     await record.save()
   }
 }

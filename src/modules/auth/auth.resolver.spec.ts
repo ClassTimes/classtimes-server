@@ -16,16 +16,9 @@ import { FollowerService } from '@modules/follower/follower.service'
 import { Following, FollowingSchema } from '@modules/following/following.model'
 import { FollowingService } from '@modules/following/following.service'
 import { MongoStubService } from '@utils/tests/mongo-stub.service'
+import { STUBBED_USER } from '@utils/tests/record-stubs'
 import loginUser from '@modules/auth/queries/login-user'
 import { EConfiguration } from '@utils/enum'
-
-const STUBBED_USER = {
-  email: 'test@email.com',
-  password: 'supersecret',
-  username: 'test_user',
-  fullName: 'Test User',
-  mobile: '112112122',
-}
 
 describe('AuthResolver', () => {
   let app: INestApplication
