@@ -1,9 +1,9 @@
 import supertest from 'supertest'
 import { join } from 'path'
 import { Test } from '@nestjs/testing'
-import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLModule } from '@nestjs/graphql'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication } from '@nestjs/common'
 import { AuthModule } from '@modules/auth/auth.module'
 import { AuthResolver } from '@modules/auth/auth.resolver'
@@ -19,7 +19,8 @@ describe('AuthResolver', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
-        GraphQLModule.forRoot({
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+          driver: ApolloDriver,
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         }),
         // MongooseModule.forRoot(
