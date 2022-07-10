@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { AccessibleRecordModel } from '@casl/mongoose'
 import mongoose from 'mongoose'
 import { SendGridService } from '@anchan828/nest-sendgrid'
-import * as bcrypt from 'bcrypt'
+import { hashPasswordForPayload } from '@utils/helpers/hash-password'
 
 // Pagination
 import {
@@ -31,21 +31,9 @@ export class UserService {
   ) {}
 
   async create(payload: CreateUserInput) {
-    const { password, ...payloadWithoutPassword } = payload
+    const payloadWithHash = await hashPasswordForPayload(payload)
+    const model = new this.model(payloadWithHash)
 
-    let passwordHash: string
-    try {
-      passwordHash = await bcrypt.hash(password, 10)
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-
-    const finalPayload = {
-      passwordHash,
-      ...payloadWithoutPassword,
-    }
-    const model = new this.model(finalPayload)
     console.log('[User create()] [User]', model)
     await model.save()
 
