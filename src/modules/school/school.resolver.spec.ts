@@ -116,5 +116,36 @@ describe('SchoolResolver', () => {
       expect(school?.name).toBe(STUBBED_SCHOOL.name)
       expect(school?.shortName).toBe(STUBBED_SCHOOL.shortName)
     })
+
+    it('Should respond with 200 but without data when `id` is incorrect', async () => {
+      const { body } = await supertest(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: findSchool,
+          variables: {
+            id: '62cb32b820b3d170a2ce0946', // Non-existing ID
+          },
+        })
+        .set({ Authorization: `Bearer ${jwt}` })
+        .expect(200)
+
+      // TODO: Better errors?
+      expect(body.data).toBe(null)
+    })
+
+    it('Should respond with 200 and with "Unauthorized" when missing credentials', async () => {
+      const { body } = await supertest(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          query: findSchool,
+          variables: {
+            id: '62cb32b820b3d170a2ce0946', // Non-existing ID
+          },
+        })
+        .expect(200)
+
+      expect(body.data).toBe(null)
+      expect(body.errors[0].message).toBe('Unauthorized')
+    })
   })
 })
