@@ -153,10 +153,10 @@ type School {
   avatarImage: String
   followerCounter: Int!
   parentSchool: School
-  subjectsConnection: ConnectedSubjects
-  institutesConnection: ConnectedInstitutes
-  usersFollowerConnection: ConnectedUsers
-  childrenSchoolsConnection: ConnectedSchools
+  subjectsConnection(first: Float = 0, after: String, before: String): ConnectedSubjects
+  institutesConnection(first: Float = 0, after: String, before: String): ConnectedInstitutes
+  usersFollowerConnection(first: Float = 0, after: String, before: String): ConnectedUsers
+  childrenSchoolsConnection(first: Float = 0, after: String, before: String): ConnectedSchools
 }
 
 type SchoolEdge {
@@ -219,9 +219,16 @@ type CareerEdge {
 }
 
 type Query {
+  school(_id: ID!): School!
+  listSchools(filters: ListSchoolInput, first: Float = 0, after: String, before: String): ConnectedSchools!
   user(_id: ID!): User!
   listUsers(filters: ListUserInput, first: Float = 0, after: String, before: String): ConnectedUsers!
   whoAmI: User!
+}
+
+input ListSchoolInput {
+  _id: ID
+  name: String
 }
 
 input ListUserInput {
@@ -230,10 +237,26 @@ input ListUserInput {
 }
 
 type Mutation {
+  createSchool(payload: CreateSchoolInput!): School!
+  updateSchool(payload: UpdateSchoolInput!): School!
+  deleteSchool(_id: ID!): School!
   createUser(payload: CreateUserInput!): User!
   updateUser(payload: UpdateUserInput!): User
   deleteUser(_id: ID!): User
   loginUser(payload: LoginInput!): Auth!
+}
+
+input CreateSchoolInput {
+  name: String!
+  shortName: String
+  avatarImage: String
+  parentSchool: ID
+}
+
+input UpdateSchoolInput {
+  _id: ID!
+  name: String
+  shortName: String
 }
 
 input CreateUserInput {

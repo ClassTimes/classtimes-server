@@ -1,8 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { Connection, connect, Model } from 'mongoose'
+import { Connection, connect, Model, Schema } from 'mongoose'
 import { User, UserSchema } from '@modules/user/user.model'
 import { CreateUserInput } from '@modules/user/user.inputs'
 import { hashPasswordForPayload } from '@utils/helpers/hash-password'
+import { SchemaDefinitionNode } from 'graphql'
 
 interface MongoConnection {
   connection: Connection
@@ -74,13 +75,15 @@ export class MongoStubService {
    *
    * @param {Record<string, unknown>} input
    * @param {T & { name: string }} model
+   * @param {Schema} schema
    * @returns {Promise<void>}
    */
-  public async createEntity<T>(
+  public async createEntity<M>(
     input: Record<string, unknown>,
-    model: T & { name: string },
+    model: M & { name: string },
+    schema: Schema,
   ): Promise<void> {
-    const EntityModel = this.connection.model(model.name, UserSchema)
+    const EntityModel = this.connection.model(model.name, schema)
     const record = new EntityModel(input)
     await record.save()
   }
