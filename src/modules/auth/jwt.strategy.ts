@@ -1,19 +1,23 @@
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import mongoose from 'mongoose'
 import { ExtractJwt, Strategy } from 'passport-jwt'
-
 import { UserService } from '@modules/user/user.service'
 import { User } from '@modules/user/user.model'
+import { EConfiguration } from '@utils/enum'
 import { jwtConstants } from './constants'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: configService.get(EConfiguration.JWT_SECRET),
     })
     //console.log('[JwtStrategy] #constructor')
   }
