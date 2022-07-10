@@ -7,7 +7,7 @@ import { SendGridModule } from '@anchan828/nest-sendgrid'
 import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
-import { INestApplication } from '@nestjs/common'
+import { ConsoleLogger, INestApplication } from '@nestjs/common'
 import { Connection, connect } from 'mongoose'
 import { AuthModule } from '@modules/auth/auth.module'
 import { UserResolver } from '@modules/user/user.resolver'
@@ -80,6 +80,7 @@ describe('AuthResolver', () => {
     app = moduleRef.createNestApplication()
 
     // Create a stubbed User
+    // TODO: We may wanna do this directly through the connection
     const userService = app.get<UserService>(UserService)
     await userService.create(STUBBED_USER)
 
@@ -94,8 +95,8 @@ describe('AuthResolver', () => {
   })
 
   describe('[MUTATION] loginUser', () => {
-    it('Should success for valid credentials', async () => {
-      await supertest(app.getHttpServer())
+    it('Should respond with 200 and a JWT for valid credentials', async () => {
+      const { body } = await supertest(app.getHttpServer())
         .post('/graphql')
         .send({
           operationName: null,
@@ -106,10 +107,12 @@ describe('AuthResolver', () => {
           },
         })
         .expect(200)
+
+      expect(typeof body.data?.loginUser?.jwt).toBe('string')
     })
 
-    it('Should throw an error for invalid credentials', async () => {
-      await supertest(app.getHttpServer())
+    it('Should respond with 200 throw an error for invalid credentials', async () => {
+      const { body } = await supertest(app.getHttpServer())
         .post('/graphql')
         .send({
           operationName: null,
@@ -117,6 +120,20 @@ describe('AuthResolver', () => {
           variables: { emailOrUsername: 'test@email.com', password: 'invalid' },
         })
         .expect(200)
+
+      expect(body.data).toEqual(null)
+      // TODO: We can be more specific about the error here
+    })
+
+    it('Should respond with 400 for missing payload params', async () => {
+      await supertest(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          operationName: null,
+          query: loginUser,
+          variables: { emailOrUsername: 'test@email.com' },
+        })
+        .expect(400)
     })
   })
 })
