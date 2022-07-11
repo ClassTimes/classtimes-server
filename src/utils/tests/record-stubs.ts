@@ -23,4 +23,12 @@ export const STUBBED_SCHOOLS = [
     name: 'Faculty of Architecture',
     shortName: 'FADU',
   },
+  {
+    name: 'Faculty of Economics',
+    shortName: 'FCE',
+  },
+  {
+    name: 'Faculty of Communication',
+    shortName: 'FCOM',
+  },
 ]

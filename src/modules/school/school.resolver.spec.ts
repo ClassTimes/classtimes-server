@@ -27,8 +27,8 @@ describe('SchoolResolver', () => {
   let app: INestApplication
   let mongoStub: MongoStubService
   let jwt: string
-  let schoolIds: string[]
   let cursor: string
+  const schoolIds: string[] = []
 
   beforeAll(async () => {
     mongoStub = new MongoStubService()
@@ -82,11 +82,16 @@ describe('SchoolResolver', () => {
 
     // Create a stubbed data
     await mongoStub.createUser(STUBBED_USER)
-    schoolIds = await Promise.all(
-      STUBBED_SCHOOLS.map((school) =>
-        mongoStub.createEntity(school, School, SchoolSchema),
-      ),
-    )
+
+    // Note: schools are created sequentially so that the `createdAt` field is distinctively different in all records
+    for (const schoolData of STUBBED_SCHOOLS) {
+      const schoolId = await mongoStub.createEntity(
+        schoolData,
+        School,
+        SchoolSchema,
+      )
+      schoolIds.push(schoolId)
+    }
 
     // Log in with stubbed user
     jwt = await loginTestUser(STUBBED_USER, moduleRef)
@@ -180,7 +185,8 @@ describe('SchoolResolver', () => {
       )
     })
 
-    it('Should respond with 200 and a list with 2 schools', async () => {
+    it('Should respond with 200 and a list with N schools', async () => {
+      // N = 2
       const listSchoolsQuery = new QueryRunner(app, listSchools)
       const { body } = await listSchoolsQuery
         .runQuery({
@@ -202,7 +208,8 @@ describe('SchoolResolver', () => {
       cursor = pageInfo.endCursor
     })
 
-    it('Should respond with 200 and a list with 2 schools when passing `after` cursor', async () => {
+    it('Should respond with 200 and a list with N schools when passing `after` cursor', async () => {
+      // N = 2
       const listSchoolsQuery = new QueryRunner(app, listSchools)
       const { body } = await listSchoolsQuery
         .runQuery({
