@@ -6,7 +6,21 @@ export const STUBBED_USER = {
   mobile: '112112122',
 }
 
-export const STUBBED_SCHOOL = {
-  name: 'Faculty of Engineering',
-  shortName: 'FEng',
-}
+export const STUBBED_SCHOOLS = [
+  {
+    name: 'Faculty of Engineering',
+    shortName: 'FING',
+  },
+  {
+    name: 'Faculty of Medicine',
+    shortName: 'FMED',
+  },
+  {
+    name: 'Faculty of Chemistry',
+    shortName: 'FQ',
+  },
+  {
+    name: 'Faculty of Architecture',
+    shortName: 'FADU',
+  },
+]

@@ -2,7 +2,7 @@ import supertest from 'supertest'
 import { INestApplication } from '@nestjs/common'
 
 interface RunQueryParams {
-  variables: Record<string, unknown>
+  variables?: Record<string, unknown>
   jwt?: string
 }
 
@@ -15,8 +15,8 @@ export class QueryRunner {
     this.query = query
   }
 
-  public runQuery(params: RunQueryParams): supertest.Test {
-    const { variables, jwt } = params
+  public runQuery(params?: RunQueryParams): supertest.Test {
+    const { variables = {}, jwt } = params ?? {}
 
     const baseTest = supertest(this.app.getHttpServer()).post('/graphql').send({
       query: this.query,
