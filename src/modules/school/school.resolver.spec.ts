@@ -98,9 +98,8 @@ describe('SchoolResolver', () => {
   })
 
   describe('[QUERY] school', () => {
-    const findSchoolQuery = new QueryRunner(app, findSchool)
-
     it('Should respond with 200 and school data when credentials are valid and `id` is correct', async () => {
+      const findSchoolQuery = new QueryRunner(app, findSchool)
       const { body } = await findSchoolQuery
         .runQuery({
           variables: { id: schoolId },
@@ -116,6 +115,7 @@ describe('SchoolResolver', () => {
     })
 
     it('Should respond with 200 but without data when `id` is incorrect', async () => {
+      const findSchoolQuery = new QueryRunner(app, findSchool)
       const { body } = await findSchoolQuery
         .runQuery({
           // Non-existing ID
@@ -129,6 +129,7 @@ describe('SchoolResolver', () => {
     })
 
     it('Should respond with 200 and with "Unauthorized" when missing credentials', async () => {
+      const findSchoolQuery = new QueryRunner(app, findSchool)
       const { body } = await findSchoolQuery
         .runQuery({
           variables: { id: schoolId },
