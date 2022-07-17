@@ -23,6 +23,6 @@ import { EConfiguration } from '@utils/enum'
     UserModule,
   ],
   providers: [AuthService, AuthResolver, JwtStrategy],
-  exports: [AuthService, JwtModule],
+  exports: [AuthService, JwtModule, JwtStrategy],
 })
 export class AuthModule {}

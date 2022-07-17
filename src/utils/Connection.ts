@@ -11,31 +11,31 @@ import { Base64 } from 'js-base64'
 
 @ObjectType()
 class PageInfoType {
-  @Field((type) => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   endCursor: string
 
-  @Field((type) => Boolean)
+  @Field(() => Boolean)
   hasNextPage: boolean
 }
 
 export function Connected<T>(classRef: Type<T>): any {
   @ObjectType(`${classRef.name}Edge`)
   abstract class EdgeType {
-    @Field((type) => String)
+    @Field(() => String)
     cursor: string
 
-    @Field((type) => classRef)
+    @Field(() => classRef)
     node: T
   }
   @ObjectType({ isAbstract: true })
   abstract class ConnectionType {
-    @Field((type) => [EdgeType], { nullable: true })
+    @Field(() => [EdgeType], { nullable: true })
     edges: EdgeType[]
 
-    @Field((type) => PageInfoType)
+    @Field(() => PageInfoType)
     pageInfo: PageInfoType
 
-    @Field((type) => Int)
+    @Field(() => Int)
     totalCount: number
   }
   return ConnectionType
@@ -140,7 +140,7 @@ export function buildConnection<T>(
 // *
 @ArgsType()
 export class ConnectionArgs {
-  @Field({ defaultValue: 0 }) // TODO: Actually have this as non-nullable
+  @Field(() => Int, { defaultValue: 0 }) // TODO: Actually have this as non-nullable
   first?: number
 
   @Field({ nullable: true })

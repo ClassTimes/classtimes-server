@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 
 // Guard
 // import { GqlAuthGuard } from '../../auth/gql-auth.guard'
-import { CurrentUser } from '@modules/auth/currentUser'
+import { CurrentUser } from '@modules/auth/current-user'
 import { CheckPolicies } from '@modules/casl/policy.guard'
 import { AppAbility, Action } from '@modules/casl/casl-ability.factory'
 

@@ -1,5 +1,5 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { Connection, connect, Model } from 'mongoose'
+import { Connection, connect, Model, Schema } from 'mongoose'
 import { User, UserSchema } from '@modules/user/user.model'
 import { CreateUserInput } from '@modules/user/user.inputs'
 import { hashPasswordForPayload } from '@utils/helpers/hash-password'
@@ -54,16 +54,38 @@ export class MongoStubService {
   }
 
   /**
-   * createStubbedUser
+   * createUser
    *
    * Creates a stubbed user from the provided payload
    *
    * @param {CreateUserInput} input
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    */
-  public async createUser(input: CreateUserInput): Promise<void> {
+  public async createUser(input: CreateUserInput): Promise<string> {
     const payload = await hashPasswordForPayload(input)
     const record = new this.UserModel(payload)
-    await record.save()
+    const result = await record.save()
+    return result._id.toString()
+  }
+
+  /**
+   * createEntity
+   *
+   * Creates an entity based on the provided model
+   *
+   * @param {Record<string, unknown>} input
+   * @param {T & { name: string }} model
+   * @param {Schema} schema
+   * @returns {Promise<string>}
+   */
+  public async createEntity<M>(
+    input: Record<string, unknown>,
+    model: M & { name: string },
+    schema: Schema,
+  ): Promise<string> {
+    const EntityModel = this.connection.model(model.name, schema)
+    const record = new EntityModel(input)
+    const result = await record.save()
+    return result._id.toString()
   }
 }

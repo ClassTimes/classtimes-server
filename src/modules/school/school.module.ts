@@ -49,7 +49,6 @@ import { FollowingService } from '@modules/following/following.service'
       },
     ]),
   ],
-  //   controllers: [SchoolsController],
   providers: [
     SchoolService,
     SchoolResolver,

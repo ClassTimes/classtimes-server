@@ -2,73 +2,52 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type PageInfoType {
-  endCursor: String
-  hasNextPage: Boolean!
-}
-
-type Comment {
-  content: String!
-  createdBy: User!
-}
-
-type VirtualLocation {
-  serviceType: String!
-  url: String!
-  notes: String!
-}
-
-type Event {
-  _id: ID!
-  description: String
-  presentialLocation: String
-  virtualLocation: VirtualLocation
-  startDateUtc: DateTime!
-  comments: [Comment!]
-  followerCounter: Int!
-  calendarEvent: CalendarEvent!
-  usersJoiningConnection: ConnectedUsers
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type EventEdge {
-  cursor: String!
-  node: Event!
-}
-
-type ConnectedEvents {
-  edges: [EventEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
+type Auth {
+  jwt: String!
+  user: User!
 }
 
 type CalendarEvent {
   _id: ID!
-  title: String!
+  basedOnCalendarEvent: ID
   description: String
-  presentialLocation: String
-  virtualLocation: VirtualLocation
-  tags: [String!]!
-  startDateUtc: DateTime!
-  endDateUtc: DateTime!
-  isAllDay: Boolean
   durationHours: Float!
-  rrule: String
+  endDateUtc: DateTime!
+  eventsConnection: ConnectedEvents
   exceptionsDatesUtc: [DateTime!]
   followerCounter: Int!
-  basedOnCalendarEvent: ID
+  isAllDay: Boolean
+  presentialLocation: String
+  rrule: String
+  startDateUtc: DateTime!
   subject: Subject!
-  eventsConnection: ConnectedEvents
+  tags: [String!]!
+  title: String!
   usersSubscriberConnection: ConnectedUsers
+  virtualLocation: VirtualLocation
 }
 
 type CalendarEventEdge {
   cursor: String!
   node: CalendarEvent!
+}
+
+type Career {
+  _id: ID!
+  approvingSchool: School
+  createdBy: User!
+  name: String!
+  subjectsConnection: ConnectedSubjects
+}
+
+type CareerEdge {
+  cursor: String!
+  node: Career!
+}
+
+type Comment {
+  content: String!
+  createdBy: User!
 }
 
 type ConnectedCalendarEvents {
@@ -77,14 +56,101 @@ type ConnectedCalendarEvents {
   totalCount: Int!
 }
 
+type ConnectedDiscussions {
+  edges: [DiscussionEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedEvents {
+  edges: [EventEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedInstitutes {
+  edges: [InstituteEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedSchools {
+  edges: [SchoolEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedSubjects {
+  edges: [SubjectEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+type ConnectedUsers {
+  edges: [UserEdge!]
+  pageInfo: PageInfoType!
+  totalCount: Int!
+}
+
+input CreateSchoolInput {
+  avatarImage: String
+  name: String!
+  parentSchool: ID
+  shortName: String
+}
+
+input CreateUserInput {
+  avatarImage: String
+  email: String
+  fullName: String
+  mobile: String
+  password: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Discussion {
+  _id: ID!
+  comments: [Comment!]
+  content: String!
+  subject: Subject!
+  title: String!
+}
+
+type DiscussionEdge {
+  cursor: String!
+  node: Discussion!
+}
+
+type Event {
+  _id: ID!
+  calendarEvent: CalendarEvent!
+  comments: [Comment!]
+  description: String
+  followerCounter: Int!
+  presentialLocation: String
+  startDateUtc: DateTime!
+  usersJoiningConnection: ConnectedUsers
+  virtualLocation: VirtualLocation
+}
+
+type EventEdge {
+  cursor: String!
+  node: Event!
+}
+
 type Institute {
   _id: ID!
-  name: String!
-  shortName: String!
-  createdBy: User!
   avatarImage: String
+  createdBy: User!
   followerCounter: Int!
+  name: String!
   school: School
+  shortName: String!
   subjectsConnection: ConnectedSubjects
   usersFollowerConnection: ConnectedUsers
 }
@@ -94,43 +160,75 @@ type InstituteEdge {
   node: Institute!
 }
 
-type ConnectedInstitutes {
-  edges: [InstituteEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
+input ListSchoolInput {
+  _id: ID
+  name: String
 }
 
-type Discussion {
+input ListUserInput {
+  _id: ID
+  fullName: String
+}
+
+input LoginInput {
+  emailOrUsername: String!
+  password: String!
+}
+
+type Mutation {
+  createSchool(payload: CreateSchoolInput!): School!
+  createUser(payload: CreateUserInput!): User!
+  deleteSchool(_id: ID!): School!
+  deleteUser(_id: ID!): User
+  loginUser(payload: LoginInput!): Auth!
+  updateSchool(payload: UpdateSchoolInput!): School!
+  updateUser(payload: UpdateUserInput!): User
+}
+
+type PageInfoType {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type Query {
+  listSchools(after: String, before: String, filters: ListSchoolInput, first: Int = 0): ConnectedSchools!
+  listUsers(after: String, before: String, filters: ListUserInput, first: Int = 0): ConnectedUsers!
+  school(_id: ID!): School!
+  user(_id: ID!): User!
+  whoAmI: User!
+}
+
+type School {
   _id: ID!
-  title: String!
-  content: String!
-  comments: [Comment!]
-  subject: Subject!
+  avatarImage: String
+  childrenSchoolsConnection(after: String, before: String, first: Int = 0): ConnectedSchools
+  createdBy: User!
+  followerCounter: Int!
+  institutesConnection(after: String, before: String, first: Int = 0): ConnectedInstitutes
+  name: String!
+  parentSchool: School
+  shortName: String!
+  subjectsConnection(after: String, before: String, first: Int = 0): ConnectedSubjects
+  usersFollowerConnection(after: String, before: String, first: Int = 0): ConnectedUsers
 }
 
-type DiscussionEdge {
+type SchoolEdge {
   cursor: String!
-  node: Discussion!
-}
-
-type ConnectedDiscussions {
-  edges: [DiscussionEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
+  node: School!
 }
 
 type Subject {
   _id: ID!
-  name: String!
-  shortName: String!
-  description: String!
   avatarImage: String
-  tags: [String!]!
-  followerCounter: Int!
-  school: School!
-  institute: Institute!
   calendarEventsConnection: ConnectedCalendarEvents
+  description: String!
   discussionsConnection: ConnectedDiscussions
+  followerCounter: Int!
+  institute: Institute!
+  name: String!
+  school: School!
+  shortName: String!
+  tags: [String!]!
   usersFollowerConnection: ConnectedUsers
 }
 
@@ -139,54 +237,39 @@ type SubjectEdge {
   node: Subject!
 }
 
-type ConnectedSubjects {
-  edges: [SubjectEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type School {
+input UpdateSchoolInput {
   _id: ID!
-  name: String!
-  shortName: String!
-  createdBy: User!
+  name: String
+  shortName: String
+}
+
+input UpdateUserInput {
+  _id: ID!
   avatarImage: String
-  followerCounter: Int!
-  parentSchool: School
-  subjectsConnection: ConnectedSubjects
-  institutesConnection: ConnectedInstitutes
-  usersFollowerConnection: ConnectedUsers
-  childrenSchoolsConnection: ConnectedSchools
-}
-
-type SchoolEdge {
-  cursor: String!
-  node: School!
-}
-
-type ConnectedSchools {
-  edges: [SchoolEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
+  email: String
+  fullName: String
+  mobile: String
+  password: String!
+  username: String!
 }
 
 type User {
   _id: ID!
-  fullName: String
-  username: String!
-  email: String
-  mobile: String
   avatarImage: String
+  calendarEventsSubscribedConnection(after: String, before: String, first: Int = 0): ConnectedUsers!
+  calendarsEventsSubscribedConnection: ConnectedCalendarEvents
+  email: String
+  eventsJoiningConnection(after: String, before: String, first: Int = 0): ConnectedEvents
   followerCounter: Int!
   followingCounter: Int!
-  usersFollowerConnection(first: Float = 0, after: String, before: String): ConnectedUsers
-  usersFollowingConnection(first: Float = 0, after: String, before: String): ConnectedUsers
-  schoolsFollowingConnection(first: Float = 0, after: String, before: String): ConnectedSchools
-  institutesFollowingConnection(first: Float = 0, after: String, before: String): ConnectedInstitutes
-  subjectsFollowingConnection(first: Float = 0, after: String, before: String): ConnectedSubjects
-  calendarsEventsSubscribedConnection: ConnectedCalendarEvents
-  eventsJoiningConnection(first: Float = 0, after: String, before: String): ConnectedEvents
-  calendarEventsSubscribedConnection(first: Float = 0, after: String, before: String): ConnectedUsers!
+  fullName: String
+  institutesFollowingConnection(after: String, before: String, first: Int = 0): ConnectedInstitutes
+  mobile: String
+  schoolsFollowingConnection(after: String, before: String, first: Int = 0): ConnectedSchools
+  subjectsFollowingConnection(after: String, before: String, first: Int = 0): ConnectedSubjects
+  username: String!
+  usersFollowerConnection(after: String, before: String, first: Int = 0): ConnectedUsers
+  usersFollowingConnection(after: String, before: String, first: Int = 0): ConnectedUsers
 }
 
 type UserEdge {
@@ -194,68 +277,8 @@ type UserEdge {
   node: User!
 }
 
-type ConnectedUsers {
-  edges: [UserEdge!]
-  pageInfo: PageInfoType!
-  totalCount: Int!
-}
-
-type Auth {
-  jwt: String!
-  user: User!
-}
-
-type Career {
-  _id: ID!
-  name: String!
-  createdBy: User!
-  approvingSchool: School
-  subjectsConnection: ConnectedSubjects
-}
-
-type CareerEdge {
-  cursor: String!
-  node: Career!
-}
-
-type Query {
-  user(_id: ID!): User!
-  listUsers(filters: ListUserInput, first: Float = 0, after: String, before: String): ConnectedUsers!
-  whoAmI: User!
-}
-
-input ListUserInput {
-  _id: ID
-  fullName: String
-}
-
-type Mutation {
-  createUser(payload: CreateUserInput!): User!
-  updateUser(payload: UpdateUserInput!): User
-  deleteUser(_id: ID!): User
-  loginUser(payload: LoginInput!): Auth!
-}
-
-input CreateUserInput {
-  fullName: String
-  username: String!
-  password: String!
-  email: String
-  mobile: String
-  avatarImage: String
-}
-
-input UpdateUserInput {
-  fullName: String
-  username: String!
-  password: String!
-  email: String
-  mobile: String
-  avatarImage: String
-  _id: ID!
-}
-
-input LoginInput {
-  emailOrUsername: String!
-  password: String!
+type VirtualLocation {
+  notes: String!
+  serviceType: String!
+  url: String!
 }

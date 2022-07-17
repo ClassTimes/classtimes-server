@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 
 // Current User
 import { User } from '@modules/user/user.model'
-import { CurrentUser } from '@modules/auth/currentUser'
+import { CurrentUser } from '@modules/auth/current-user'
 
 import { Follow } from './follow.model'
 
